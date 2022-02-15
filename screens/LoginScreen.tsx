@@ -31,7 +31,7 @@ export default function TabTwoScreen() {
         // }else{
         //     alert('Invalid email')
         // }
-        navigation.navigate('TabNav')
+        navigation.navigate('MyCart')
     }
 
 

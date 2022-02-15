@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, Dimensions, Alert, BackHandler, Share } 
 import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { Entypo, MaterialIcons,AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 
 // services
@@ -16,6 +17,7 @@ import Header2 from "../components/Header";
 
 export default function ProductDetails() {
  
+  const navigation = useNavigation();
 
 
 
@@ -114,7 +116,7 @@ export default function ProductDetails() {
                             <TouchableOpacity
                                 style={styles.allReview}
                             >
-                                <Text style={{ color: "#1239", fontSize: 14 }}>
+                                <Text onPress={()=>navigation.navigate('MyReviewsScreen')} style={{ color: "#1239", fontSize: 14 }}>
                                 All Reviews
                                 </Text>
                             </TouchableOpacity>

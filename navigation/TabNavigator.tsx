@@ -10,7 +10,9 @@ import { Alert } from 'react-native';
 
 // navigations 
 
-import HomeScreen from '../screens/HomeScreen'
+import CartScreen from '../screens/MyCart'
+import FavoriteScreen from '../screens/FavoriteScreen'
+
 import Root from '../navigation/DrawerNavigation';
 export function TabNav() {
 
@@ -58,12 +60,36 @@ export function TabNav() {
             }}
 
          />
+          <Tab.Screen name="FavoriteScreen" component={FavoriteScreen}
+            options={{
+               tabBarLabel: "Favorite",
+               // unmountOnBlur: true,
+               header: () => null,
+
+               tabBarIcon: ({ focused, color }) =>
+                  <AntDesign name="hearto" size={30} color={focused ? '#BB2227' : color} />,
+            }}
+
+         />
+          <Tab.Screen name="CartScreen" component={CartScreen}
+            options={{
+               tabBarLabel: "Cart",
+               // unmountOnBlur: true,
+               header: () => null,
+
+               tabBarIcon: ({ focused, color }) =>
+                  <AntDesign name="shoppingcart" size={30} color={focused ? '#BB2227' : color} />,
+            }}
+
+         />
+
          
 
 
 
-         
-            {/* <Tab.Screen name="Profile"  component={Root}
+
+
+         {/* <Tab.Screen name="Profile"  component={Root}
             
              options={{
                 tabBarLabel: "Profile",

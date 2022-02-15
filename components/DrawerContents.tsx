@@ -51,7 +51,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialCommunityIcons name="shopping-search" size={25} color={color} />
                             )}
-                            label="My Orders"
+                            label="All Categories"
                             onPress={() => {
                               
                             }}
@@ -61,7 +61,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialIcons name="note-add" size={25} color={color} />
                             )}
-                            label="My Subscriptions"
+                            label="Favorites"
                             onPress={() => {
                              
                             }}
@@ -71,7 +71,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialIcons name="bookmark" size={25} color={color} />
                             )}
-                            label="My Bookings"
+                            label="My Cart"
                             onPress={() => {
                              
                             }}
@@ -81,7 +81,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialIcons name="assignment-return" size={25} color={color} />
                             )}
-                            label="My Returns"
+                            label="Profile"
                             onPress={() => {
                             }}
                         />
@@ -90,7 +90,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialIcons name="rate-review" size={25} color={color} />
                             )}
-                            label="My Reviews"
+                            label="Address"
                             onPress={() =>{
                                
                             }}
@@ -99,14 +99,21 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <Ionicons name="gift-sharp" size={25} color={color} />
                             )}
-                            label="My Rewards"
+                            label="orders"
                             onPress={() => {props.navigation.navigate('MyRewards')}}
                         />
                          <DrawerItem 
                             icon={({color, size}) => (
                               <Entypo name='heart' size={25} color='#1239'></Entypo>
                               )}
-                            label="My Favourites"
+                            label="Notification"
+                            onPress={() => {props.navigation.navigate('FavScreen')}}
+                        />
+                         <DrawerItem 
+                            icon={({color, size}) => (
+                              <Entypo name='heart' size={25} color='#1239'></Entypo>
+                              )}
+                            label="Hurry Orders"
                             onPress={() => {props.navigation.navigate('FavScreen')}}
                         />
                         </>
@@ -117,7 +124,7 @@ export function DrawerContent(props:any) {
                                 <Ionicons name="ios-settings-outline" size={25} color={color} />
                             )}
                             label="Privacy Policies"
-                            onPress={() => Linking.openURL('https://www.ebhubon.com/about/terms-and-conditions-1628077866634')}
+                            onPress={() => Linking.openURL('')}
                         />
                 </View>
               
