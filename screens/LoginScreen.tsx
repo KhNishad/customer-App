@@ -17,8 +17,9 @@ export default function TabTwoScreen() {
     const navigation = useNavigation();
 
 
-    const [email, setemail] = useState('')
+    const [phone, setphone] = useState('')
     const [passWord, setpassWord] = useState('')
+    const [fullName, setfullName] = useState('')
 
 
     const LoginSubmit = async ()=>{
@@ -42,15 +43,22 @@ export default function TabTwoScreen() {
             <View style={{borderTopColor:'#fff',alignItems:'center',marginBottom:40}}>
                 <FontAwesome name='user-circle' size={90} color={'#fff'}/>
                 {/* <Image style={{width:deviceWidth/3,height:80,resizeMode:'contain'}} source={require('../assets/images/essa-logo.jpeg')}></Image> */}
-                <Text style={styles.title}>Login</Text>
+                <Text style={styles.title}>Registration</Text>
             </View>
 
             <View>
                 <TextInput
                     style={styles.input}
-                    onChangeText={setemail}
-                    value={email}
+                    onChangeText={setphone}
+                    value={phone}
                     placeholder="email"
+                />
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setfullName}
+                    value={fullName}
+                    placeholder="Full Name"
+                    secureTextEntry={true}
                 />
                 <TextInput
                     style={styles.input}
@@ -60,13 +68,14 @@ export default function TabTwoScreen() {
                     secureTextEntry={true}
                 />
             </View>
-            <TouchableOpacity style={{alignItems:'center',paddingBottom:10}}>
-                <Text style={[styles.title,{fontSize:14}]}>Forgot Your Password?</Text>
-            </TouchableOpacity>
+            
             <View style={{alignItems:'center',margin:12}}>
                 <TouchableOpacity onPress={()=>LoginSubmit()} style={{backgroundColor:'#001E42',padding:10,width:deviceWidth/1.2,alignItems:'center',borderRadius:5}}>
-                    <Text style={[styles.title,{fontSize:16}]}>Login</Text>
+                    <Text style={[styles.title,{fontSize:16}]}>REGISTER</Text>
                 </TouchableOpacity>
+            </View>
+            <View style={{alignItems:'center',paddingBottom:10}}>
+                <Text style={[styles.title,{fontSize:14}]}>Already Have An Account?<Text style={{color:'#000000'}} onPress={()=>navigation.navigate('')}> Login</Text></Text>
             </View>
             
         </SafeAreaView>

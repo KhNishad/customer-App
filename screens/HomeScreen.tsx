@@ -1,10 +1,11 @@
 
 import { View, Text, StyleSheet, StatusBar, SafeAreaView, TextInput, Button, Image } from 'react-native';
 import { Dimensions } from 'react-native'
-import { FontAwesome, EvilIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
+import Modal from "react-native-modal";
+import { Ionicons } from '@expo/vector-icons';
 
 // components
 import Header from '../components/Header';
@@ -36,6 +37,9 @@ const data = [
 export default function TabTwoScreen() {
 
   const navigation = useNavigation();
+  const [ModalOpen, setModalOpen] = useState(false)
+  const [number, setnumber] = useState('')
+  const [otpCode, setotpCode] = useState('')
 
 
 
@@ -123,6 +127,33 @@ export default function TabTwoScreen() {
 
         </ScrollView>
       </SafeAreaView>
+      <Modal isVisible={ModalOpen} style={{alignItems:'center'}}>
+              <View style={{ width:deviceWidth-100,justifyContent:'center',height:200,backgroundColor:'#fff',alignItems:'center',borderRadius:10 }}>
+                <Ionicons  onPress={()=>setModalOpen(false)} name='close' color={'red'} size={25}/>
+                <View style={{paddingVertical:5}}>
+                  <Text style={{fontWeight:'bold',fontSize:16}}>Login with Phone & Otp</Text>
+                </View>
+                <View>
+                <TextInput
+                    style={styles.input}
+                    onChangeText={setnumber}
+                    value={number}
+                    multiline={true}
+                    placeholder="Enter Your Number"
+                />
+                 <TextInput
+                    style={styles.input}
+                    onChangeText={setotpCode}
+                    value={otpCode}
+                    multiline={true}
+                    placeholder="OTP Code"
+                />
+                </View>
+                <TouchableOpacity  style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
+                  <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Submit</Text>
+                </TouchableOpacity>
+              </View>
+           </Modal>
 
 
     </View>
@@ -147,7 +178,7 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: .5,
     padding: 10,
-    borderColor: '#fff',
+    borderColor: '#BBE5EB',
     borderRadius: 5,
     backgroundColor: '#fff'
   },
