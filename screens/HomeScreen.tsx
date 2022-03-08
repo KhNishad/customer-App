@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Header from '../components/Header';
 import Slider from '../components/bannerCarosel';
 import ProductCard from '../components/ProductCard';
+import LoginModal from '../components/LoginModal';
 
 // img
 
@@ -38,8 +39,7 @@ export default function TabTwoScreen() {
 
   const navigation = useNavigation();
   const [ModalOpen, setModalOpen] = useState(false)
-  const [number, setnumber] = useState('')
-  const [otpCode, setotpCode] = useState('')
+
 
 
 
@@ -56,9 +56,9 @@ export default function TabTwoScreen() {
             <Slider />
           </View>
           <View style={styles.iconSection}>
-            <TouchableOpacity style={styles.icons}>
+            <TouchableOpacity onPress={()=>setModalOpen(true)} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
-              <Text style={{ fontSize: 10,textAlign:'center' }}>Categories</Text>
+              <Text  style={{ fontSize: 10,textAlign:'center' }}>Categories</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
@@ -127,33 +127,9 @@ export default function TabTwoScreen() {
 
         </ScrollView>
       </SafeAreaView>
-      <Modal isVisible={ModalOpen} style={{alignItems:'center'}}>
-              <View style={{ width:deviceWidth-100,justifyContent:'center',height:200,backgroundColor:'#fff',alignItems:'center',borderRadius:10 }}>
-                <Ionicons  onPress={()=>setModalOpen(false)} name='close' color={'red'} size={25}/>
-                <View style={{paddingVertical:5}}>
-                  <Text style={{fontWeight:'bold',fontSize:16}}>Login with Phone & Otp</Text>
-                </View>
-                <View>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setnumber}
-                    value={number}
-                    multiline={true}
-                    placeholder="Enter Your Number"
-                />
-                 <TextInput
-                    style={styles.input}
-                    onChangeText={setotpCode}
-                    value={otpCode}
-                    multiline={true}
-                    placeholder="OTP Code"
-                />
-                </View>
-                <TouchableOpacity  style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
-                  <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Submit</Text>
-                </TouchableOpacity>
-              </View>
-           </Modal>
+      {ModalOpen?
+           <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+      :null}
 
 
     </View>

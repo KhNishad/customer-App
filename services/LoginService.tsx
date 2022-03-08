@@ -8,15 +8,15 @@ import request from '../utils/request';
     
 //     return res;
 // }
-async function  Login (data:any) {
-    const res = await request('/auth/seller/login',{method:'POST',data:data})
+async function  loginOtpSend (number:any) {
+    const res = await request(`/auth/b2c/otp/send?phone=${number}`)
     return res;
 }
 
 
 
 
-export default {Login}
+export default {loginOtpSend}
 
 
 

@@ -21,7 +21,7 @@ export default function TabTwoScreen() {
     <View style={styles.container}>
       <View style={styles.headerBar}>
 
-         <Image style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/essa-logo.png')}></Image>
+         <Image style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image>
          <View  style={styles.input}>
               <Feather name='search' style={{paddingRight:5}} color={'red'} size={20}></Feather>
                <TextInput
