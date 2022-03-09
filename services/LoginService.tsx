@@ -2,12 +2,12 @@
 import request from '../utils/request';
 
 
-// async function  Registration (data:any) {
+async function  Registration (data:any) {
   
-//     const res = await request('/contractor/signup',{method:"POST",data:data})
+    const res = await request('/auth/b2c/register',{method:"POST",data:data})
     
-//     return res;
-// }
+    return res;
+}
 async function  loginOtpSend (number:any) {
     const res = await request(`/auth/b2c/otp/send?phone=${number}`)
     return res;
@@ -16,7 +16,7 @@ async function  loginOtpSend (number:any) {
 
 
 
-export default {loginOtpSend}
+export default {loginOtpSend,Registration}
 
 
 

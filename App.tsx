@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import FlashMessage from "react-native-flash-message";
 
 
 
@@ -24,7 +25,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={"LoginScreen"}>
+      <Stack.Navigator initialRouteName={"TabNav"}>
 
         <Stack.Screen
           name="LoginScreen"
@@ -65,6 +66,8 @@ export default function App() {
         />
 
       </Stack.Navigator>
+      <FlashMessage style={{alignItems:'center'}}  duration={3000} position="top" />
+
     </NavigationContainer>
 
   );

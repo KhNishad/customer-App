@@ -8,11 +8,17 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment'
 import {Picker} from '@react-native-picker/picker';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as SecureStore from 'expo-secure-store';
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
+// service 
+
+import LoginService from '../services/LoginService';
 
 export default function TabTwoScreen() {
 
@@ -28,19 +34,34 @@ export default function TabTwoScreen() {
     const [showDate, setshowDate] = useState(false)
 
 
-console.log('...............g',gender);
-
-    const LoginSubmit = async ()=>{
-        // if(reg.test(email)=== true){
-        //     const data = {
-        //         email:email,
-        //         password:passWord
-        //     }
-        //     console.log('..............res',data);
-        // }else{
-        //     alert('Invalid email')
-        // }
+  const LoginSubmit = async ()=>{
+    const data = {
+      
+        name: fullName,
+        phone: phone,
+        password: passWord,
+        DOB: date,
+        gender: gender
+      
+    }
+    
+       try {
+         let res  = await LoginService.Registration(data)
+         console.log('...........res',res);
+         
+         showMessage({
+          message: `${res.message}`,
+          type: "success",
+        });
+        // SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
         navigation.navigate('TabNav')
+
+       } catch (error) {
+        showMessage({
+          message: `${error?.message}`,
+          type: "danger",
+        });
+       }
     }
 
        // select time and date
@@ -56,8 +77,7 @@ console.log('...............g',gender);
   return (
     <View style={styles.container}>
         <StatusBar backgroundColor="#FF9411"/>
-        <SafeAreaView>
-            <View style={{borderTopColor:'#fff',alignItems:'center',marginBottom:20}}>
+            <View style={{borderTopColor:'#fff',alignItems:'center'}}>
                 <FontAwesome name='user-circle' size={90} color={'#fff'}/>
                 <Image style={{width:deviceWidth/3,height:80,resizeMode:'contain'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image>
                 <Text style={{color:'black',fontSize:12}}>By signing up, you agree to our Term & Conditions</Text>
@@ -112,8 +132,8 @@ console.log('...............g',gender);
                 
             </View>
             
-            <View style={{alignItems:'center',margin:12}}>
-                <TouchableOpacity onPress={()=>LoginSubmit()} style={{backgroundColor:'#faec84',padding:10,width:deviceWidth/1.2,alignItems:'center',borderRadius:5}}>
+            <View style={{alignItems:'center',paddingVertical:10}}>
+                <TouchableOpacity onPress={()=>LoginSubmit()} style={{backgroundColor:'#faec84',padding:10,width:deviceWidth-40,alignItems:'center',borderRadius:2}}>
                     <Text style={{fontSize:16,color:'black'}}>Register</Text>
                 </TouchableOpacity>
             </View>
@@ -129,10 +149,7 @@ console.log('...............g',gender);
                      display="default"
                      onChange={onChange}
                    />
-                  : null}
-            
-        </SafeAreaView>
-       
+                  : null}       
         
     </View>
   );
@@ -143,7 +160,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor:'#fff',
-    paddingTop:20
+    // paddingTop:20
   },
   title: {
     fontSize: 30,
