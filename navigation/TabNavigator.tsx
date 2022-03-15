@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
-import { Ionicons, FontAwesome, AntDesign } from '@expo/vector-icons';
+import { Ionicons, FontAwesome, AntDesign,MaterialIcons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
 
@@ -12,6 +12,7 @@ import { Alert } from 'react-native';
 
 import CartScreen from '../screens/MyCart'
 import FavoriteScreen from '../screens/FavoriteScreen'
+import CategoryScreen from '../screens/CategoryScreen';
 
 import Root from '../navigation/DrawerNavigation';
 export function TabNav() {
@@ -79,6 +80,17 @@ export function TabNav() {
 
                tabBarIcon: ({ focused, color }) =>
                   <AntDesign name="shoppingcart" size={30} color={focused ? '#BB2227' : color} />,
+            }}
+
+         />
+          <Tab.Screen name="CategoryScreen" component={CategoryScreen}
+            options={{
+               tabBarLabel: "Categories",
+               // unmountOnBlur: true,
+               header: () => null,
+
+               tabBarIcon: ({ focused, color }) =>
+                  <MaterialIcons name="category" size={30} color={focused ? '#BB2227' : color} />,
             }}
 
          />

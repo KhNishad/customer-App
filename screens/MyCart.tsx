@@ -30,7 +30,7 @@ export default function TabTwoScreen() {
                 <ScrollView style={{marginBottom:95}}>
                     <View style={styles.container1}>
                         <View style={{ display:"flex",flexDirection: 'row',alignItems:'center',justifyContent:'space-between' }}>
-                            <AntDesign name="left" size={25} color={"Black"}></AntDesign>
+                            <AntDesign name="left" size={25} color={"black"}></AntDesign>
                             <Text style={{ fontSize: 18, fontWeight: 'bold'}}>MY CART</Text>
                             <View></View>
                         </View>
@@ -83,7 +83,7 @@ export default function TabTwoScreen() {
                                 </View>
                             </View>
                             <View style={styles.card4}>
-                                <AntDesign name="closecircleo" size={20} color="Black"></AntDesign>
+                                <AntDesign name="closecircleo" size={20} color="black"></AntDesign>
                                 <Text style={{ fontSize: 18, fontWeight: '700' }}>$10.00</Text>
                             </View>
                         </View>

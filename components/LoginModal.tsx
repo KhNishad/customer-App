@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import { Ionicons } from '@expo/vector-icons';
+import { showMessage, hideMessage } from "react-native-flash-message";
+import * as SecureStore from 'expo-secure-store';
 
 
 const deviceWidth = Dimensions.get('window').width
@@ -16,24 +18,90 @@ export default function ModalScreen({setModalOpen,ModalOpen}:any) {
     const [number, setnumber] = useState('')
     const [otpCode, setotpCode] = useState('')
     const [isOtp, setisOtp] = useState(false)
+    const [passWord, setpassWord] = useState('')
+    const [isConfirmOtp, setisConfirmOtp] = useState(false)
     
 
     const sendOtp = async ()=>{
-        console.log('..........called wihh',number);
-        if(number){
-            try {
-                let res  = await LoginService.loginOtpSend(number)
-                console.log('............res',res);
-                
-            } catch (error) {
-                console.log('err in send otp',error);
-                
-            }
+        if(otpCode != ''){
+          if(number){
+            const  data={
+              phone: number,
+              password: passWord,
+              otpCode:otpCode?Number(otpCode) : 0
+              }
+              try {
+                  let res  = await LoginService.loginWithPassword(data)
+                  showMessage({
+                    message: `${res?.message}`,
+                    type: "success",
+                  });
+                  SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
+                  // navigation.closeDrawer()
+                  setModalOpen(false)
+                  setotpCode('')
+                  setpassWord('')
+                  setnumber('')
+                  
+              } catch (error) {
+                  console.log('err in send otp',error);
+                  showMessage({
+                    message: `${error?.message}`,
+                    type: "danger",
+                  });
+                  
+              }
+          }else{
+              alert('Number Required')
+          }
         }else{
-            alert('Number Required')
+          if(number){
+            setisConfirmOtp(true)
+  
+              try {
+                  let res  = await LoginService.loginOtpSend(number)
+                  console.log('............res',res);
+                  
+              } catch (error) {
+                  console.log('err in send otp',error);
+                  
+              }
+          }else{
+              alert('Number Required')
+          }
         }
+       
       
       
+    }
+
+
+    const loginWithPass =async()=>{
+      if(number){
+      const  data={
+        phone: number,
+        password: passWord,
+        otpCode:otpCode?otpCode: 0
+        }
+        try {
+            let res  = await LoginService.loginWithPassword(data)
+            showMessage({
+              message: `${res?.message}`,
+              type: "success",
+            });
+            SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
+            setModalOpen(false)
+        } catch (error) {
+            console.log('err in send otp',error);
+            showMessage({
+              message: `${error?.message}`,
+              type: "danger",
+            });
+            
+        }
+    }else{
+        alert('Number Required')
+    }
     }
 
     
@@ -64,7 +132,7 @@ export default function ModalScreen({setModalOpen,ModalOpen}:any) {
                     multiline={true}
                     placeholder="Enter Your Number"
                 />
-                {isOtp?
+                {isConfirmOtp?
                  <TextInput
                     style={styles.input}
                     onChangeText={setotpCode}
@@ -73,24 +141,33 @@ export default function ModalScreen({setModalOpen,ModalOpen}:any) {
                     placeholder="Otp"
                 />
                 :
+                <>
+                {isOtp?null:
                   <TextInput
                   style={styles.input}
-                  onChangeText={setotpCode}
-                  value={otpCode}
+                  onChangeText={setpassWord}
+                  value={passWord}
                   multiline={true}
                   placeholder="Password"
-              />}
+              />}</>}
                 </View>
+                {isOtp?
                 <View style={{flexDirection:'row',justifyContent:"space-around",width:deviceWidth/1.5}}>
                   <TouchableOpacity onPress={()=>sendOtp()}  style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
                     <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Submit</Text>
                   </TouchableOpacity>
-                  {isOtp?
-                  <TouchableOpacity  style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
+                 {isConfirmOtp?
+                  <TouchableOpacity onPress={()=>sendOtp()}   style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
                     <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Re-send</Text>
                   </TouchableOpacity>
                   :null}
                 </View>
+                : 
+                <View style={{flexDirection:'row',justifyContent:"space-around",width:deviceWidth/1.5}}>
+                  <TouchableOpacity onPress={()=>loginWithPass()}  style={{backgroundColor:'#1C6E7A',borderRadius:10}}>
+                    <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Submit</Text>
+                  </TouchableOpacity>
+                </View>}
               
               </View>
            </Modal>

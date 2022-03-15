@@ -9,9 +9,11 @@ import { CommonActions } from '@react-navigation/native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 // import { actionTypes } from "../context/reducer";
 // import { useStateValue } from '../context/StateProvider'
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { useNavigation } from '@react-navigation/native';
 
 
-
+import LoginModal from '../components/LoginModal';
 
 export function DrawerContent(props:any) {
 
@@ -21,8 +23,44 @@ export function DrawerContent(props:any) {
   const [userInfo, setuserInfo] = useState([])
   const [isLoginModalOpen, setisLoginModalOpen] = useState(false)
   const [notLogin, setnotLogin] = useState(false)
+  const [token, settoken] = useState('')
+  const [ModalOpen, setModalOpen] = useState(false)
+  const navigation = useNavigation(); 
+
+  
 
 
+      useEffect(() => {
+        const token = async()=>{
+         
+          let tokenn = await SecureStore.getItemAsync('accessToken')
+          if(tokenn != null){
+            setnotLogin(true)
+          }else{
+            setnotLogin(false)
+          }
+          settoken(tokenn)
+        }
+       
+        token()
+      }, [isDrawerOpen])
+      
+
+        // logout 
+        const logout  = async () =>{
+       
+        let tokenn =   await  SecureStore.deleteItemAsync('accessToken')
+          
+          if(tokenn == null){
+            props.navigation.closeDrawer()
+            showMessage({
+              message: `Logged Out Successfully`,
+              type: "success",
+            });            
+          }
+       
+        }
+      
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
@@ -44,9 +82,9 @@ export function DrawerContent(props:any) {
                       
                     </View>
                 
-                         {notLogin?
+                         {/* {notLogin?
                          null:
-                         <>
+                         <> */}
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <MaterialCommunityIcons name="shopping-search" size={25} color={color} />
@@ -116,8 +154,15 @@ export function DrawerContent(props:any) {
                             label="Hurry Orders"
                             onPress={() => {props.navigation.navigate('FavScreen')}}
                         />
-                        </>
-                          }
+                         <DrawerItem 
+                            icon={({color, size}) => (
+                              <Entypo name='login' size={25} color='#1239'></Entypo>
+                              )}
+                            label="Registration"
+                            onPress={() => {props.navigation.navigate('LoginScreen')}}
+                        />
+                        {/* </>
+                          } */}
                     
                           <DrawerItem 
                             icon={({color, size}) => (
@@ -129,8 +174,19 @@ export function DrawerContent(props:any) {
                 </View>
               
             </DrawerContentScrollView>
-            {/* {notLogin?
-              null
+            {!notLogin?
+               <Drawer.Section style={styles.bottomDrawerSection}>
+               <DrawerItem onPress={()=> setModalOpen(true) }
+                   icon={({color, size}) => (
+                       <Entypo
+                       name="login" 
+                       color="green"
+                       size={size}
+                       />
+                   )}
+                   label="Sign In"
+               />
+           </Drawer.Section>
             :
               <Drawer.Section style={styles.bottomDrawerSection}>
                   <DrawerItem onPress={()=> logout()}
@@ -144,8 +200,10 @@ export function DrawerContent(props:any) {
                       label="Sign Out"
                   />
               </Drawer.Section>
-             }  */}
-           
+             } 
+            {ModalOpen?
+              <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+             :null}
         </View>
     );
 }
