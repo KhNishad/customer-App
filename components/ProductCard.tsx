@@ -12,34 +12,61 @@ const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 
-export default function TabTwoScreen({image}:any) {
+export default function ProductCard({products}:any) {
 
+
+    console.log("..........card",products);
+    
     
   const navigation = useNavigation();
 
-
+  // Object {
+  //   "activeStatus": 1,
+  //   "brand": Object {
+  //     "slug": "fresh-1648225292258",
+  //     "title": "Fresh",
+  //   },
+  //   "category": Object {
+  //     "slug": "oil-1648225014547",
+  //     "title": "Oil",
+  //   },
+  //   "createdAt": "Mar 26, 2022 1:02:49 PM",
+  //   "id": 12,
+  //   "productVariation": Array [
+  //     Object {
+  //       "regularPrice": 200,
+  //       "salePrice": 0,
+  //     },
+  //   ],
+  //   "slug": "cooking-oil-2-litre-1648278169485",
+  //   "title": "Cooking Oil 2 Litre",
+  // },
 
   return (
-    
-              <TouchableOpacity onPress={()=> navigation.navigate('ProductDetails')} style={styles.card}>
+             <>
+             {products?.map((item:any,index:number)=>
+              <TouchableOpacity key={index} onPress={()=> navigation.navigate('ProductDetails',{title:item.slug})} style={styles.card}>
 
                 <View style={{ alignItems: 'center', justifyContent: 'center',elevation:5 }}>
-                  <Image style={styles.img} source={image?.imageLink}></Image>
+                  {/* <Image style={styles.img} source={image?.imageLink}></Image> */}
                 </View>
                 <View style={{ margin: 5 ,}}>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Watch</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{item.title}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 10, color: '#1239' }}>Square</Text>
+                    <Text style={{ fontSize: 10, color: '#1239' }}>{item?.brand?.title}</Text>
                     <EvilIcons name='heart' size={20} />
                   </View>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>$200</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>${item?.productVariation[0]?.regularPrice}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 10, textDecorationLine: 'line-through' }}>$150</Text>
+                    <Text style={{ fontSize: 10, textDecorationLine: 'line-through' }}>${item?.productVariation[0]?.salePrice}</Text>
                     <EvilIcons name='cart' size={20} />
                   </View>
                 </View>
 
               </TouchableOpacity>
+             )}
+
+            </>
   );
 }
 

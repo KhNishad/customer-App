@@ -4,6 +4,7 @@ import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-ha
 import { Entypo, MaterialIcons,AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import productService from "../services/productService";
 
 
 // services
@@ -13,12 +14,37 @@ const deviceWidth = Dimensions.get("window").width;
 
 // components
 import Header2 from "../components/Header";
+import { useEffect, useState } from "react";
 
 
 export default function ProductDetails() {
  
   const navigation = useNavigation();
+  const [refreshing, setrefreshing] = useState(false)
+  const route = useRoute();
+  const { title } = route.params;
 
+  // pull refresh  function
+function wait(time: any) {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+}
+
+  const refresh = React.useCallback(() => {
+    setrefreshing(true)
+    wait(1000).then(() => {
+      setrefreshing(false)
+    })
+  }, [refreshing])
+
+  useEffect(() => {
+      productService.getSingleProductDetails(title).then((res)=>{
+        console.log('..........productdetails',res);
+        
+      })
+  },[refreshing])
+  
 
 
   return (

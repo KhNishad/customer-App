@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 // services 
-import categoryService from '../services/categoryServices';
+import productService from '../services/productService';
 
 const apiImagepath = 'http://103.119.71.9:4400/media';
 const deviceWidth = Dimensions.get('window').width
@@ -18,25 +18,21 @@ export default function TopCategories({ childCat, banner }: any) {
   const navigation = useNavigation();
 
 
-  // const getChildCategory = (slug: any, title: string) => {
 
-  //   categoryService.getSingleCategory(slug).then(res => {
-  //     topCats = res?.data
+  const getChildCategory = async (slug: any) => {
 
-  //     if (res?.data?.products) {
+     try {
+       let res = await productService.getCatWiseProduct(slug)
 
-  //       navigation.navigate('CategoryProduct', { slug: slug, pro: res?.data?.products?.slice(0, 70), banner: banner, title: title })
-
-  //     }
-
-  //   }).catch(err => console.log(err));
-
-
-  // }
+      //  console.log('............res',res?.data);
+       
+     } catch (error) {
+       
+     }
+  }
 
   return (
     <View>
-
       <SafeAreaView>
         <ScrollView style={{ marginBottom: 180 }} removeClippedSubviews={true}>
           <View >
@@ -50,7 +46,7 @@ export default function TopCategories({ childCat, banner }: any) {
                   {childCat?.map((item: any, index: number) =>
                     <View style={styles.flashSaleCard} key={index}>
                       <View style={{ width: '100%', height: "60%", marginTop: 2 }}>
-                        <TouchableOpacity onPress={() => getChildCategory(item?.slug, item?.title)}>
+                        <TouchableOpacity onPress={() => getChildCategory(item?.slug)}>
                           <Image style={{ width: "99%", height: "99%", resizeMode: 'contain', padding: 1 }} source={{ uri: `${apiImagepath}/${item.images[0]?.imageUrl}`}}></Image>
                         </TouchableOpacity>
                       </View>

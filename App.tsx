@@ -15,6 +15,7 @@ import FavoriteScreen from "./screens/FavoriteScreen"
 import MyReviewsScreen from "./screens/MyReviewsScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import MyCart from './screens/MyCart'
+import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
 
 const Stack = createStackNavigator();
@@ -63,7 +64,15 @@ export default function App() {
           name="TabNav"
           component={TabNav}
           options={{ header: () => null }}
+        /> 
+        
+        <Stack.Screen
+          name="categoryWiseProductScreen"
+          component={categoryWiseProductScreen}
+          options={{ header: () => null }}
         />
+  
+
 
       </Stack.Navigator>
       <FlashMessage style={{alignItems:'center'}}  duration={3000} position="top" />

@@ -11,6 +11,7 @@ import Header from '../components/Header';
 import TopCategories from '../components/topCategories';
 // services
 import categoryService from '../services/categoryServices';
+import productService from '../services/productService';
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
@@ -53,7 +54,7 @@ export default function CategoryScreen() {
   useEffect(() => {
 
     categoryService.getAllCategories().then(res => {
-        console.log('====================================res',res);
+        // console.log('====================================res',res);
         
       setallCategories(res?.data)
       setchildCat(res[0]?.childTermValues)
@@ -64,6 +65,21 @@ export default function CategoryScreen() {
       }
     }).catch(err => { console.log(err) });
   }, [refreshing])
+
+
+  const getProducts = async (slug,childs) =>{
+
+    try {
+    let res  =  await productService.getCatWiseProduct(slug)
+
+          if(res?.data?.length>0){
+              navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
+           }
+    } catch (error) {
+      console.log('err in cat wise pro',err);
+    }
+  }
+  
 
 
 
@@ -79,6 +95,7 @@ export default function CategoryScreen() {
                   setchildCat(item?.children)
                   setbanner(item?.images?.banner?.url)
                   setselected(item?.slug)
+                  getProducts(item?.slug,item?.children)
                 }}>
                   {item?.slug == selected ?
                     <View style={[styles.categoryScrollView, { borderColor: '#e01221' }]} >
