@@ -3,7 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import FlashMessage from "react-native-flash-message";
 
-
+import { StateProvider } from "./context/StateProvider";
+import reducer, { initialState } from "./context/reducer";
 
 // navigations
 
@@ -25,6 +26,7 @@ export default function App() {
 
 
   return (
+    <StateProvider initialState={initialState} reducer={reducer}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName={"TabNav"}>
 
@@ -78,6 +80,6 @@ export default function App() {
       <FlashMessage style={{alignItems:'center'}}  duration={3000} position="top" />
 
     </NavigationContainer>
-
+    </StateProvider>
   );
 }

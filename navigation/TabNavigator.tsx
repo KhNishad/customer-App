@@ -3,6 +3,7 @@ import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome, AntDesign,MaterialIcons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
+import { useStateValue } from '../context/StateProvider'
 
 
 // services
@@ -12,11 +13,15 @@ import { Alert } from 'react-native';
 
 import CartScreen from '../screens/MyCart'
 import FavoriteScreen from '../screens/FavoriteScreen'
-import CategoryScreen from '../screens/CategoryScreen';
+import CatNav from '../navigation/CatNavigation';
 
 import Root from '../navigation/DrawerNavigation';
 export function TabNav() {
 
+   const [{ qnty, token }] = useStateValue();
+
+   console.log('...........qty',qnty);
+   
 
    // const netFunction = ()=>{
    //   NetworkUtils.isNetworkAvailable().then(res=>{
@@ -75,6 +80,7 @@ export function TabNav() {
           <Tab.Screen name="CartScreen" component={CartScreen}
             options={{
                tabBarLabel: "Cart",
+               tabBarBadge: qnty? qnty : null,
                // unmountOnBlur: true,
                header: () => null,
 
@@ -83,7 +89,7 @@ export function TabNav() {
             }}
 
          />
-          <Tab.Screen name="CategoryScreen" component={CategoryScreen}
+          <Tab.Screen name="CategoryScreen" component={CatNav}
             options={{
                tabBarLabel: "Categories",
                // unmountOnBlur: true,
@@ -94,11 +100,6 @@ export function TabNav() {
             }}
 
          />
-
-         
-
-
-
 
 
          {/* <Tab.Screen name="Profile"  component={Root}

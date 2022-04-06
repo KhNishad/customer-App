@@ -2,11 +2,15 @@
 import { View, Text, StyleSheet, StatusBar, Image, ActivityIndicator, SafeAreaView, TextInput, Button } from 'react-native';
 import { Dimensions } from 'react-native'
 import { FontAwesome, AntDesign, Entypo } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState, } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { showMessage, hideMessage } from "react-native-flash-message";
+import AddToCartServices from '../services/AddToCartServices';
+import { useIsFocused,useFocusEffect } from "@react-navigation/native";
+import { actionTypes } from "../context/reducer";
+import { useStateValue } from '../context/StateProvider'
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
@@ -16,10 +20,115 @@ let Color = '';
 export default function TabTwoScreen() {
 
     const navigation = useNavigation();
+    const [cartItem, setcartItem] = useState<any[]>([])
+    const [refreshing, setrefreshing] = useState(false)
+    const [renderMe, setrenderMe] = useState(false)
+
+    const [{ qnty, token }] = useStateValue();
+    const [state, dispatch] = useStateValue();
+
+    const isFocused = useIsFocused();
 
 
-    let arr = ['', '', '', '', '',]
+useEffect(() => {
+    let isAlive = true
+    AddToCartServices.getAllCartItem().then((res)=>{
+        if(isAlive){
+            setcartItem(res?.data?.packageList)
+            dispatch({
+                type: actionTypes.GET_TOTAL,
+                qnty: res?.data?.packageList[0]?.qty,
+              });
+        }
+    }).catch(err=>{
+        console.log('err in cart List',err);
+    })
+    return ()=> isAlive = false
+},[isFocused,refreshing,renderMe] )
 
+
+// increment cart item
+const qtyInc = (proId:Number,varId:Number) =>{
+    
+    const data = {
+        prodId: proId,
+        prodVarId: varId,
+        qty: 1,
+      }
+      AddToCartServices.addToCart(data).then((res)=>{
+        showMessage({
+          message: `${res?.message}`,
+          type: "success",
+          textStyle: { fontSize: 30 }
+        });
+        setrenderMe(!renderMe)
+        
+      }).catch(err=>{
+        showMessage({
+          message: `${err.message}`,
+          type: "danger",
+          textStyle: { fontSize: 30 }
+        });
+      })
+  
+}
+
+// decrement cart item
+const qtyDec = (proId:Number,varId:Number,qty:Number) =>{
+    
+    const data = {
+        prodId: proId,
+        prodVarId: varId,
+        qty: -1,
+      }
+      if(qty>1){
+        AddToCartServices.addToCart(data).then((res)=>{
+            showMessage({
+              message: `${res?.message}`,
+              type: "success",
+              textStyle: { fontSize: 30 }
+            });
+            setrenderMe(!renderMe)
+            
+          }).catch(err=>{
+            showMessage({
+              message: `${err.message}`,
+              type: "danger",
+              textStyle: { fontSize: 30 }
+            });
+          })
+      }
+    
+  
+}
+
+// remove item
+
+const removeItem  = async (proId:Number,varId:Number) => {
+    const data = {
+        prodId: proId,
+        prodVarId: varId,
+        qty: 0,
+      }
+      try {
+          let res = await AddToCartServices.addToCart(data)
+          if(res){
+            showMessage({
+                message: `${res?.message}`,
+                type: "success",
+                textStyle: { fontSize: 30 }
+              });
+              setrenderMe(!renderMe)
+          }
+      } catch (error) {
+        showMessage({
+            message: `${error.message}`,
+            type: "danger",
+            textStyle: { fontSize: 30 }
+          });
+      }
+      
+}
 
 
 
@@ -35,13 +144,15 @@ export default function TabTwoScreen() {
                             <View></View>
                         </View>
                     </View>
-                    {Array.apply(null,{length:14}).map((item,index)=>
-                      <View key={index} style={{ paddingHorizontal: 10 }}>
+                   
+                      <View  style={{ paddingHorizontal: 10 }}>
+                      {cartItem?.length > 0 ?
+                        cartItem?.map((item, index) =>
                         <View style={[styles.card, { marginTop: 8 }]}>
                             <Image style={{ width: deviceWidth/4, height: deviceWidth/4}} source={require('../assets/images/mobile.jpg')}></Image>
                             <View style={{paddingVertical:5,marginLeft:-20}}>
-                                <Text style={{fontSize:16,marginBottom:5}}>Realme X2</Text>
-                                <Text style={{fontSize:14,marginBottom:15}}>Realme Brand</Text>
+                                <Text style={{fontSize:16,marginBottom:5}}>{item?.product?.title}</Text>
+                                
                                 <View style={styles.qtyContainer}>
                                     <View style={{
                                         flexDirection: "row",
@@ -49,7 +160,7 @@ export default function TabTwoScreen() {
                                         alignItems: 'center',
                                     }} >
 
-                                        <TouchableOpacity>
+                                        <TouchableOpacity onPress={()=>qtyDec(item?.product?.id,item?.productVariation?.id,item?.qty)}>
                                             <View style={[styles.qtyBtn, { marginRight: 10 }]}>
                                                 <AntDesign
                                                     style={{ fontSize: 20, color: "#fff" }}
@@ -67,11 +178,11 @@ export default function TabTwoScreen() {
                                                     textAlign: 'center',
                                                     marginVertical: -2
                                                 }}
-                                                value="10"
+                                                value={item?.qty.toString()}
 
                                             />
                                         </View>
-                                        <TouchableOpacity >
+                                        <TouchableOpacity onPress={()=>qtyInc(item?.product?.id,item?.productVariation?.id)}>
                                             <View style={[styles.qtyBtn, { marginLeft: 10 }]}>
                                                 <AntDesign
                                                     style={{ fontSize: 20, color: "#fff" }}
@@ -83,14 +194,17 @@ export default function TabTwoScreen() {
                                 </View>
                             </View>
                             <View style={styles.card4}>
-                                <AntDesign name="closecircleo" size={20} color="black"></AntDesign>
-                                <Text style={{ fontSize: 18, fontWeight: '700' }}>$10.00</Text>
+                                <AntDesign onPress={()=>removeItem(item?.product?.id,item?.productVariation?.id)} name="closecircleo" size={20} color="black"></AntDesign>
+                                <Text style={{ fontSize: 18, fontWeight: '700' }}>TK: {item?.productVariation?.salePrice>0?(item?.productVariation?.salePrice * item?.qty):(item?.productVariation?.regularPrice * item?.qty)}</Text>
                             </View>
                         </View>
-                        
-                       
+                        ):
+                        <View style={{ justifyContent: "center", marginTop: deviceHeight / 2 - 100 }}>
+                <ActivityIndicator size="small" color="#e01221" />
+              </View> 
+}
                       </View>
-                     )}
+                   
                 </ScrollView>
                 
                 <View style={{position:'absolute',zIndex:999,bottom:0,left:5,backgroundColor:'#fff',height:90 }}>

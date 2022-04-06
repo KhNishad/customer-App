@@ -91,6 +91,8 @@ export default function ModalScreen({setModalOpen,ModalOpen}:any) {
             });
             SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
             setModalOpen(false)
+            // console.log('====================================',res?.data?.token?.accessToken);
+            
         } catch (error) {
             console.log('err in send otp',error);
             showMessage({

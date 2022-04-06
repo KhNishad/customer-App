@@ -1,10 +1,12 @@
 import * as React from "react";
 import { StyleSheet, Text, View, Image, Dimensions, Alert, BackHandler, Share } from "react-native";
 import { ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { Entypo, MaterialIcons,AntDesign } from "@expo/vector-icons";
+import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import productService from "../services/productService";
+import AddToCartServices from "../services/AddToCartServices";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 
 // services
@@ -15,21 +17,25 @@ const deviceWidth = Dimensions.get("window").width;
 // components
 import Header2 from "../components/Header";
 import { useEffect, useState } from "react";
+const apiImagepath = 'http://103.119.71.9:4400/media';
 
 
 export default function ProductDetails() {
- 
+
   const navigation = useNavigation();
-  const [refreshing, setrefreshing] = useState(false)
+  const [refreshing, setrefreshing] = useState(false);
+  const [productDetail, setproductDetail] = useState<any>({});
   const route = useRoute();
+  const [Counter, setCounter] = useState(1);
+
   const { title } = route.params;
 
   // pull refresh  function
-function wait(time: any) {
-  return new Promise(resolve => {
-    setTimeout(resolve, time)
-  })
-}
+  function wait(time: any) {
+    return new Promise(resolve => {
+      setTimeout(resolve, time)
+    })
+  }
 
   const refresh = React.useCallback(() => {
     setrefreshing(true)
@@ -39,200 +45,243 @@ function wait(time: any) {
   }, [refreshing])
 
   useEffect(() => {
-      productService.getSingleProductDetails(title).then((res)=>{
-        console.log('..........productdetails',res);
-        
-      })
-  },[refreshing])
-  
+    productService.getSingleProductDetails(title).then((res) => {
+      setproductDetail(res?.data);
+      // console.log("...............res", res?.data);
 
+    })
+  }, [refreshing])
+
+
+  //Add to cart 
+  const addToCart = async () => {
+    const data = {
+      prodId: productDetail?.id,
+      prodVarId: productDetail?.variations[0]?.id,
+      qty: Counter,
+    }
+    AddToCartServices.addToCart(data).then((res)=>{
+      showMessage({
+        message: `${res?.message}`,
+        type: "success",
+        textStyle: { fontSize: 30 }
+      });
+      
+    }).catch(err=>{
+      showMessage({
+        message: `${err.message}`,
+        type: "danger",
+        textStyle: { fontSize: 30 }
+      });
+    })
+
+  }
+
+
+
+  // quantity inc dec
+
+  const qtyInc = () => {
+
+    // if(Counter < productDetail?.variations[0]?.maxOrderQty)   
+    setCounter(Number(Counter) + 1);
+
+  };
+
+  const qtyDec = () => {
+    if (Counter > 1) setCounter(Counter - 1);
+
+  };
 
   return (
-    
-      <View style={{ zIndex: 0,backgroundColor: '#fff',  }}>
-        <Header2 />
-          <ScrollView
-            style={{ height: '90%' }}
-            removeClippedSubviews={true}
-          >
-                <View style={{ paddingVertical: 5}}>
-                    <View style={{ marginBottom: 5}}>
-                        {/* image section */}
-                        {/* <Carousel
+
+    <View style={{ backgroundColor: '#fff', flex: 1 }}>
+      <Header2 />
+      <ScrollView
+        style={{ height: '100%' }}
+        removeClippedSubviews={true}
+      >
+
+        <View style={{ paddingVertical: 5 }}>
+          <View style={{ marginBottom: 5 }}>
+            {/* image section */}
+            {/* <Carousel
                             style={{ width: deviceWidth, height: deviceWidth }}
                             delay={5000}
                             pageInfo={true}
                             pageInfoBackgroundColor={'#fff'}
                         > */}
-                                <View
-                                style={{ alignItems: "center" }}
-                                >
-                                    <Image
-                                        style={styles.detailsImg}
-                                        source={require('../assets/images/jacket.jpg')}
-                                    ></Image>
-                                </View>
+            {productDetail?.images?.length > 0 ?
+              <View
+                style={{ alignItems: "center" }}
+              >
+                <Image
+                  style={styles.detailsImg}
+                  source={{ uri: `${apiImagepath}/${productDetail?.images[0]?.url}` }}
+                ></Image>
+              </View>
+              : null}
 
-                        {/* </Carousel> */}
+            {/* </Carousel> */}
+
+          </View>
+
+          <View style={{ marginBottom: 5, paddingTop: 5 }}>
+            {/* price section */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
+              {productDetail?.variations?.length > 0 ?
+                <View style={[styles.priceAndWishContainer]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={styles.salePrice}>
+                      Tk.{productDetail?.variations[0]?.salePrice ? productDetail?.variations[0]?.regularPrice : productDetail?.variations[0]?.regularPrice}
+                    </Text>
+
+                  </View>
+                  {productDetail?.variations[0]?.salePrice > 0 ?
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
+                      <Text style={{ color: "#1239", fontSize: 14, textDecorationLine: 'line-through' }}>
+                        Tk.{productDetail?.variations[0]?.salePrice ? productDetail?.variations[0]?.regularPrice : null}
+                      </Text>
 
                     </View>
-
-                    <View style={{  marginBottom: 5, paddingTop: 5 }}>
-                        {/* price section */}
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
-                            <View style={[styles.priceAndWishContainer]}>
-                                <View style={{ flexDirection:'row', alignItems:'center'}}>
-                                    <Text style={styles.salePrice}>
-                                    Tk.250.00
-                                    </Text>
-                                    
-                                </View>
-                                {/* offer tag */}
-                                {/* <View>
-                                    <View style={[styles.discoutDesign,{marginTop:0}]}>
-                                        <Text style={{ color: "#e01221", fontSize: 10 }}>
-                                        20
-                                        % OFF
-                                        </Text>
-                                    </View>
-                                
-                                </View> */}
-                                 <View style={{ flexDirection:'row', alignItems:'center',paddingLeft:10}}>
-                                    <Text style={{ color: "#1239", fontSize: 14,textDecorationLine:'line-through' }}>
-                                    Tk.150.00
-                                    </Text>
-                                    
-                                </View>
-                            </View>
-
-                            <View style={{ flexDirection: 'row', alignItems: 'center',marginBottom:0 }}>
-                            
-                                <TouchableOpacity style={{ paddingRight: 10 }}>
-                                <Entypo name='heart-outlined' size={20} color= {'#1239'}></Entypo>
-                                </TouchableOpacity>
-                                <TouchableOpacity  style={{ paddingRight: 15 }}>
-                                <Entypo name='share' size={20} color='#1239'></Entypo>
-                                </TouchableOpacity>
-                            </View>
-                            
-                        </View>
-                                
-                        <View style={styles.shopTileContainer}>
-                            <Text style={styles.proTitle}>Samsung Galaxy</Text>
-
-                            <Text
-                                style={{ fontSize: 14, color: '#1239' }}>
-                                Category : Mobile
-                            </Text>
-                        </View>
-
-                        {/* review section */}
-
-                        <View style={styles.allReviews}>
-                            <Rating
-                                type='custom'
-                                readonly={true}
-                                startingValue={5}
-                                imageSize={18}
-                                // onFinishRating={''}
-                                // ratingColor='#3498db'
-
-                            />
-
-                            <TouchableOpacity
-                                style={styles.allReview}
-                            >
-                                <Text onPress={()=>navigation.navigate('MyReviewsScreen')} style={{ color: "#1239", fontSize: 14 }}>
-                                All Reviews
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        {/* qty box  */}
-
-                        <View style={styles.qtyContainer}>
-
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: 'center',
-                            // width:'100%'
-                          }}
-                        >
-                          <Text style={{fontSize: 15, marginRight: '20%' }} >
-                            Quantity
-                          </Text>
-                          <TouchableOpacity>
-                            <View style={[styles.qtyBtn,{marginRight:10}]}>
-                              <AntDesign
-                                style={{ fontSize: 16, color: "#fff" }}
-                                name="minus"
-                              ></AntDesign>
-                            </View>
-                          </TouchableOpacity>
-
-                          <View style={styles.qtyInputBox}>
-                            <TextInput
-                              keyboardType='numeric'
-                              style={{
-                                fontSize: 14,
-                                color: "#1239",
-                                textAlign: 'center',
-                                marginVertical: -2
-                              }}
-                              value="10"
-                            
-                            />
-                          </View>
-                          <TouchableOpacity >
-                            <View style={[styles.qtyBtn,{marginLeft:10}]}>
-                              <AntDesign
-                                style={{ fontSize: 16, color: "#fff" }}
-                                name="plus"
-                              ></AntDesign>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
-                        </View>
-
-                        {/* total */}
-
-                        <View style={{padding:10,display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
-                            <Text style={{fontSize:18}}>Total</Text>
-                            <Text style={{fontSize:18}}>$ 250 * 1 = 250</Text>
-
-                        </View>
-
-                        {/* btn s s */}
-
-                        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-around'}}>
-                            <View style={styles.secondBtns}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
-                                    <Text style={{ color: '#fff' }}> Add to Cart</Text>
-                                    </TouchableOpacity>
-                                </View>
-                           </View>
-                           <View style={styles.secondBtns}>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <AntDesign name="tago" size={25} color={"#fff"}></AntDesign>
-                                    <Text style={{ color: '#fff',marginLeft:5 }}>Buy Now</Text>
-                                    </TouchableOpacity>
-                                </View>
-                           </View>
-                        </View>
-
-                        {/* description */}
-
-                        <View style={{padding:10}}>
-                            <Text style={{fontSize:16,fontWeight:'bold'}}>Specification & Description :</Text>
-                        </View>
-                        
-                    </View>
+                    : null}
                 </View>
-           </ScrollView>
+                : null}
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0 }}>
+
+                <TouchableOpacity style={{ paddingRight: 10 }}>
+                  <Entypo name='heart-outlined' size={20} color={'#1239'}></Entypo>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ paddingRight: 15 }}>
+                  <Entypo name='share' size={20} color='#1239'></Entypo>
+                </TouchableOpacity>
+              </View>
+
+            </View>
+
+            <View style={styles.shopTileContainer}>
+              <Text style={styles.proTitle}>{productDetail?.title}</Text>
+
+              <Text
+                style={{ fontSize: 14, color: '#1239' }}>
+                Category : {productDetail?.category?.title}
+              </Text>
+            </View>
+
+
+
+            {/* review section */}
+
+            <View style={styles.allReviews}>
+              <Rating
+                type='custom'
+                readonly={true}
+                startingValue={5}
+                imageSize={18}
+              // onFinishRating={''}
+              // ratingColor='#3498db'
+
+              />
+
+              <TouchableOpacity
+                style={styles.allReview}
+              >
+                <Text style={{ color: "#1239", fontSize: 14 }}>
+                  All Reviews
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {/* qty box  */}
+
+            <View style={styles.qtyContainer}>
+
+              <View style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: 'center',
+                // width:'100%'
+              }}
+              >
+                <Text style={{ fontSize: 15, marginRight: '20%' }} >
+                  Quantity
+                </Text>
+                <TouchableOpacity onPress={() => qtyDec()}>
+                  <View style={[styles.qtyBtn, { marginRight: 10 }]}>
+                    <AntDesign
+                      style={{ fontSize: 16, color: "#fff" }}
+                      name="minus"
+                    ></AntDesign>
+                  </View>
+                </TouchableOpacity>
+
+                <View style={styles.qtyInputBox}>
+                  <TextInput
+                    keyboardType='numeric'
+                    style={{
+                      fontSize: 14,
+                      color: "#1239",
+                      textAlign: 'center',
+                      marginVertical: -2
+                    }}
+                    value={Counter.toString()}
+
+                  />
+                </View>
+                <TouchableOpacity onPress={() => qtyInc()} >
+                  <View style={[styles.qtyBtn, { marginLeft: 10 }]}>
+                    <AntDesign
+                      style={{ fontSize: 16, color: "#fff" }}
+                      name="plus"
+                    ></AntDesign>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* total */}
+            {productDetail?.variations?.length > 0 ?
+              <View style={{ padding: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+                <Text style={{ fontSize: 18 }}>Total</Text>
+                <Text style={{ fontSize: 18 }}>$ {productDetail?.variations[0]?.salePrice ? productDetail?.variations[0]?.salePrice : productDetail?.variations[0]?.regularPrice} * {Counter} = {productDetail?.variations[0]?.salePrice ? productDetail?.variations[0]?.salePrice * Counter : productDetail?.variations[0]?.regularPrice * Counter}</Text>
+
+              </View>
+              : null}
+
+            {/* btn s s */}
+
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
+              <View style={styles.secondBtns}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity onPress={()=>addToCart()} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
+                    <Text style={{ color: '#fff' }}> Add to Cart</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.secondBtns}>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <AntDesign name="tago" size={25} color={"#fff"}></AntDesign>
+                    <Text style={{ color: '#fff', marginLeft: 5 }}>Buy Now</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+
+            {/* description */}
+
+            <View style={{ padding: 10 }}>
+              <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Specification & Description :</Text>
+              <View style={{ marginVertical: 10 }}>
+                <Text>{productDetail?.description}</Text>
+              </View>
+            </View>
+
+          </View>
         </View>
+      </ScrollView>
+    </View>
 
   );
 }
@@ -375,10 +424,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 10,
-    borderBottomColor:'#1234',
-    borderBottomWidth:.5,
-    borderTopColor:'#1234',
-    borderTopWidth:.5
+    borderBottomColor: '#1234',
+    borderBottomWidth: .5,
+    borderTopColor: '#1234',
+    borderTopWidth: .5
   },
   qtyBtn: {
     backgroundColor: "#1239",
@@ -496,9 +545,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 10,
-    borderColor:"#e01221",
-    borderWidth:1,
-    padding:4,
+    borderColor: "#e01221",
+    borderWidth: 1,
+    padding: 4,
     // marginLeft:10
   },
   variationBox: {
