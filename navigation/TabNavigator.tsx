@@ -3,8 +3,9 @@ import { createBottomTabNavigator, } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome, AntDesign,MaterialIcons } from '@expo/vector-icons';
 import { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
+import AddToCartServices from "../services/AddToCartServices";
 import { useStateValue } from '../context/StateProvider'
-
+import { actionTypes } from "../context/reducer";
 
 // services
 import { Alert } from 'react-native';
@@ -16,32 +17,51 @@ import FavoriteScreen from '../screens/FavoriteScreen'
 import CatNav from '../navigation/CatNavigation';
 
 import Root from '../navigation/DrawerNavigation';
+import NetworkUtils from '../utils/Connection';
 export function TabNav() {
 
    const [{ qnty, token }] = useStateValue();
+   const [state, dispatch] = useStateValue();
+ 
+ 
+   useEffect(() => {
+     let qty = 0;
+     AddToCartServices.getAllCartItem().then((res)=>{
+ 
+             res?.data?.packageList.map((item,index)=>{
+                 qty = qty + item?.qty
+             })
+             dispatch({
+                 type: actionTypes.GET_TOTAL,
+                 qnty: qty,
+               });
+         
+     }).catch(err=>{
+         console.log('err in cart List',err);
+     })
+ },[])
 
-   console.log('...........qty',qnty);
    
 
-   // const netFunction = ()=>{
-   //   NetworkUtils.isNetworkAvailable().then(res=>{
-   //     if(!res){
-   //       Alert.alert(
-   //         "Something Went Wrong!",
-   //         "Please Check Your Internet Connection",
-   //         [
-   //           {
-   //             text: "Cancel",
-   //             onPress: () => console.log("Cancel Pressed"),
-   //             style: "cancel"
-   //           },
-   //           { text: "Try Again", onPress: () => netFunction() }
-   //         ]
-   //       );
-   //     }
-   //   })
-   // }
-   // netFunction()
+   const netFunction = ()=>{
+     NetworkUtils.isNetworkAvailable().then(res=>{
+       if(!res){
+         Alert.alert(
+           "Something Went Wrong!",
+           "Please Check Your Internet Connection",
+           [
+             {
+               text: "Cancel",
+               onPress: () => console.log("Cancel Pressed"),
+               style: "cancel"
+             },
+             { text: "Try Again", onPress: () => netFunction() }
+           ]
+         );
+       }
+     })
+   }
+   netFunction()
 
 
    const [totalItems, settotalItems] = useState(0)

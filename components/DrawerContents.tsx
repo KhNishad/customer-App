@@ -130,7 +130,7 @@ export function DrawerContent(props:any) {
                             )}
                             label="Address"
                             onPress={() =>{
-                               
+                              props.navigation.navigate('AddressScreen')
                             }}
                         />
                            <DrawerItem 

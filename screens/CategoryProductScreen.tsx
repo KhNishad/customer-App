@@ -37,7 +37,7 @@ export default function TopCategories() {
   const isFocused = useIsFocused();
 
   const { slug, pro,childs } = route.params;
-  console.log('...............receoved',slug,pro);
+  console.log('...............receoved',childs);
   
 
   // back press handle
@@ -156,7 +156,7 @@ export default function TopCategories() {
           <View removeClippedSubviews={true}>
             <View style={{ paddingHorizontal: 10 }}>
               <Image style={styles.banner} source={{ uri: `${apiImagepath}/${bannerrs}` }}></Image>
-              {childs.length > 0 ?
+              {childs && childs.length > 0 ?
                 <ScrollView style={styles.horizontalScroll} horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.flashSaleContainer}>
                     {childs.map((item: any, index: number) =>
@@ -188,7 +188,7 @@ export default function TopCategories() {
             </View>
             {pro?.length > 0 ?
 
-              <View style={{ paddingHorizontal: 10 }}>
+              <View style={{ paddingHorizontal: 10,flexDirection:'row',alignItems:'center',flexWrap:'wrap' }}>
 
                 <ProductCard products={pro} />
 

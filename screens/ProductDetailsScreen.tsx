@@ -47,10 +47,10 @@ export default function ProductDetails() {
   useEffect(() => {
     productService.getSingleProductDetails(title).then((res) => {
       setproductDetail(res?.data);
-      // console.log("...............res", res?.data);
+      console.log("...............res", res?.data);
 
     })
-  }, [refreshing])
+  }, [refreshing,title])
 
 
   //Add to cart 
@@ -133,7 +133,7 @@ export default function ProductDetails() {
                 <View style={[styles.priceAndWishContainer]}>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={styles.salePrice}>
-                      Tk.{productDetail?.variations[0]?.salePrice ? productDetail?.variations[0]?.regularPrice : productDetail?.variations[0]?.regularPrice}
+                      Tk.{productDetail?.variations[0]?.salePrice>0 ? productDetail?.variations[0]?.salePrice : productDetail?.variations[0]?.regularPrice}
                     </Text>
 
                   </View>

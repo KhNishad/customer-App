@@ -17,11 +17,16 @@ import MyReviewsScreen from "./screens/MyReviewsScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import MyCart from './screens/MyCart'
 import categoryWiseProductScreen from './screens/CategoryProductScreen'
+import AddressScreen from './screens/AddressScreen'
+import { useEffect } from "react";
+// import CheckoutScreen from './screens/CheckoutScreen';
 
 
 const Stack = createStackNavigator();
 
 export default function App() {
+
+
 
 
 
@@ -71,6 +76,11 @@ export default function App() {
         <Stack.Screen
           name="categoryWiseProductScreen"
           component={categoryWiseProductScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="AddressScreen"
+          component={AddressScreen}
           options={{ header: () => null }}
         />
   

@@ -53,7 +53,7 @@ export default function TabTwoScreen() {
           message: `${res.message}`,
           type: "success",
         });
-        // SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
+        SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
         navigation.navigate('TabNav')
 
        } catch (error) {

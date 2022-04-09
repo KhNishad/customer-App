@@ -12,11 +12,14 @@ async function getAllCartItem() {
     return data;
   }
 
+  async function placeOrder(data:any) {
+    const res = await request('/requisition',{method:'POST',data:data})
+    return res;
+  }
 
+  
 
-
-
-export default {addToCart,getAllCartItem}
+export default {addToCart,getAllCartItem,placeOrder}
 
 
 

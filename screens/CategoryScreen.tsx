@@ -67,11 +67,10 @@ export default function CategoryScreen() {
   }, [refreshing])
 
 
-  const getProducts = async (slug,childs) =>{
+  const getProducts = async (slug:any,childs:any) =>{
 
     try {
     let res  =  await productService.getCatWiseProduct(slug)
-
           if(res?.data?.length>0){
               navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
            }
