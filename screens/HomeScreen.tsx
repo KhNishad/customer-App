@@ -1,7 +1,7 @@
 
 import { View, Text, StyleSheet, StatusBar, SafeAreaView, TextInput, Button, Image } from 'react-native';
 import { Dimensions } from 'react-native'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Modal from "react-native-modal";
@@ -12,6 +12,10 @@ import Header from '../components/Header';
 import Slider from '../components/bannerCarosel';
 import ProductCard from '../components/ProductCard';
 import LoginModal from '../components/LoginModal';
+
+//services
+
+import HomeServices from '../services/HomeServices';
 
 // img
 
@@ -35,11 +39,32 @@ const data = [
     imageLink: require('../assets/images/product.jpg')
   }
 ]
-export default function TabTwoScreen() {
+export default function TabTwoScreen(props:any) {
 
   const navigation = useNavigation();
-  const [ModalOpen, setModalOpen] = useState(false)
+  const [ModalOpen, setModalOpen] = useState(false);
+  const [banner, setbanner] = useState([])
+  const [homeSection, setHomeSection] = useState({})
+  const [refreshing, setrefreshing] = useState(false)
 
+useEffect(() => {
+
+  const data ={
+    "homePage:banners": [
+      {}
+    ],
+  
+  "homePage:innerSections":[{
+
+  }],
+  }
+     HomeServices.homeSettings(data).then((res)=>{
+        console.log('...........banner',res);
+        setHomeSection(res?.data)
+        // console.log('...........banner..........',banner);
+     })
+     
+},[refreshing])
 
 
 
@@ -53,7 +78,7 @@ export default function TabTwoScreen() {
         <ScrollView>
           <Header />
           <View>
-            <Slider />
+            <Slider banner={homeSection?.['homePage:banners']}/>
           </View>
           <View style={styles.iconSection}>
             <TouchableOpacity onPress={()=>setModalOpen(true)} style={styles.icons}>
@@ -81,21 +106,27 @@ export default function TabTwoScreen() {
               <Text style={{ fontSize: 10 }}>Electronics</Text>
             </TouchableOpacity>
           </View>
-
-          <View style={{marginBottom:10}}>
+          {homeSection?.['homePage:innerSections']?.length>0?
+          <>
+          {homeSection?.['homePage:innerSections'].map((item:any,index:number)=>
+          
+          <View style={{marginBottom:10}} key={index}>
               <View style={styles.ProductSection}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Popular </Text>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item?.title}</Text>
                 <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
               </View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={styles.CardContainer}>
-                  {Array.apply(null,{length:10}).map((item,index)=>
-                      <ProductCard image={data[0]}/>
-                  )}
+                  {/* {Array.apply(null,{length:10}).map((item,index)=> */}
+                      <ProductCard products={item?.source}/>
+                  {/* )} */}
                 </View>
               </ScrollView>
           </View>
-          <View style={{marginBottom:10}}>
+          )}
+          </>
+          :null}
+          {/* <View style={{marginBottom:10}}>
             <View style={styles.ProductSection}>
               <Text style={{ fontSize: 18, fontWeight: 'bold' }}>New In Store </Text>
               <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
@@ -108,9 +139,9 @@ export default function TabTwoScreen() {
               </View>
             </ScrollView>
            
-          </View>
+          </View> */}
 
-          <View style={{marginBottom:10}}>
+          {/* <View style={{marginBottom:10}}>
             <View style={styles.ProductSection}>
               <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Editor Choice</Text>
               <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
@@ -123,7 +154,7 @@ export default function TabTwoScreen() {
               </View>
             </ScrollView>
            
-          </View>
+          </View> */}
 
         </ScrollView>
       </SafeAreaView>

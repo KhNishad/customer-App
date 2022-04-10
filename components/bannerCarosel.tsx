@@ -3,6 +3,7 @@ import {View,Dimensions,Image,StyleSheet} from 'react-native';
 import Carousel from 'react-native-looped-carousel';
 // import img from '../assets/images/banner-and-eCommerce.jpg'
 import { useNavigation} from '@react-navigation/native';
+const apiImagepath = 'http://103.119.71.9:4400/media';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -12,7 +13,13 @@ const deviceWidth = Dimensions.get('window').width
 
 const width = Dimensions.get('window').width-20
 const height = 180;
-export default function CarouselExample({images}:any) {
+let  bannerson ;
+export default function CarouselExample({banner}:any) {
+
+// bannerson = banner['homePage:banners']
+
+
+
 
   const navigation = useNavigation();
 
@@ -33,12 +40,12 @@ export default function CarouselExample({images}:any) {
          {/* {Object.keys(images).length == 0?null: */}
       
          <View style={{alignItems:'center'}}>
-            {banners?.length > 0?
+            {banner?.length > 0?
               //  main banner 
              <Carousel  bullets={true} bulletStyle={{backgroundColor:"#ec1d25",borderColor:"#ec1d25"}} chosenBulletStyle={{backgroundColor:'red',width:20}} delay={4000} style={{width:width,height:height}}>
-                {banners?.map((item,index)=>
-                  <TouchableOpacity>
-                    <Image style={styles.mainBanner}  source={require('../assets/images/banner-and-eCommerce.jpg')}></Image>
+                {banner?.map((item:any,index:number)=>
+                  <TouchableOpacity key={index}>
+                    <Image style={styles.mainBanner}  source={{ uri: `${apiImagepath}/${item?.image?.url}`}}></Image>
                   </TouchableOpacity>  
                 )}
 

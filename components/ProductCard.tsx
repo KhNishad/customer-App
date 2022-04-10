@@ -15,18 +15,24 @@ const apiImagepath = 'http://103.119.71.9:4400/media';
 
 export default function ProductCard({products}:any) {
 
+  console.log('====================================pro card',products);
+ 
 
   const navigation = useNavigation();
 
 
   return (
-             <>
+    
+             <View>
+               {products?.length>0?
+               <>
              {products?.map((item:any,index:number)=>
               <TouchableOpacity key={index} onPress={()=> navigation.navigate('ProductDetails',{title:item.slug})} style={styles.card}>
-
+                {item?.images?.length?
                 <View style={{ alignItems: 'center', justifyContent: 'center',elevation:5 }}>
                   <Image style={styles.img} source={{uri:`${apiImagepath}/${item?.images[0]?.url}`}}></Image>
                 </View>
+                :null}
                 <View style={{ margin: 5 ,}}>
                   <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{item.title}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -42,8 +48,9 @@ export default function ProductCard({products}:any) {
 
               </TouchableOpacity>
              )}
-
-            </>
+              </>
+              :null}
+            </View>
   );
 }
 

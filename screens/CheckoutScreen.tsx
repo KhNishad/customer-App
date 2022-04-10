@@ -62,7 +62,7 @@ export default function TabTwoScreen() {
         }
         try {
             let res = await AddToCartServices.placeOrder(data)
-            console.log('.............res order',res);
+            // console.log('.............res order',res);
             
 
         } catch (error) {

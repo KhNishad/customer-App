@@ -47,7 +47,7 @@ export default function ProductDetails() {
   useEffect(() => {
     productService.getSingleProductDetails(title).then((res) => {
       setproductDetail(res?.data);
-      console.log("...............res", res?.data);
+      // console.log("...............res", res?.data);
 
     })
   }, [refreshing,title])
