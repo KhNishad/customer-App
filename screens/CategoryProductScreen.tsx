@@ -188,7 +188,7 @@ export default function TopCategories() {
             </View>
             {pro?.length > 0 ?
 
-              <View style={{ paddingHorizontal: 10,flexDirection:'row',alignItems:'center',flexWrap:'wrap' }}>
+              <View style={{ paddingHorizontal: 10,flexDirection:'row',alignItems:'center',flexWrap:'wrap', }}>
 
                 <ProductCard products={pro} />
 
@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     borderWidth: .5,
     borderColor: '#ddd',
     height: 80,
-    borderRadius: 5
+    borderRadius: 5,
+    marginBottom:5
   }
 });

@@ -64,8 +64,6 @@ export function TabNav() {
    netFunction()
 
 
-   const [totalItems, settotalItems] = useState(0)
-   const [renderMe, setrenderMe] = useState(false)
 
 
    const Tab = createBottomTabNavigator();

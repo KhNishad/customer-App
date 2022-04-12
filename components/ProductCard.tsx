@@ -15,15 +15,13 @@ const apiImagepath = 'http://103.119.71.9:4400/media';
 
 export default function ProductCard({products}:any) {
 
-  console.log('====================================pro card',products);
- 
 
   const navigation = useNavigation();
 
 
   return (
     
-             <View>
+             <>
                {products?.length>0?
                <>
              {products?.map((item:any,index:number)=>
@@ -34,7 +32,7 @@ export default function ProductCard({products}:any) {
                 </View>
                 :null}
                 <View style={{ margin: 5 ,}}>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>{item.title}</Text>
+                  <Text numberOfLines={2} style={{ fontSize: 12, fontWeight: 'bold' }}>{item.title}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 10, color: '#1239' }}>{item?.brand?.title}</Text>
                     <EvilIcons name='heart' size={20} />
@@ -50,7 +48,7 @@ export default function ProductCard({products}:any) {
              )}
               </>
               :null}
-            </View>
+            </>
   );
 }
 
@@ -93,7 +91,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: deviceWidth / 3 - 15,
-    height: 180,
+    height: 190,
     borderWidth: .5,
     borderRadius: 5,
     marginRight:10,

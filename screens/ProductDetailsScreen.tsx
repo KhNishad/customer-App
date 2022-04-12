@@ -30,6 +30,10 @@ export default function ProductDetails() {
 
   const { title } = route.params;
 
+
+  console.log('................slug',title);
+  
+
   // pull refresh  function
   function wait(time: any) {
     return new Promise(resolve => {

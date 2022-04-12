@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ScrollView } from 'react-native-gesture-handler';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 
 const deviceWidth = Dimensions.get('window').width
@@ -63,10 +64,16 @@ export default function TabTwoScreen() {
         try {
             let res = await AddToCartServices.placeOrder(data)
             // console.log('.............res order',res);
-            
+            showMessage({
+                message: `${res.message}`,
+                type: "success",
+              });
 
         } catch (error) {
-            
+            showMessage({
+                message: `${error.message}`,
+                type: "danger",
+              });
         }
     }
 

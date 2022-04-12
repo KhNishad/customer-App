@@ -20,7 +20,7 @@ export default function Root() {
 		<Drawer.Navigator initialRouteName="Home" drawerContent = {props => <DrawerContent {...props}/>}>
 
 			<Drawer.Screen name="Home" component={HomeScreen} />
-			{/* <Drawer.Screen name="productDetailsScreen" component={productDetailsScreen} /> */}
+			<Drawer.Screen name="productDetailsScreen" component={productDetailsScreen} />
 
 			
 

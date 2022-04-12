@@ -25,26 +25,13 @@ import HomeServices from '../services/HomeServices';
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
-const data = [
-  {
-    id: "1",
-    imageLink: require('../assets/images/jacket.jpg')
-  },
-  {
-    id: "2",
-    imageLink: require('../assets/images/mobile.jpg')
-  },
-  {
-    id: "3",
-    imageLink: require('../assets/images/product.jpg')
-  }
-]
+
 export default function TabTwoScreen(props:any) {
 
   const navigation = useNavigation();
   const [ModalOpen, setModalOpen] = useState(false);
   const [banner, setbanner] = useState([])
-  const [homeSection, setHomeSection] = useState({})
+  const [homeSection, setHomeSection] = useState<any>({})
   const [refreshing, setrefreshing] = useState(false)
 
 useEffect(() => {
@@ -59,9 +46,9 @@ useEffect(() => {
   }],
   }
      HomeServices.homeSettings(data).then((res)=>{
-        console.log('...........banner',res);
         setHomeSection(res?.data)
-        // console.log('...........banner..........',banner);
+        // console.log('====================================',res?.data);
+       
      })
      
 },[refreshing])
@@ -81,12 +68,12 @@ useEffect(() => {
             <Slider banner={homeSection?.['homePage:banners']}/>
           </View>
           <View style={styles.iconSection}>
-            <TouchableOpacity onPress={()=>setModalOpen(true)} style={styles.icons}>
-              <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
+            <TouchableOpacity onPress={()=> navigation.navigate('CategoryScreen')} style={styles.icons}>
+              <Image style={styles.mainBanner} source={require('../assets/images/categories.png')}></Image>
               <Text  style={{ fontSize: 10,textAlign:'center' }}>Categories</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
-              <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
+              <Image style={styles.mainBanner} source={require('../assets/images/layers.png')}></Image>
               <Text style={{ fontSize: 10 }}>Essential</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
@@ -94,20 +81,20 @@ useEffect(() => {
               <Text style={{ fontSize: 10 }}>Offer Zone</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
-              <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
+              <Image style={styles.mainBanner} source={require('../assets/images/mobile-app.png')}></Image>
               <Text style={{ fontSize: 10 }}>Mobile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
-              <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
+              <Image style={styles.mainBanner} source={require('../assets/images/clothes-rack.png')}></Image>
               <Text style={{ fontSize: 10 }}>Fashion</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
-              <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
+              <Image style={styles.mainBanner} source={require('../assets/images/electronics.png')}></Image>
               <Text style={{ fontSize: 10 }}>Electronics</Text>
             </TouchableOpacity>
           </View>
           {homeSection?.['homePage:innerSections']?.length>0?
-          <>
+          <View>
           {homeSection?.['homePage:innerSections'].map((item:any,index:number)=>
           
           <View style={{marginBottom:10}} key={index}>
@@ -117,45 +104,13 @@ useEffect(() => {
               </View>
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 <View style={styles.CardContainer}>
-                  {/* {Array.apply(null,{length:10}).map((item,index)=> */}
-                      <ProductCard products={item?.source}/>
-                  {/* )} */}
+                    <ProductCard products={item?.source}/>
                 </View>
               </ScrollView>
           </View>
           )}
-          </>
+          </View>
           :null}
-          {/* <View style={{marginBottom:10}}>
-            <View style={styles.ProductSection}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>New In Store </Text>
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
-            </View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              <View style={styles.CardContainer}>
-                {Array.apply(null, {length: 10}).map((item,index)=>
-                  <ProductCard key={index} image={data[1]}/>
-                )}
-              </View>
-            </ScrollView>
-           
-          </View> */}
-
-          {/* <View style={{marginBottom:10}}>
-            <View style={styles.ProductSection}>
-              <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Editor Choice</Text>
-              <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
-            </View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              <View style={styles.CardContainer}>
-                {Array.apply(null, {length: 10}).map((item,index)=>
-                  <ProductCard key={index} image={data[2]}/>
-                )}
-              </View>
-            </ScrollView>
-           
-          </View> */}
-
         </ScrollView>
       </SafeAreaView>
       {ModalOpen?

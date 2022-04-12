@@ -5,12 +5,18 @@ import {DrawerContentScrollView,DrawerItem,} from '@react-navigation/drawer';
 import { Ionicons,FontAwesome5,MaterialIcons,Entypo,MaterialCommunityIcons } from '@expo/vector-icons';
 import {useState,useEffect} from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useFocusEffect } from '@react-navigation/native';
 import { useIsDrawerOpen } from '@react-navigation/drawer';
 // import { actionTypes } from "../context/reducer";
 // import { useStateValue } from '../context/StateProvider'
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useNavigation } from '@react-navigation/native';
+
+
+
+// service
+import profileService from '../services/profileService'
+
 
 
 import LoginModal from '../components/LoginModal';
@@ -20,22 +26,23 @@ export function DrawerContent(props:any) {
 
   const isDrawerOpen = useIsDrawerOpen();
   
-  const [userInfo, setuserInfo] = useState([])
-  const [isLoginModalOpen, setisLoginModalOpen] = useState(false)
+
   const [notLogin, setnotLogin] = useState(false)
   const [token, settoken] = useState('')
   const [ModalOpen, setModalOpen] = useState(false)
+  const [refreshing, setrefreshing] = useState(false)
+  const [phone, setphone] = useState('')
+  const [name, setname] = useState('')
   const navigation = useNavigation(); 
 
   
-
-
       useEffect(() => {
         const token = async()=>{
          
           let tokenn = await SecureStore.getItemAsync('accessToken')
           if(tokenn != null){
             setnotLogin(true)
+            
           }else{
             setnotLogin(false)
           }
@@ -52,6 +59,8 @@ export function DrawerContent(props:any) {
         let tokenn =   await  SecureStore.deleteItemAsync('accessToken')
           
           if(tokenn == null){
+            setname('')
+            setphone('')
             props.navigation.closeDrawer()
             showMessage({
               message: `Logged Out Successfully`,
@@ -60,22 +69,42 @@ export function DrawerContent(props:any) {
           }
        
         }
+
+        useFocusEffect(() => {
+         if(token){
+           
+          profileService.getUser().then((res)=>{
+            setname(res?.data?.name)
+            setphone(res?.data?.phone)
+          }).catch(err=>{
+
+          })
+         }
+                      
+        })  
+        
+
+        // close the drawer
+        const closeIt = ()=>{
+          props.navigation.closeDrawer()
+
+        }
       
     return(
         <View style={{flex:1}}>
             <DrawerContentScrollView {...props}>
-                <View style={styles.drawerContent}>
+                <View style={styles.drawerContent}>  
                   <View style={styles.userInfoSection}>
                     <TouchableOpacity style={{paddingBottom:5}} onPress={()=> props.navigation.navigate('Account')}>
                       <View  style={{flexDirection:'row',marginTop: 15,alignItems:'center'}}>
-                          <Image  source={require('../assets/images/essa-logo.png')} 
+                          {/* <Image  source={require('../assets/images/essa-logo.png')} 
                              style={styles.sellerImg}
-                          />
+                          /> */}
                           
                         <View style={{marginLeft:15}}>
-                            <Title  style={styles.title}>Jhon Cina</Title>  
+                            <Title  style={styles.title}>{name}</Title>  
                            
-                            <Text style={{fontSize:14,color:'#1234'}}>01728897456</Text>                              
+                            <Text style={{fontSize:14,color:'#1234'}}>{phone}</Text>                              
                         </View>
                      </View>
                       </TouchableOpacity>
@@ -91,7 +120,7 @@ export function DrawerContent(props:any) {
                             )}
                             label="All Categories"
                             onPress={() => {
-                              
+                              props.navigation.navigate('CategoryScreen')
                             }}
                         />
 
@@ -101,7 +130,7 @@ export function DrawerContent(props:any) {
                             )}
                             label="Favorites"
                             onPress={() => {
-                             
+                              
                             }}
                         />
 
@@ -202,7 +231,7 @@ export function DrawerContent(props:any) {
               </Drawer.Section>
              } 
             {ModalOpen?
-              <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+              <LoginModal closeIt={closeIt()}  setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
              :null}
         </View>
     );

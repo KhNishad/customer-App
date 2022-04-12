@@ -13,7 +13,7 @@ const deviceWidth = Dimensions.get('window').width
 
 import LoginService from '../services/LoginService';
 
-export default function ModalScreen({setModalOpen,ModalOpen}:any) {
+export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
 
     const [number, setnumber] = useState('')
     const [otpCode, setotpCode] = useState('')
@@ -37,7 +37,7 @@ export default function ModalScreen({setModalOpen,ModalOpen}:any) {
                     type: "success",
                   });
                   SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
-                  // navigation.closeDrawer()
+                  closeIt()
                   setModalOpen(false)
                   setotpCode('')
                   setpassWord('')

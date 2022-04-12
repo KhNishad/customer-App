@@ -147,22 +147,23 @@ export default function TabTwoScreen() {
             <ScrollView style={{ marginBottom: 95 }}>
                 <View style={styles.container1}>
                     <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <AntDesign name="left" size={25} color={"black"}></AntDesign>
+                        <AntDesign onPress={() => navigation.goBack()} name="left" size={25} color={"black"}></AntDesign>
                         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>MY CART</Text>
                         <View></View>
                     </View>
                 </View>
 
-                <View style={{ paddingHorizontal: 10 }}>
+                <View style={{ paddingHorizontal: 10}}>
                     {cartItem?.length > 0 ?
                         cartItem?.map((item, index) =>
-                            <View style={[styles.card, { marginTop: 8 }]}>
-                                <Image style={{ width: deviceWidth / 4, height: deviceWidth / 4, resizeMode: 'center' }} source={{ uri: `${apiImagepath}/${item?.product?.images[0]?.url}` }}></Image>
-                                <View style={{ paddingVertical: 5, marginLeft: -20 }}>
-                                    <Text style={{ fontSize: 16, marginBottom: 5 }}>{item?.product?.title}</Text>
+                            <View style={[styles.card, { marginTop: 10 }]} key={index}>
+                                <View style={{ width: deviceWidth / 4}}>
+                                    <Image style={{ width: 100,resizeMode: 'center',height:100 }} source={{ uri: `${apiImagepath}/${item?.product?.images[0]?.url}` }}></Image>
+                                </View>
+                              
+                                <View style={{ paddingVertical: 5}}>
+                                    <Text style={{ fontSize: 16, marginBottom: 5,width:deviceWidth/2 }}>{item?.product?.title}</Text>
                                     <Text style={{ fontSize: 16, marginBottom: 5 }}>Price : {item?.productVariation?.salePrice?item?.productVariation?.salePrice:item?.productVariation?.regularPrice}</Text>
-
-
                                     <View style={styles.qtyContainer}>
                                         <View style={{
                                             flexDirection: "row",
@@ -203,9 +204,10 @@ export default function TabTwoScreen() {
                                         </View>
                                     </View>
                                 </View>
+
                                 <View style={styles.card4}>
-                                    <AntDesign onPress={() => removeItem(item?.product?.id, item?.productVariation?.id)} name="closecircleo" size={20} color="black"></AntDesign>
-                                    <Text style={{ fontSize: 18, fontWeight: '700' }}>TK: {item?.productVariation?.salePrice > 0 ? (item?.productVariation?.salePrice * item?.qty) : (item?.productVariation?.regularPrice * item?.qty)}</Text>
+                                    <AntDesign style={{marginTop:5}} onPress={() => removeItem(item?.product?.id, item?.productVariation?.id)} name="closecircleo" size={20} color="black"></AntDesign>
+                                    <Text style={{ fontSize: 16, fontWeight: '700',marginBottom:5 }}>TK: {item?.productVariation?.salePrice > 0 ? (item?.productVariation?.salePrice * item?.qty) : (item?.productVariation?.regularPrice * item?.qty)}</Text>
                                 </View>
                             </View>
                         ) :
@@ -256,13 +258,14 @@ const styles = StyleSheet.create({
         // paddingHorizontal: 10,
     },
     card: {
-        //    width:deviceWidth/1.1,
+        width:deviceWidth-20,
         display: 'flex',
         flexDirection: 'row',
         justifyContent: "space-between",
+        // alignItems:'center',
         backgroundColor: '#fff',
-        elevation: 3,
         borderRadius: 5,
+        
 
     },
     card4: {
@@ -270,7 +273,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         justifyContent: 'space-between',
         paddingHorizontal: 5,
-        paddingVertical: 8,
+        // paddingVertical: 8,
         alignItems: 'flex-end'
     },
     tableColumn3: {
