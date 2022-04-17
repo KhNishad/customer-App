@@ -7,6 +7,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import productService from "../services/productService";
 import AddToCartServices from "../services/AddToCartServices";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import * as SecureStore from 'expo-secure-store';
+import { useEffect, useState } from "react";
 
 
 // services
@@ -15,8 +17,10 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 const deviceWidth = Dimensions.get("window").width;
 
 // components
-import Header2 from "../components/Header";
-import { useEffect, useState } from "react";
+import Header2 from "../components/header2";
+import LoginModal from '../components/LoginModal'
+
+
 const apiImagepath = 'http://103.119.71.9:4400/media';
 
 
@@ -27,13 +31,14 @@ export default function ProductDetails() {
   const [productDetail, setproductDetail] = useState<any>({});
   const route = useRoute();
   const [Counter, setCounter] = useState(1);
+  const [ModalOpen, setModalOpen] = useState(false)
 
   const { title } = route.params;
 
 
-  console.log('................slug',title);
-  
+const closeIt = ()=>{
 
+}
   // pull refresh  function
   function wait(time: any) {
     return new Promise(resolve => {
@@ -59,28 +64,32 @@ export default function ProductDetails() {
 
   //Add to cart 
   const addToCart = async () => {
-    const data = {
-      prodId: productDetail?.id,
-      prodVarId: productDetail?.variations[0]?.id,
-      qty: Counter,
+    let tokenn =   await  SecureStore.getItemAsync('accessToken')
+
+    if(tokenn){
+      const data = {
+        prodId: productDetail?.id,
+        prodVarId: productDetail?.variations[0]?.id,
+        qty: Counter,
+      }
+      AddToCartServices.addToCart(data).then((res)=>{
+        showMessage({
+          message: `${res?.message}`,
+          type: "success",
+          textStyle: { fontSize: 30 }
+        });
+        
+      }).catch(err=>{
+        showMessage({
+          message: `${err.message}`,
+          type: "danger",
+          textStyle: { fontSize: 30 }
+        });
+      })
+    }else{
+      setModalOpen(true)
     }
-    AddToCartServices.addToCart(data).then((res)=>{
-      showMessage({
-        message: `${res?.message}`,
-        type: "success",
-        textStyle: { fontSize: 30 }
-      });
-      
-    }).catch(err=>{
-      showMessage({
-        message: `${err.message}`,
-        type: "danger",
-        textStyle: { fontSize: 30 }
-      });
-    })
-
   }
-
 
 
   // quantity inc dec
@@ -102,7 +111,7 @@ export default function ProductDetails() {
     <View style={{ backgroundColor: '#fff', flex: 1 }}>
       <Header2 />
       <ScrollView
-        style={{ height: '100%' }}
+        style={{ height: '100%',marginBottom:50 }}
         removeClippedSubviews={true}
       >
 
@@ -257,7 +266,7 @@ export default function ProductDetails() {
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
               <View style={styles.secondBtns}>
                 <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={()=>addToCart()} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <TouchableOpacity onPress={()=> addToCart()} style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
                     <Text style={{ color: '#fff' }}> Add to Cart</Text>
                   </TouchableOpacity>
@@ -281,10 +290,18 @@ export default function ProductDetails() {
                 <Text>{productDetail?.description}</Text>
               </View>
             </View>
-
           </View>
         </View>
       </ScrollView>
+      <View style={{backgroundColor:'#FF9411',paddingVertical:10,alignItems:"center",position:'absolute',bottom:5,zIndex:9999,width:deviceWidth-20,left:10,borderRadius:5}}>
+        <TouchableOpacity onPress={()=>navigation.navigate('MyCart')}  style={{flexDirection:'row'}}>
+            <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
+            <Text style={{color:'#fff',fontSize:18,marginLeft:5}}>View Cart</Text>
+        </TouchableOpacity>
+      </View>
+            {ModalOpen?
+              <LoginModal closeIt={closeIt()}  setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+             :null}
     </View>
 
   );
@@ -505,63 +522,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 95,
   },
-  relatedProImg: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "center",
-  },
-  metaData: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  metaDataIcons: {
-    fontSize: 15,
-    color: "#ec1d25",
-    marginRight: 10,
-  },
-  metaTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  sellerAvater: {
-    width: deviceWidth / 3,
-    height: 70,
-    resizeMode: "center",
-    marginLeft: -15
-  },
-  metaDataSellerInfoContainer: {
-    backgroundColor: "#fff",
-    flexDirection: "row",
-    paddingVertical: 5,
-    justifyContent: "space-between",
-
-  },
-  metaDataText: {
-    fontSize: 12,
-    color: '#1239'
-  },
-  highlightsContainer: {
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-  },
-  discoutDesign: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    borderColor: "#e01221",
-    borderWidth: 1,
-    padding: 4,
-    // marginLeft:10
-  },
-  variationBox: {
-    paddingBottom: 10,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    width: deviceWidth / 1.2,
-
-  },
+ 
   secondBtns: {
     paddingVertical: 10,
     backgroundColor: '#ec1d25',

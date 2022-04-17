@@ -47,7 +47,6 @@ export default function TabTwoScreen() {
     
        try {
          let res  = await LoginService.Registration(data)
-         console.log('...........res',res);
          
          showMessage({
           message: `${res.message}`,

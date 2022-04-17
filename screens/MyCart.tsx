@@ -28,6 +28,7 @@ export default function TabTwoScreen() {
     const [refreshing, setrefreshing] = useState(false)
     const [renderMe, setrenderMe] = useState(false)
     const [totalPrice, setTotalPrice] = useState(0)
+    const [loading, setloading] = useState(true)
 
     const [{ qnty, token }] = useStateValue();
     const [state, dispatch] = useStateValue();
@@ -50,9 +51,11 @@ export default function TabTwoScreen() {
                 type: actionTypes.GET_TOTAL,
                 qnty: qty,
             });
+            setloading(false)
 
         }).catch(err => {
             console.log('err in cart List', err);
+            setloading(false)
         })
     }, [isFocused, refreshing, renderMe])
 
@@ -147,7 +150,7 @@ export default function TabTwoScreen() {
             <ScrollView style={{ marginBottom: 95 }}>
                 <View style={styles.container1}>
                     <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <AntDesign onPress={() => navigation.goBack()} name="left" size={25} color={"black"}></AntDesign>
+                        <AntDesign onPress={() => navigation.goBack()} name="left" size={30} color={"black"}></AntDesign>
                         <Text style={{ fontSize: 18, fontWeight: 'bold' }}>MY CART</Text>
                         <View></View>
                     </View>
@@ -212,7 +215,13 @@ export default function TabTwoScreen() {
                             </View>
                         ) :
                         <View style={{ justifyContent: "center", marginTop: deviceHeight / 2 - 100 }}>
+                            {loading?
                             <ActivityIndicator size="small" color="#e01221" />
+                            :
+                            <View style={{alignItems:"center"}}>
+                               <Text style={{fontSize:20,color:'red'}}>No Items Found !!</Text>
+                            </View>
+                            }
                         </View>
                     }
                 </View>
@@ -225,7 +234,7 @@ export default function TabTwoScreen() {
                     <Text style={{ fontSize: 20 }}>$ {totalPrice}</Text>
                 </View>
 
-                <TouchableOpacity onPress={()=>navigation.navigate('CheckoutScreen')} style={{ backgroundColor: '#1C6E7A', padding: 10, width: deviceWidth - 10, alignItems: 'center', borderRadius: 5 }}>
+                <TouchableOpacity disabled={cartItem?.length > 0 ?false:true} onPress={()=>navigation.navigate('CheckoutScreen')} style={{ backgroundColor: '#1C6E7A', padding: 10, width: deviceWidth - 10, alignItems: 'center', borderRadius: 5 }}>
                     <Text style={[styles.title,]}>CHECK OUT</Text>
                 </TouchableOpacity>
             </View>

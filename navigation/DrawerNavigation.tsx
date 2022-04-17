@@ -7,7 +7,7 @@ import {DrawerContent} from '../components/DrawerContents';
 
 // import screens 
 import HomeScreen from '../screens/HomeScreen';
-import productDetailsScreen from '../screens/ProductDetailsScreen'
+import ProductDetails from '../screens/ProductDetailsScreen'
 
 
 
@@ -20,7 +20,7 @@ export default function Root() {
 		<Drawer.Navigator initialRouteName="Home" drawerContent = {props => <DrawerContent {...props}/>}>
 
 			<Drawer.Screen name="Home" component={HomeScreen} />
-			<Drawer.Screen name="productDetailsScreen" component={productDetailsScreen} />
+			{/* <Drawer.Screen name="ProductDetails" component={ProductDetails} /> */}
 
 			
 

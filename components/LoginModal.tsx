@@ -57,14 +57,11 @@ export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
         }else{
           if(number){
             setisConfirmOtp(true)
-  
               try {
                   let res  = await LoginService.loginOtpSend(number)
-                  console.log('............res',res);
                   
               } catch (error) {
                   console.log('err in send otp',error);
-                  
               }
           }else{
               alert('Number Required')

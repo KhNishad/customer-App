@@ -15,6 +15,7 @@ const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 import profileService from '../services/profileService';
+import { showMessage } from 'react-native-flash-message';
 export default function TabTwoScreen() {
 
     const navigation = useNavigation();
@@ -61,13 +62,36 @@ export default function TabTwoScreen() {
 
     useEffect(() => {
 
-      
-
         const getUser = async () => {
+            
             try {
                 let res = await profileService.getUser()
                 setfullName(res?.data?.name)
                 setuserInfo(res?.data)
+                // get district
+                setSelectedDivision(res?.data?.shippingAddress[0]?.division?.id)
+                if(res?.data?.shippingAddress[0]?.division?.id){
+                    getDistrict(res?.data?.shippingAddress[0]?.division?.id)
+                }
+                // get city
+                setSelectedDistrict(res?.data?.shippingAddress[0]?.district?.id)
+                if(res?.data?.shippingAddress[0]?.district?.id){
+                    getCities(res?.data?.shippingAddress[0]?.district?.id)
+                }
+
+                // get getPolice
+                setselectedCity(res?.data?.shippingAddress[0]?.city?.id)
+                if(res?.data?.shippingAddress[0]?.city?.id){
+                    getPolice(res?.data?.shippingAddress[0]?.city?.id)
+                }
+
+                setselectedPolice(res?.data?.shippingAddress[0]?.policeStation?.id)
+                if(res?.data?.shippingAddress[0]?.policeStation?.id){
+                    getArea(res?.data?.shippingAddress[0]?.policeStation?.id)
+                }
+
+                setselectedArea(res?.data?.shippingAddress[0]?.area?.id)
+                
                 
             } catch (error) {
 
@@ -75,7 +99,8 @@ export default function TabTwoScreen() {
         }
         getUser()
 
-    }, [])
+    }, [division])
+
 
     const getDistrict = async (id: any) => {
         setSelectedDistrict('')
@@ -89,15 +114,27 @@ export default function TabTwoScreen() {
 
 
     }
+
+    useEffect(() => {
+        const getCities = async (id: any) => {
+        
+            if(district){
+                let index = district.findIndex(e => e.id == id)
+                setcity(district[index]?.children)
+            }
+        }
+        getCities(selectedDistrict)
+    }, [district,selectedDistrict])
+    
+
     const getCities = async (id: any) => {
-
-        let index = district.findIndex(e => e.id == id)
-        console.log('...........res', index);
-
-        setcity(district[index]?.children)
-
-
+        
+        if(district){
+            let index = district.findIndex(e => e.id == id)
+            setcity(district[index]?.children)
+        }
     }
+
     const getPolice = async (id: any) => {
 
         try {
@@ -110,11 +147,24 @@ export default function TabTwoScreen() {
 
 
     }
+
+    useEffect(() => {
+        const getArea = async (id: any) => {
+            if(policeStation){
+                let index = policeStation.findIndex(e => e.id == id)
+                setarea(policeStation[index]?.children)
+            }
+        }
+        getArea(selectedPolice)
+    }, [policeStation,selectedPolice])
+    
+
     const getArea = async (id: any) => {
-
-        let index = policeStation.findIndex(e => e.id == id)
-        setarea(policeStation[index]?.children)
-
+        if(policeStation){
+            let index = policeStation.findIndex(e => e.id == id)
+            setarea(policeStation[index]?.children)
+        }
+       
 
     }
 
@@ -157,13 +207,20 @@ export default function TabTwoScreen() {
                 }
             ]
         }
+            console.log('...........res',data);
 
         try {
             let res  = await AddressServices.setAddress(userInfo?.id,data)
-            console.log('...........res',res);
+            showMessage({
+                message: `${res.message}`,
+                type: "success",
+              });
 
         } catch (error) {
-            
+            showMessage({
+                message: `${error.message}`,
+                type: "danger",
+              });
         }
         
     }
@@ -177,8 +234,8 @@ export default function TabTwoScreen() {
                 <ScrollView>
                     <View style={styles.container1}>
                         <View style={{ display: "flex", flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <AntDesign name="left" size={25} color={"black"}></AntDesign>
-                            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Add Shipping Address</Text>
+                            <AntDesign onPress={()=> navigation.goBack()} name="left" size={30} color={"black"}></AntDesign>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Add Shipping Address</Text>
                             <View></View>
                         </View>
                     </View>
@@ -212,7 +269,7 @@ export default function TabTwoScreen() {
                         </View>
 
                         <View>
-                            <Text>DIvision</Text>
+                            <Text>Division</Text>
                             <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
                                 <Picker
                                     selectedValue={selectedDivision}
@@ -220,6 +277,10 @@ export default function TabTwoScreen() {
                                     onValueChange={(itemValue, itemIndex) => {
                                         setSelectedDivision(itemValue)
                                         getDistrict(itemValue)
+                                        setcity([])
+                                        setarea([])
+                                        setpoliceStation([])
+                                
                                     }
                                     }>
                                     <Picker.Item label='Select Any' value={''} />

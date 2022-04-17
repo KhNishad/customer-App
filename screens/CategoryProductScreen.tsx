@@ -9,6 +9,9 @@ import { useState, useEffect } from 'react';
 
 // services 
 import categoryService from '../services/categoryServices';
+import productService from '../services/productService';
+
+
 import ProductCard from '../components/ProductCard';
 
 const apiImagepath = 'http://103.119.71.9:4400/media';
@@ -16,9 +19,6 @@ const deviceWidth = Dimensions.get('window').width
 const deviceHeaight = Dimensions.get('window').height
 
 
-let topCats = []
-let limit = 20;
-let current = 1;
 
 export default function TopCategories() {
 
@@ -40,23 +40,23 @@ export default function TopCategories() {
   console.log('...............receoved',childs);
   
 
-  // back press handle
-  useEffect(() => {
+  // // back press handle
+  // useEffect(() => {
 
-    const backAction = () => {
+  //   const backAction = () => {
 
-      navigation.goBack()
+  //     navigation.goBack()
 
-      return true;
-    };
+  //     return true;
+  //   };
 
-    // handle hard back press
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-    return () => backHandler.remove();
-  }, []);
+  //   // handle hard back press
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     backAction
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
 
   // useEffect(() => {
 
@@ -83,7 +83,7 @@ export default function TopCategories() {
 
   useEffect(() => {
 
-    topCats = []
+    // topCats = []
     settopCategories([])
     setcategoryWisePro([])
     setbanner('')
@@ -91,27 +91,22 @@ export default function TopCategories() {
   }, [isFocused])
 
   // get child category or product under category
-  // const getChildCategory = (slug: any, title: any) => {
+  const getChildCategory = (slug: any) => {
 
-  //   limit = 20;
-  //   current = 1;
-  //   setselectedCat(title)
-  //   setisLoading(true)
-  //   setslugg(slug)
-    
-  //   categoryService.categoryWiseProduct(slug, limit, current).then(res => {
-  //     if (res?.data?.products) {
-  //       if(res?.data?.category?.childTermValues?.length>0){
-  //         settopCategories(res?.data)
-  //       }
-  //       setcategoryWisePro(res?.data?.products)
-  //       setcount(res?.count)
-  //       setisLoading(false)
-  //     }
-  //   }).catch(err => { console.log(err), setisLoading(false) })
+    productService.getCatWiseProduct(slug).then(res => {
+      console.log("...........res",res);
+      
+      // if (res?.data?.products) {
+      //   if(res?.data?.category?.childTermValues?.length>0){
+      //     settopCategories(res?.data)
+      //   }
+      //   setcategoryWisePro(res?.data?.products)
+      //   setcount(res?.count)
+      //   setisLoading(false)
+      // }
+    }).catch(err => { console.log(err), setisLoading(false) })
 
-
-  // }
+  }
   // lazay loading in react native
   const lazayLoading = async () => {
 
@@ -162,13 +157,13 @@ export default function TopCategories() {
                     {childs.map((item: any, index: number) =>
                       <View style={styles.flashSaleCard} key={index}>
                         <View style={{ width: '100%', height: "50%" }}>
-                          <TouchableOpacity >
+                          <TouchableOpacity onPress={() => getChildCategory(item?.slug)}>
                             <Image style={{ width: "100%", height: "100%", resizeMode: 'contain' }} source={{ uri: `${apiImagepath}/${item.images[0]?.imageUrl}`}}></Image>
                           </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%', height: '50%' }}>
                           <View style={{ flexDirection: 'row', height: 30, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text  numberOfLines={2} style={{ fontSize: 10, flexShrink: 1, textAlign: 'center', width: '90%' }}>{item?.title}</Text>
+                            <Text onPress={() => getChildCategory(item?.slug)}  numberOfLines={2} style={{ fontSize: 10, flexShrink: 1, textAlign: 'center', width: '90%' }}>{item?.title}</Text>
                           </View>
                         </View>
                       </View>

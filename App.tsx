@@ -39,7 +39,7 @@ export default function App() {
           name="LoginScreen"
           component={LoginScreen}
           options={{ header: () => null }}
-        />
+        /> 
 
         <Stack.Screen
           name="ProductDetails"

@@ -79,7 +79,6 @@ export default function TabTwoScreen() {
 
 
 
-
     return (
         <View >
             <StatusBar backgroundColor="#FF9411" />
@@ -87,7 +86,7 @@ export default function TabTwoScreen() {
                 <ScrollView>
                     <View style={styles.container1}>
                         <View style={{ flexDirection: 'row' }}>
-                            <AntDesign name="left" size={30} color={"black"}></AntDesign>
+                            <AntDesign onPress={()=>navigation.goBack()} name="left" size={30} color={"black"}></AntDesign>
                             <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: deviceWidth / 4.2 }}>Check-Out</Text>
                         </View>
                     </View>

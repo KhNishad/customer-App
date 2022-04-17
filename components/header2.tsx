@@ -1,7 +1,7 @@
 
 import { View, Text,StyleSheet,StatusBar,ScrollView ,Image,ActivityIndicator,SafeAreaView,TextInput,Button } from 'react-native';
 import { Dimensions } from 'react-native'
-import { Ionicons,Feather} from '@expo/vector-icons';
+import { Ionicons,Feather,AntDesign} from '@expo/vector-icons';
 import { useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -20,8 +20,9 @@ export default function TabTwoScreen() {
 
     <View style={styles.container}>
       <View style={styles.headerBar}>
-        <TouchableOpacity onPress={()=>navigation.openDrawer()}>
-           <Image  style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image>
+        <TouchableOpacity >
+        <AntDesign onPress={() => navigation.goBack()} name="left" size={30} color={"#fff"}></AntDesign>
+           {/* <Image  style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image> */}
         </TouchableOpacity>
          <View  style={styles.input}>
               <Feather name='search' style={{paddingRight:5}} color={'red'} size={20}></Feather>
