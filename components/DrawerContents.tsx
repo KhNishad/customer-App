@@ -167,7 +167,7 @@ export function DrawerContent(props:any) {
                                 <Ionicons name="gift-sharp" size={25} color={color} />
                             )}
                             label="orders"
-                            onPress={() => {props.navigation.navigate('MyRewards')}}
+                            onPress={() => {props.navigation.navigate('MyOrdersScreen')}}
                         />
                          <DrawerItem 
                             icon={({color, size}) => (
@@ -231,7 +231,7 @@ export function DrawerContent(props:any) {
               </Drawer.Section>
              } 
             {ModalOpen?
-              <LoginModal closeIt={closeIt()}  setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+              <LoginModal closeIt={closeIt}  setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
              :null}
         </View>
     );

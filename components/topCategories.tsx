@@ -19,17 +19,17 @@ export default function TopCategories({ childCat, banner }: any) {
 
 
 
-  const getChildCategory = async (slug: any) => {
+  const getChildCategory = async (slug: any,childs:any) => {
 
-     try {
-       let res = await productService.getCatWiseProduct(slug)
-
-      //  console.log('............res',res?.data);
-       
-     } catch (error) {
-       
-     }
-  }
+    try {
+      let res  =  await productService.getCatWiseProduct(slug)
+            if(res?.data?.length>0 || childs){
+                navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
+             }
+      } catch (error) {
+        console.log('err in cat wise pro',error);
+      }
+    }
 
   return (
     <View>
@@ -46,14 +46,14 @@ export default function TopCategories({ childCat, banner }: any) {
                   {childCat?.map((item: any, index: number) =>
                     <View style={styles.flashSaleCard} key={index}>
                       <View style={{ width: '100%', height: "60%", marginTop: 2 }}>
-                        <TouchableOpacity onPress={() => getChildCategory(item?.slug)}>
+                        <TouchableOpacity onPress={() => getChildCategory(item?.slug,item?.children)}>
                           <Image style={{ width: "99%", height: "99%", resizeMode: 'contain', padding: 1 }} source={{ uri: `${apiImagepath}/${item.images[0]?.imageUrl}`}}></Image>
                         </TouchableOpacity>
                       </View>
                       <View style={{ width: '100%', height: '40%' }}>
-                        <View style={styles.titleContainer}>
+                        <TouchableOpacity onPress={() => getChildCategory(item?.slug,item?.children)} style={styles.titleContainer}>
                           <Text style={{ fontSize: 12, flexShrink: 1, textAlign: 'center' }}>{item?.title}</Text>
-                        </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   )}

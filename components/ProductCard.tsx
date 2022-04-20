@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
   CardContainer: {
     paddingHorizontal: 20,
     marginTop: 10,
+    
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginRight:10,
     borderColor:'#1234',
+    marginBottom:10,
     // boxWithShadow: {
     //     elevation: 5
     // }

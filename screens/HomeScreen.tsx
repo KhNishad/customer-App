@@ -72,13 +72,13 @@ useEffect(() => {
               <Image style={styles.mainBanner} source={require('../assets/images/categories.png')}></Image>
               <Text  style={{ fontSize: 10,textAlign:'center' }}>Categories</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.icons}>
+            <TouchableOpacity onPress={()=> navigation.navigate('AllBrandScreen',{origin:'Brand'})} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/layers.png')}></Image>
-              <Text style={{ fontSize: 10 }}>Essential</Text>
+              <Text style={{ fontSize: 10 }}>All Brand</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.icons}>
+            <TouchableOpacity onPress={()=> navigation.navigate('AllBrandScreen',{origin:'Shop'})} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
-              <Text style={{ fontSize: 10 }}>Offer Zone</Text>
+              <Text style={{ fontSize: 10 }}>All Shop</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/mobile-app.png')}></Image>

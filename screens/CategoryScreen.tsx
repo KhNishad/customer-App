@@ -67,17 +67,17 @@ export default function CategoryScreen() {
   }, [refreshing])
 
 
-  const getProducts = async (slug:any,childs:any) =>{
+  // const getProducts = async (slug:any,childs:any) =>{
 
-    try {
-    let res  =  await productService.getCatWiseProduct(slug)
-          if(res?.data?.length>0){
-              navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
-           }
-    } catch (error) {
-      console.log('err in cat wise pro',err);
-    }
-  }
+  //   try {
+  //   let res  =  await productService.getCatWiseProduct(slug)
+  //         if(res?.data?.length>0){
+  //             navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
+  //          }
+  //   } catch (error) {
+  //     console.log('err in cat wise pro',err);
+  //   }
+  // }
   
 
 
@@ -94,7 +94,7 @@ export default function CategoryScreen() {
                   setchildCat(item?.children)
                   setbanner(item?.images?.banner?.url)
                   setselected(item?.slug)
-                  getProducts(item?.slug,item?.children)
+                  // getProducts(item?.slug,item?.children)
                 }}>
                   {item?.slug == selected ?
                     <View style={[styles.categoryScrollView, { borderColor: '#e01221' }]} >

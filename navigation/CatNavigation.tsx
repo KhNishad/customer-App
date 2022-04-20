@@ -22,7 +22,6 @@ export default function CatRoot() {
 	return (
 		<Drawer.Navigator initialRouteName="Categories"  drawerContent = {props => <DrawerContent {...props}/>}>
 		    <Drawer.Screen name="CategoryScreen" component={CategoryScreen} />
-			<Drawer.Screen name="categoryWiseProductScreen" component={categoryWiseProductScreen} />
 			{/* <Drawer.Screen name="ProductDetails" component={ProductDetails} /> */}
 		</Drawer.Navigator>
 

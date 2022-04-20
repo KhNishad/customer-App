@@ -11,8 +11,9 @@ import { useState, useEffect } from 'react';
 import categoryService from '../services/categoryServices';
 import productService from '../services/productService';
 
-
+// com
 import ProductCard from '../components/ProductCard';
+import Header2 from '../components/header2'
 
 const apiImagepath = 'http://103.119.71.9:4400/media';
 const deviceWidth = Dimensions.get('window').width
@@ -37,7 +38,7 @@ export default function TopCategories() {
   const isFocused = useIsFocused();
 
   const { slug, pro,childs } = route.params;
-  console.log('...............receoved',childs);
+  console.log('...............receoved',pro);
   
 
   // // back press handle
@@ -84,29 +85,25 @@ export default function TopCategories() {
   useEffect(() => {
 
     // topCats = []
-    settopCategories([])
-    setcategoryWisePro([])
-    setbanner('')
+    setcategoryWisePro(pro)
+    // setcategoryWisePro([])
+    // setbanner('')
 
-  }, [isFocused])
+  }, [slug])
 
   // get child category or product under category
   const getChildCategory = (slug: any) => {
 
     productService.getCatWiseProduct(slug).then(res => {
-      console.log("...........res",res);
       
-      // if (res?.data?.products) {
-      //   if(res?.data?.category?.childTermValues?.length>0){
-      //     settopCategories(res?.data)
-      //   }
-      //   setcategoryWisePro(res?.data?.products)
-      //   setcount(res?.count)
-      //   setisLoading(false)
-      // }
+      if (res?.data) {
+        setcategoryWisePro(res?.data)
+        setisLoading(false)
+      }
     }).catch(err => { console.log(err), setisLoading(false) })
 
   }
+
   // lazay loading in react native
   const lazayLoading = async () => {
 
@@ -142,6 +139,7 @@ export default function TopCategories() {
 
   return (
     <View style={{ backgroundColor: '#fff', height: deviceHeaight }}>
+      <Header2/>
       <SafeAreaView>
 
         <ScrollView style={{ marginBottom: 165 }} removeClippedSubviews={true} onScroll={({ nativeEvent }) => {
@@ -150,7 +148,9 @@ export default function TopCategories() {
 
           <View removeClippedSubviews={true}>
             <View style={{ paddingHorizontal: 10 }}>
+              {bannerrs?
               <Image style={styles.banner} source={{ uri: `${apiImagepath}/${bannerrs}` }}></Image>
+              :null}
               {childs && childs.length > 0 ?
                 <ScrollView style={styles.horizontalScroll} horizontal={true} showsHorizontalScrollIndicator={false}>
                   <View style={styles.flashSaleContainer}>
@@ -173,7 +173,6 @@ export default function TopCategories() {
                 :
                 null
               }
-
               {topCategories?.category?.childTermValues?.length > 0 ?
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                   <Text style={[styles.title, { color: '#e01221' }]}>{selectedCat ? selectedCat : 'title'}</Text>
@@ -181,19 +180,25 @@ export default function TopCategories() {
                 </View>
                 : null}
             </View>
-            {pro?.length > 0 ?
+            {categoryWisePro?.length > 0 ?
 
               <View style={{ paddingHorizontal: 10,flexDirection:'row',alignItems:'center',flexWrap:'wrap', }}>
 
-                <ProductCard products={pro} />
+                <ProductCard products={categoryWisePro} />
 
-              </View> :
-              <ActivityIndicator size="small" color="#e01221" />
+              </View> 
+              :
+              <>
+                {isLoading?
+                <ActivityIndicator size="small" color="#e01221" />
+                :
+                null}
+              </>
             }
           </View>
 
           <View style={{ alignItems: 'center', marginTop: 50 }}>
-            {pro && !isLoading && pro?.length <= 0 ?
+            {categoryWisePro && !isLoading && categoryWisePro?.length <= 0 ?
               <Text style={{ fontSize: 16 }}>No Items Found</Text>
               : null}
           </View>

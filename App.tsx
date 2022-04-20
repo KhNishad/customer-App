@@ -18,6 +18,11 @@ import CheckoutScreen from "./screens/CheckoutScreen";
 import MyCart from './screens/MyCart'
 import categoryWiseProductScreen from './screens/CategoryProductScreen'
 import AddressScreen from './screens/AddressScreen'
+import AllBrandScreen from './screens/AllBrandScreen'
+import BrandWiseProductScreen from './screens/BrandWiseProductScreen'
+import MyOrdersScreen from './screens/MyOrdersScreen'
+// import categoryWiseProductScreen from './screens/CategoryProductScreen'
+
 import { useEffect } from "react";
 // import CheckoutScreen from './screens/CheckoutScreen';
 
@@ -46,9 +51,30 @@ export default function App() {
           component={ProductDetails}
           options={{ header: () => null }}
         />
+         {/* <Stack.Screen
+          name="categoryWiseProductScreen"
+          component={categoryWiseProductScreen}
+          options={{ header: () => null }}
+        /> */}
+
         <Stack.Screen
           name="FavoriteScreen"
           component={FavoriteScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="MyOrdersScreen"
+          component={MyOrdersScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="BrandWiseProductScreen"
+          component={BrandWiseProductScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="AllBrandScreen"
+          component={AllBrandScreen}
           options={{ header: () => null }}
         />
         <Stack.Screen
