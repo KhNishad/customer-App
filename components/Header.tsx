@@ -1,7 +1,7 @@
 
 import { View, Text,StyleSheet,StatusBar,ScrollView ,Image,ActivityIndicator,SafeAreaView,TextInput,Button } from 'react-native';
 import { Dimensions } from 'react-native'
-import { Ionicons,Feather} from '@expo/vector-icons';
+import { Ionicons,Feather, AntDesign, FontAwesome} from '@expo/vector-icons';
 import { useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -32,12 +32,13 @@ export default function TabTwoScreen() {
                 />
          </View>
          <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-           <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather>
-           <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather>
+           <FontAwesome style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
+           {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
+           {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
          </View>
-         <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+         {/* <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
            <Text style={{fontSize:16,fontWeight:'bold',color:"black"}}>Grocery</Text>
-         </View>
+         </View> */}
       </View>
                 
     </View>
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 35,
-    width:deviceWidth/3,
+    width:deviceWidth/2,
     // margin: 12,
     borderWidth: .5,
     padding: 5,

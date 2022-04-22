@@ -130,7 +130,7 @@ export function DrawerContent(props:any) {
                             )}
                             label="Favorites"
                             onPress={() => {
-                              
+                              props.navigation.navigate('FavoriteScreen')
                             }}
                         />
 
@@ -140,7 +140,7 @@ export function DrawerContent(props:any) {
                             )}
                             label="My Cart"
                             onPress={() => {
-                             
+                              props.navigation.navigate('MyCart')
                             }}
                         />
 
@@ -166,30 +166,35 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <Ionicons name="gift-sharp" size={25} color={color} />
                             )}
-                            label="orders"
+                            label="My Requisition"
                             onPress={() => {props.navigation.navigate('MyOrdersScreen')}}
                         />
-                         <DrawerItem 
+                         {/* <DrawerItem 
                             icon={({color, size}) => (
                               <Entypo name='heart' size={25} color='#1239'></Entypo>
                               )}
                             label="Notification"
                             onPress={() => {props.navigation.navigate('FavScreen')}}
-                        />
-                         <DrawerItem 
+                        /> */}
+                         {/* <DrawerItem 
                             icon={({color, size}) => (
                               <Entypo name='heart' size={25} color='#1239'></Entypo>
                               )}
                             label="Hurry Orders"
                             onPress={() => {props.navigation.navigate('FavScreen')}}
-                        />
-                         <DrawerItem 
-                            icon={({color, size}) => (
-                              <Entypo name='login' size={25} color='#1239'></Entypo>
-                              )}
-                            label="Registration"
-                            onPress={() => {props.navigation.navigate('LoginScreen')}}
-                        />
+                        /> */}
+                        {!notLogin? 
+                           <DrawerItem 
+                           icon={({color, size}) => (
+                             <Entypo name='login' size={25} color='#1239'></Entypo>
+                             )}
+                           label="Registration"
+                           onPress={() => {props.navigation.navigate('LoginScreen')}}
+                       />
+                       :
+                       null 
+                      }
+                        
                         {/* </>
                           } */}
                     

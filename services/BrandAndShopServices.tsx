@@ -13,7 +13,11 @@ async function getAllShop() {
 }
 
 async function getBrandWiseProduct(slug:any) {
-  const data = await request(`/product/getList?${slug}`)
+  const data = await request(`product/getList?page=1&take=10&brandSlug=${slug}`)
+  return data;
+}
+async function getShopWiseProduct(slug:any) {
+  const data = await request(`product/getList?page=1&take=10&shopSlug=${slug}`)
   return data;
 }
 
@@ -21,4 +25,4 @@ async function getBrandWiseProduct(slug:any) {
 
 
  
-export default {getAllBrand,getBrandWiseProduct,getAllShop}
+export default {getAllBrand,getBrandWiseProduct,getAllShop,getShopWiseProduct}

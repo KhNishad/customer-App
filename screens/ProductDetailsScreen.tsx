@@ -161,7 +161,7 @@ const closeIt = ()=>{
                 </View>
                 : null}
 
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0 }}>
+              {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0 }}>
 
                 <TouchableOpacity style={{ paddingRight: 10 }}>
                   <Entypo name='heart-outlined' size={20} color={'#1239'}></Entypo>
@@ -169,7 +169,7 @@ const closeIt = ()=>{
                 <TouchableOpacity style={{ paddingRight: 15 }}>
                   <Entypo name='share' size={20} color='#1239'></Entypo>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
             </View>
 

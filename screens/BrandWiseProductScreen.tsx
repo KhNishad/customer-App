@@ -2,6 +2,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Dimensions,
   Image,
   SafeAreaView,
@@ -30,23 +31,36 @@ function wait(time: any) {
 export default function TabTwoScreen(props: any) {
   const navigation = useNavigation();
   const route = useRoute();
-  const { title,slug } = route.params;
+  const { title,slug,titlee } = route.params;
+  
 
   const [products, setproducts] = useState([]);
 
   const [refreshing, setrefreshing] = useState(false);
   const [renderMe, setrenderMe] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
-    BrandAndShopServices.getBrandWiseProduct(slug)
+    if(title){
+      BrandAndShopServices.getBrandWiseProduct(slug)
       .then((res) => {
-        console.log('.........',res?.data);
         
         setproducts(res?.data);
       })
       .catch((err) => {
         console.log(err);
       });
+    }else{
+      BrandAndShopServices.getShopWiseProduct(slug)
+      .then((res) => {
+        
+        setproducts(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    
   }, [refreshing]);
 
   const refresh = React.useCallback(() => {
@@ -78,7 +92,7 @@ export default function TabTwoScreen(props: any) {
               <Text
                 style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}
               >
-               {title}
+               {title ? title : titlee}
               </Text>
               <View></View>
             </View>
@@ -86,10 +100,21 @@ export default function TabTwoScreen(props: any) {
           <ScrollView>
           <View style={{ marginBottom: 20,alignItems:'center' }}>
             
-
+          {products?.length > 0 ?
                 <View style={styles.CardContainer}>
                     <ProductCard products={products}/>
                 </View>
+                :
+                
+              <>
+                {isLoading?
+                <ActivityIndicator size="small" color="#e01221" />
+                :
+                <View style={{justifyContent:'center',alignItems:'center',}}>
+                  <Text style={{color:'red'}}>No Items Found</Text>
+                  </View>}
+              </>
+            }
           </View>
         </ScrollView>
       </SafeAreaView>

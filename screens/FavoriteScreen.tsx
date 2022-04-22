@@ -31,14 +31,14 @@ export default function TabTwoScreen() {
                 <ScrollView>
                     <View style={styles.container1}>
                         <View style={{ flexDirection: 'row' }}>
-                            <AntDesign name="left" size={25} color={"Black"}></AntDesign>
-                            <Text style={{ fontSize: 25, fontWeight: 'bold', marginLeft: deviceWidth / 3.5 }}>Favorite</Text>
+                            <AntDesign onPress={()=>navigation.goBack()} name="left" size={25} color={"black"}></AntDesign>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', marginLeft: deviceWidth / 3.5 }}>Favorite</Text>
                         </View>
                     </View>
                     <View style={{ marginBottom: 25 }} >
                         {arr?.map((item, index) =>
                             <View key={index}>
-                                {index % 4 === 0 ?
+                                {index % 2 === 0 ?
                                     <Text style={{ display: 'none' }}> {Color = '#FFFFFF'}</Text>
                                     :
                                     <Text style={{ display: 'none' }}>{Color = '#F9F9FF'}</Text>

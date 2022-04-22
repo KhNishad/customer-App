@@ -106,10 +106,14 @@ export default function TabTwoScreen(props: any) {
               {allBrands?.map((item: any, index: any) => (
                 <View style={{ paddingVertical: 10 }} key={index}>
                   <TouchableOpacity
+                  
                     onPress={() =>
                       navigation.navigate("BrandWiseProductScreen", {
                         title: item?.title,
-                        slug:item?.slug
+                        slug:item?.slug,
+                        titlee:item?.name,
+                        // originn:"Brand"
+                        
                       })
                     }
                     style={styles.card3}

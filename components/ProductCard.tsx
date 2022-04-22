@@ -35,12 +35,12 @@ export default function ProductCard({products}:any) {
                   <Text numberOfLines={2} style={{ fontSize: 12, fontWeight: 'bold' }}>{item.title}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Text style={{ fontSize: 10, color: '#1239' }}>{item?.brand?.title}</Text>
-                    <EvilIcons name='heart' size={20} />
+                    {/* <EvilIcons name='heart' size={20} /> */}
                   </View>
-                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>${item?.productVariation[0]?.regularPrice}</Text>
+                  <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Tk.{item?.productVariation[0]?.regularPrice}</Text>
                   <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 10, textDecorationLine: 'line-through' }}>${item?.productVariation[0]?.salePrice}</Text>
-                    <EvilIcons name='cart' size={20} />
+                    <Text style={{ fontSize: 10, textDecorationLine: 'line-through' }}>Tk.{item?.productVariation[0]?.salePrice}</Text>
+                    {/* <EvilIcons name='cart' size={20} /> */}
                   </View>
                 </View>
 
