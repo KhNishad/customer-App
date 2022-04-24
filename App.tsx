@@ -21,6 +21,9 @@ import AddressScreen from './screens/AddressScreen'
 import AllBrandScreen from './screens/AllBrandScreen'
 import BrandWiseProductScreen from './screens/BrandWiseProductScreen'
 import MyOrdersScreen from './screens/MyOrdersScreen'
+import Requisition from './screens/RequisitionScreen'
+import RequisitionDetails from './screens/requisitionDetails'
+
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
 import { useEffect } from "react";
@@ -60,6 +63,11 @@ export default function App() {
         <Stack.Screen
           name="FavoriteScreen"
           component={FavoriteScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="Requisition"
+          component={Requisition}
           options={{ header: () => null }}
         />
         <Stack.Screen
@@ -107,6 +115,11 @@ export default function App() {
         <Stack.Screen
           name="AddressScreen"
           component={AddressScreen}
+          options={{ header: () => null }}
+        />
+       <Stack.Screen
+          name="RequisitionDetails"
+          component={RequisitionDetails}
           options={{ header: () => null }}
         />
   

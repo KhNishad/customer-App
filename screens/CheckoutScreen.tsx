@@ -46,7 +46,7 @@ export default function TabTwoScreen() {
 
         profileService.getUser().then((res) => {
             // setcartItem(res?.data?.packageList)
-            console.log('...........res',res?.data);
+            // console.log('...........res',res?.data);
             setuserInfo(res?.data)
            
         }).catch(err => {
@@ -93,7 +93,7 @@ export default function TabTwoScreen() {
                     <View style={{paddingHorizontal:15}}>
                     <View style={styles.edit}>
                         <Text style={{fontSize:18}}>Shipping Address</Text>
-                        <AntDesign name="edit" size={20} color={"black"}></AntDesign>
+                        <AntDesign onPress={()=>navigation.navigate('AddressScreen')} name="edit" size={20} color={"black"}></AntDesign>
                     </View>
                     
                     <View style={styles.card}>
@@ -112,7 +112,7 @@ export default function TabTwoScreen() {
                     
                     <View style={styles.edit}>
                         <Text style={{fontSize:18}}>Payment</Text>
-                        <AntDesign name="edit" size={20} color={"black"}></AntDesign>
+                        {/* <AntDesign name="edit" size={20} color={"black"}></AntDesign> */}
                     </View>
                     
                     <View style={styles.card}>

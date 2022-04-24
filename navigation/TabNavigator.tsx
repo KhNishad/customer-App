@@ -84,7 +84,7 @@ export function TabNav() {
             }}
 
          />
-          <Tab.Screen name="FavoriteScreen" component={FavoriteScreen}
+          {/* <Tab.Screen name="FavoriteScreen" component={FavoriteScreen}
             options={{
                tabBarLabel: "Favorite",
                // unmountOnBlur: true,
@@ -94,7 +94,7 @@ export function TabNav() {
                   <AntDesign name="hearto" size={30} color={focused ? '#BB2227' : color} />,
             }}
 
-         />
+         /> */}
           <Tab.Screen name="CartScreen" component={CartScreen}
             options={{
                tabBarLabel: "Cart",

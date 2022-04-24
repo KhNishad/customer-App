@@ -87,11 +87,11 @@ export default function TabTwoScreen(props: any) {
               <AntDesign
                 onPress={() => navigation.navigate("HomeScreen")}
                 name="left"
-                size={25}
+                size={30}
                 color={"black"}
               ></AntDesign>
               <Text
-                style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}
+                style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}
               >
                 All {origin}
               </Text>
@@ -104,7 +104,7 @@ export default function TabTwoScreen(props: any) {
 
             <View style={styles.CardContainer}>
               {allBrands?.map((item: any, index: any) => (
-                <View style={{ paddingVertical: 10 }} key={index}>
+                <View style={{ paddingVertical: 5 }} key={index}>
                   <TouchableOpacity
                   
                     onPress={() =>
@@ -163,7 +163,7 @@ export default function TabTwoScreen(props: any) {
                         style={{
                           justifyContent: "center",
                           alignItems: "center",
-                          marginTop: 10,
+                          marginTop: 5,
                           padding: 2,
                         }}
                       >
@@ -171,7 +171,7 @@ export default function TabTwoScreen(props: any) {
                           style={{
                             width: 80,
                             textAlign: "center",
-                            fontSize: 15,
+                            fontSize: 12,
                             fontWeight: "600",
                             color: "#000",
                           }}
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
 
   CardContainer: {
     paddingHorizontal: 10,
-    marginTop: 10,
+    marginTop: 5,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",

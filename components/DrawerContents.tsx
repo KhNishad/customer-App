@@ -128,9 +128,9 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <MaterialIcons name="note-add" size={25} color={color} />
                             )}
-                            label="Favorites"
+                            label="My Requisition"
                             onPress={() => {
-                              props.navigation.navigate('FavoriteScreen')
+                              props.navigation.navigate('Requisition')
                             }}
                         />
 
@@ -166,7 +166,7 @@ export function DrawerContent(props:any) {
                             icon={({color, size}) => (
                                 <Ionicons name="gift-sharp" size={25} color={color} />
                             )}
-                            label="My Requisition"
+                            label="My Order"
                             onPress={() => {props.navigation.navigate('MyOrdersScreen')}}
                         />
                          {/* <DrawerItem 
