@@ -81,7 +81,7 @@ const request = async (link, params={}, noPrefix = null, header = null) => {
         
 
         return axios(options).then(res=>{
-            // console.log('res ====', res.data);
+            // console.log('res ====', options);
             return res.data;
         }).catch(err=>{
             console.log('reqest == err',err?.response?.data);

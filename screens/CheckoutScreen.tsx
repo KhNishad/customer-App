@@ -17,6 +17,8 @@ import AddToCartServices from '../services/AddToCartServices';
 import profileService from '../services/profileService';
 
 
+import SuccessModal from '../components/filterModal';
+
 export default function TabTwoScreen() {
 
     const navigation = useNavigation();
@@ -24,6 +26,8 @@ export default function TabTwoScreen() {
     const [total, setTotal] = useState('')
     const [searchItem, setsearchItem] = useState('')
     const [userInfo, setuserInfo] = useState({})
+    const [openFilter, setopenFilter] = useState(false)
+    const [requisitionData, setrequisitionData] = useState([])
 
 
     useEffect(() => {
@@ -63,7 +67,9 @@ export default function TabTwoScreen() {
         }
         try {
             let res = await AddToCartServices.placeOrder(data)
-            // console.log('.............res order',res);
+            console.log('.............res order',res);
+            setrequisitionData(res?.data)
+            setopenFilter(true)
             showMessage({
                 message: `${res.message}`,
                 type: "success",
@@ -160,7 +166,9 @@ export default function TabTwoScreen() {
                     </View>
                 </ScrollView>
             </SafeAreaView>
-
+            {/* {openFilter? */}
+            <SuccessModal setopenFilter={setopenFilter} openFilter={openFilter} data={requisitionData}/>
+            {/* :null} */}
 
         </View>
     );

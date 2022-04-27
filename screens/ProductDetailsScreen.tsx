@@ -56,7 +56,7 @@ const closeIt = ()=>{
   useEffect(() => {
     productService.getSingleProductDetails(title).then((res) => {
       setproductDetail(res?.data);
-      // console.log("...............res", res?.data);
+      console.log("...............res", res?.data);
 
     })
   }, [refreshing,title])
@@ -173,7 +173,7 @@ const closeIt = ()=>{
 
             </View>
 
-            <View style={styles.shopTileContainer}>
+            <View style={[styles.shopTileContainer,{marginBottom:10}]}>
               <Text style={styles.proTitle}>{productDetail?.title}</Text>
 
               <Text
@@ -186,7 +186,7 @@ const closeIt = ()=>{
 
             {/* review section */}
 
-            <View style={styles.allReviews}>
+            {/* <View style={styles.allReviews}>
               <Rating
                 type='custom'
                 readonly={true}
@@ -204,7 +204,7 @@ const closeIt = ()=>{
                   All Reviews
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View> */}
             {/* qty box  */}
 
             <View style={styles.qtyContainer}>
@@ -264,22 +264,22 @@ const closeIt = ()=>{
             {/* btn s s */}
 
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
-              <View style={styles.secondBtns}>
+              <TouchableOpacity onPress={()=> addToCart()} style={styles.secondBtns}>
                 <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={()=> addToCart()} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <TouchableOpacity  style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
                     <Text style={{ color: '#fff' }}> Add to Cart</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-              <View style={styles.secondBtns}>
+              </TouchableOpacity>
+              {/* <View style={styles.secondBtns}>
                 <View style={{ flexDirection: 'row' }}>
                   <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <AntDesign name="tago" size={25} color={"#fff"}></AntDesign>
                     <Text style={{ color: '#fff', marginLeft: 5 }}>Buy Now</Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </View> */}
             </View>
 
             {/* description */}
@@ -288,6 +288,12 @@ const closeIt = ()=>{
               <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Specification & Description :</Text>
               <View style={{ marginVertical: 10 }}>
                 <Text>{productDetail?.description}</Text>
+                <View style={{marginTop:10}}>
+                  {productDetail?.attributes?.map((item,index)=>
+                    <Text key={index}>{item?.termTitle} : {item?.value}</Text>
+                  )}
+                </View>
+               
               </View>
             </View>
           </View>
@@ -374,12 +380,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 12,
   },
-  cardPriceText: {
-    textDecorationLine: "line-through",
-    fontSize: 10,
-    marginRight: 10,
-    color: "#999999",
-  },
+
   relatedProductContainer: {
     flex: 1,
     flexDirection: "row",
@@ -470,66 +471,15 @@ const styles = StyleSheet.create({
     height: "50%",
     paddingHorizontal: 5,
   },
-  cardPrice: {
-    fontSize: 10,
-    color: "red",
-  },
-  cardTitleContainer: {
-    height: "60%",
-    alignItems: "flex-start",
-    justifyContent: "center",
-  },
-  bookNowBtn: {
-    backgroundColor: "#ec1d25",
-    width: deviceWidth,
-    alignItems: "center",
-  },
-  subscripBtn: {
-    flexDirection: "row",
-    paddingVertical: 8,
-    alignItems: "center",
-  },
-  addToBtnContainer: {
-    backgroundColor: "#ec1d25",
-    width: deviceWidth / 3 - 2,
-    alignItems: "center",
-    paddingVertical: 16,
-    marginRight: 1,
-    // height:50
-  },
-  cartBadge: {
-    backgroundColor: "#ffffff",
-    marginLeft: 1,
-    borderRadius: 50,
-    paddingHorizontal: 3,
-    position: "absolute",
-    left: 15,
-    bottom: 18,
-  },
-
-  cartBadgeText: {
-    color: "#ec1d25",
-    fontWeight: "bold",
-    fontSize: 10,
-  },
-  subsBtnText: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    marginLeft: 5,
-  },
-  btnContainer: {
-    flexDirection: "row",
-    position: "absolute",
-    bottom: 95,
-  },
  
+
   secondBtns: {
     paddingVertical: 10,
     backgroundColor: '#ec1d25',
     alignItems: 'center',
-    width: 120,
+    width:deviceWidth-20,
     marginVertical: 10,
-    borderRadius: 15
+    borderRadius: 5
 
   }
 

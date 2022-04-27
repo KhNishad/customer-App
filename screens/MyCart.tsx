@@ -165,7 +165,7 @@ export default function TabTwoScreen() {
                                 </View>
                               
                                 <View style={{ paddingVertical: 5}}>
-                                    <Text style={{ fontSize: 16, marginBottom: 5,width:deviceWidth/2 }}>{item?.product?.title}</Text>
+                                    <Text style={{ fontSize: 16, marginBottom: 5,width:deviceWidth/3 }}>{item?.product?.title}</Text>
                                     <Text style={{ fontSize: 16, marginBottom: 5 }}>Price : {item?.productVariation?.salePrice?item?.productVariation?.salePrice:item?.productVariation?.regularPrice}</Text>
                                     <View style={styles.qtyContainer}>
                                         <View style={{

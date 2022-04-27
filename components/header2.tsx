@@ -11,7 +11,7 @@ const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 
-export default function TabTwoScreen() {
+export default function TabTwoScreen({filter,setopenFilter}:any) {
 
     const navigation = useNavigation();
 
@@ -33,7 +33,11 @@ export default function TabTwoScreen() {
                 />
          </View>
          <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+           {filter?
+           <Feather onPress={()=>setopenFilter(true)} name='filter' style={{paddingRight:5}} color={'#fff'} size={25}></Feather>
+            :null}
            <FontAwesome style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
+
            {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
            {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
          </View>

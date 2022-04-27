@@ -14,6 +14,8 @@ import productService from '../services/productService';
 // com
 import ProductCard from '../components/ProductCard';
 import Header2 from '../components/header2'
+import FilterModal from '../components/filterModal';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 const apiImagepath = 'http://103.119.71.9:4400/media';
 const deviceWidth = Dimensions.get('window').width
@@ -32,32 +34,17 @@ export default function TopCategories() {
   const [isLoading, setisLoading] = useState(false);
   const [slugg, setslugg] = useState('')
   const [count, setcount] = useState(0)
+  const [filterItems, setfilterItems] = useState([])
+  const [openFilter, setopenFilter] = useState(false)
+  const [subSub, setsubSub] = useState('')
 
 
   const route = useRoute();
   const isFocused = useIsFocused();
 
   const { slug, pro,childs } = route.params;
-  console.log('...............receoved',pro);
   
 
-  // // back press handle
-  // useEffect(() => {
-
-  //   const backAction = () => {
-
-  //     navigation.goBack()
-
-  //     return true;
-  //   };
-
-  //   // handle hard back press
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     backAction
-  //   );
-  //   return () => backHandler.remove();
-  // }, []);
 
   // useEffect(() => {
 
@@ -83,26 +70,52 @@ export default function TopCategories() {
   // }, [slug])
 
   useEffect(() => {
-
-    // topCats = []
     setcategoryWisePro(pro)
-    // setcategoryWisePro([])
-    // setbanner('')
+    categoryService.categoryFilter(slug).then(res=>{
+      setfilterItems(res?.data?.filterOptions)
+      
+    }).catch(err=>{
+
+    })
 
   }, [slug])
 
+ 
+
   // get child category or product under category
   const getChildCategory = (slug: any) => {
-
+    setsubSub(slug)
     productService.getCatWiseProduct(slug).then(res => {
       
       if (res?.data) {
         setcategoryWisePro(res?.data)
+        categoryService.categoryFilter(slug).then(res=>{
+          setfilterItems(res?.data?.filterOptions)
+
+        }).catch(err=>{
+    
+        })
         setisLoading(false)
       }
     }).catch(err => { console.log(err), setisLoading(false) })
+   
 
   }
+    // filter
+    const makeFilter = async (id:number)=>{
+
+      try {
+        let res = await categoryService.categoryFilterSPec(subSub?subSub: slug,id)
+        console.log("...............ress of filter",res);
+        setfilterItems(res?.data?.filterOptions)
+
+        
+      } catch (error) {
+        
+      }
+      
+    }
+  
 
   // lazay loading in react native
   const lazayLoading = async () => {
@@ -137,9 +150,11 @@ export default function TopCategories() {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
   };
 
+
+
   return (
     <View style={{ backgroundColor: '#fff', height: deviceHeaight }}>
-      <Header2/>
+      <Header2 filter={true} setopenFilter={setopenFilter} />
       <SafeAreaView>
 
         <ScrollView style={{ marginBottom: 165 }} removeClippedSubviews={true} onScroll={({ nativeEvent }) => {
@@ -147,9 +162,9 @@ export default function TopCategories() {
         }}>
 
           <View removeClippedSubviews={true}>
-            <View style={{ paddingHorizontal: 10 }}>
-              {bannerrs?
-              <Image style={styles.banner} source={{ uri: `${apiImagepath}/${bannerrs}` }}></Image>
+            <View style={{ paddingHorizontal: 10,marginVertical:10 }}>
+              {childs?.images?.length?
+              <Image style={styles.banner} source={{ uri: `${apiImagepath}/${childs.images[0]?.bannerUrl}` }}></Image>
               :null}
               {childs && childs.length > 0 ?
                 <ScrollView style={styles.horizontalScroll} horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -205,6 +220,60 @@ export default function TopCategories() {
 
         </ScrollView>
       </SafeAreaView>
+      {openFilter?
+      // <FilterModal  setopenFilter={setopenFilter} openFilter={openFilter} filterItems={filterItems}/>
+      <View style={[styles.filterDrawer,{marginLeft:openFilter?0:300}]}>
+      <ScrollView  removeClippedSubviews={true}>
+        <TouchableOpacity  onPress={()=> setopenFilter(false)} style={{alignItems:'flex-end',padding:5,marginRight:5}}>
+          <Ionicons name="close-circle-outline" color='#BB2227'size={30}/>
+        </TouchableOpacity>
+        {filterItems?.brands?.length>0?
+        <View style={{paddingHorizontal:10,marginBottom:10}}>
+       
+          <Text style={{fontSize:16,padding:5}}>Brands</Text> 
+          <View style={{flexDirection:'row',paddingBottom:10,flex:1,flexWrap:'wrap'}}>
+              {filterItems?.brands?.map((item,index)=>
+              <View  style={{margin:2,width:'30%',alignItems:'center'}}>
+                {/* {selectedBrand == item?.id? */}
+                 <TouchableOpacity onPress={()=>makeFilter(item?.id)} style={{backgroundColor:'#BB2227',paddingHorizontal:5}}>
+                      <Text style={{padding:5,color:'#ffffff'}}>{item?.title}</Text>
+                 </TouchableOpacity>
+                {/* :
+                 <TouchableOpacity onPress={()=> selectBrand(item?.id)} style={{backgroundColor:'#F2F3F3',paddingHorizontal:5}}>
+                     <Text style={{padding:5,color:'black'}}>{item?.title}</Text>
+                 </TouchableOpacity>
+                } */}
+              </View>                  
+              )}
+           </View>
+        </View>
+        :null}
+        <View style={{paddingHorizontal:10}}>
+       
+          <View>
+              {filterItems?.attributes?.map((item,index)=>
+              <View key={index}   style={{borderBottomWidth:0.5,borderBottomColor:'red',borderTopColor:'red',borderTopWidth:.5,paddingVertical:4}}>
+                <TouchableOpacity style={styles.termValues}>
+                     <Text style={{padding:4,fontSize:14}}>{item?.term?.title}</Text>
+                </TouchableOpacity>
+                  <View  style={{width:deviceWidth/1.5,flex:1,flexDirection:'row',flexWrap:'wrap'}}>
+                        {item?.values?.map((items,indexs)=>
+                          <View key={indexs} style={{backgroundColor:items?.isSelected?"res":'#F2F3F3',margin:5,width:'42%',alignItems:'center'}} >
+                            <TouchableOpacity onPress={()=>makeFilter(items?.id)}>
+                               <Text  style={{padding:5}}>{items?.title}</Text>
+                            </TouchableOpacity>
+                          </View>
+                         )}
+                    </View>
+              </View>
+             
+              )}
+           </View>
+        
+        </View>
+        </ScrollView>
+      </View>
+      :null}
     </View>
   );
 }
@@ -219,6 +288,24 @@ const styles = StyleSheet.create({
     borderRadius: 5,
 
 
+  },
+  filterDrawer:{
+    backgroundColor:'#1234',
+    width:deviceWidth/1.5,
+    height:deviceHeaight,
+    position:'absolute',
+    zIndex:9999,
+    borderRightColor:'red',
+    borderRightWidth:.5,
+    left:130,
+    top:55
+    
+  },
+  termValues:{
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between',
+    paddingVertical:10
   },
   flashSaleCard: {
     width: 80,

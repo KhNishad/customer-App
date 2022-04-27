@@ -7,10 +7,21 @@ async function getAllCategories() {
   return data;
 }
 
+async function categoryFilter(slug:string) {
+
+  const data = await request(`/term/attribute/associate/filter/${slug}`)
+  return data;
+}
+async function categoryFilterSPec(slug:string,id:number) {
+ let arr  = [id]
+  const data = await request(`/term/attribute/associate/filter/${slug}?spec${arr}`)
+  return data;
+}
+
 
 
  
-export default {getAllCategories}
+export default {getAllCategories,categoryFilter,categoryFilterSPec}
 
 
 

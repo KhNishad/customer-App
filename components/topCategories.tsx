@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Image, Dimensions, ActivityIndicator } from 're
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 // services 
 import productService from '../services/productService';
@@ -25,6 +26,11 @@ export default function TopCategories({ childCat, banner }: any) {
       let res  =  await productService.getCatWiseProduct(slug)
             if(res?.data?.length>0 || childs){
                 navigation.navigate('categoryWiseProductScreen', { slug: slug, pro: res?.data,childs:childs})
+             }else{
+              showMessage({
+                message: `NO Items Found`,
+                type: "danger",
+              });
              }
       } catch (error) {
         console.log('err in cat wise pro',error);

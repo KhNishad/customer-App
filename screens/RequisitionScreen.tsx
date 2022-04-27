@@ -97,7 +97,7 @@ export default function TabTwoScreen(props: any) {
             </View> */}
             <View style={{ paddingHorizontal: 10,paddingVertical:10 }}>
               {allRequisition?.length > 0 && allRequisition?.map((item:any,index:number) =>
-                <View style={styles.card}>
+                <View style={styles.card} key={index}>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: '#ebe8e8',paddingVertical:10}}>
                   <Text style={{ fontSize: 14, paddingHorizontal: 15 }}>Requisition No :{item?.requisitionNo}</Text>
                   <Text style={{ fontSize: 12, paddingHorizontal: 15 }}>Date: {moment(item?.updatedAt).format('ll')}</Text>
