@@ -16,7 +16,7 @@ import StepIndicator from 'react-native-step-indicator';
 // components
 
 // img
-import Requisition from "../services/RequisitionServices";
+import OrderServices from "../services/OrderServices";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -73,6 +73,7 @@ const customStyles = {
     const navigation = useNavigation();
     const route = useRoute();
     const { id } = route.params;
+// console.log('.......',id);
 
 
     const [allRequisition, setallRequisition] = useState([]);
@@ -80,8 +81,9 @@ const customStyles = {
     const [refreshing, setrefreshing] = useState(false);
 
     useEffect(() => {
-        Requisition.getRequisitionDetails(id)
+        OrderServices.getOrderDetails(id)
             .then((res) => {
+                console.log('..................deails', res);
 
                 setallRequisition(res?.data);
             })
@@ -114,7 +116,7 @@ const customStyles = {
                         <Text
                             style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}
                         >
-                            Requisition Details
+                            Order Details
                         </Text>
                         <View></View>
                     </View>

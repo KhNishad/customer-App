@@ -11,10 +11,11 @@ import {
   View,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import moment from 'moment'
 // components
 
 // img
-import BrandAndShopServices from "../services/BrandAndShopServices";
+import OrderServices from "../services/OrderServices";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -29,15 +30,17 @@ function wait(time: any) {
 export default function TabTwoScreen(props: any) {
   const navigation = useNavigation();
 
-  const [allBrands, setallBrands] = useState([]);
+  const [allorders, setallorders] = useState([]);
 
   const [refreshing, setrefreshing] = useState(false);
   const [renderMe, setrenderMe] = useState(false);
 
   useEffect(() => {
-    BrandAndShopServices.getAllBrand()
+    OrderServices.getAllOrder()
       .then((res) => {
-        setallBrands(res.slice(0, 21));
+        // console.log('...............order',res);
+        
+        setallorders(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +83,8 @@ export default function TabTwoScreen(props: any) {
         </View>
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
-            <View style={styles.deleverd}>
+
+            {/* <View style={styles.deleverd}>
               <TouchableOpacity style={{ borderBottomWidth: 2, }}>
                 <Text style={styles.name}>Deleverd</Text>
               </TouchableOpacity>
@@ -90,52 +94,40 @@ export default function TabTwoScreen(props: any) {
               <TouchableOpacity>
                 <Text style={styles.name}>Cancel</Text>
               </TouchableOpacity>
+            </View> */}
 
-            </View>
-            <View style={{ paddingHorizontal: 10,marginBottom:10 }}>
-              <View style={styles.card}>
+
+            <View style={{ paddingHorizontal: 10,paddingVertical:10 }}>
+            {allorders?.length > 0 && allorders?.map((item:any,index:number) =>
+              <View key={index} style={styles.card}>
                 <View style={{ borderBottomWidth: 1, borderBottomColor: '#ebe8e8', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, padding: 15 }}>Order No :25458765</Text>
-                  <Text style={{ fontSize: 14, padding: 15 }}>Date</Text>
+                  <Text style={{ fontSize: 14, padding: 15 }}>Order No :{item?.orderNo}</Text>
+                  <Text style={{ fontSize: 14, padding: 15 }}>Date:{moment(item?.createdAt).format('ll')}</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Qunatity :04</Text>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Total Amount :1450</Text>
+                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Qunatity :{item?.cQuantity}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Total Amount :{item?.cSubTotalAmount}</Text>
                 </View>
+                {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Payment Status:{item?.paymentStatus}</Text>
+                </View> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                  <TouchableOpacity style={{ backgroundColor: '#FF9411', borderTopRightRadius: 5, borderBottomRightRadius: 5, paddingHorizontal: 10 }}>
+                  <TouchableOpacity onPress={()=>navigation.navigate('OrderDetails',
+                  { id:item?.id}
+                  )} 
+                  style={{ backgroundColor: '#FF9411', borderTopRightRadius: 5, borderBottomRightRadius: 5, paddingHorizontal: 10 }}>
                     <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>Details</Text>
                   </TouchableOpacity>
 
                   <Text style={{ color: '#ec1d25', fontSize: 14, fontWeight: 'bold', padding: 15 }}>
-                    Deleverd
+                    {item?.orderStatus}
                   </Text>
                 </View>
               </View>
+            )}
             </View>
-            <View style={{ paddingHorizontal: 10 }}>
-              <View style={styles.card}>
-                <View style={{ borderBottomWidth: 1, borderBottomColor: '#ebe8e8', flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, padding: 15 }}>Order No :25458765</Text>
-                  <Text style={{ fontSize: 14, padding: 15 }}>Date</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Qunatity :04</Text>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Total Amount :1450</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-                  <TouchableOpacity style={{ backgroundColor: '#FF9411', borderTopRightRadius: 5, borderBottomRightRadius: 5, paddingHorizontal: 10 }}>
-                    <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 10 }}>Details</Text>
-                  </TouchableOpacity>
-
-                  <Text style={{ color: '#ec1d25', fontSize: 14, fontWeight: 'bold', padding: 15 }}>
-                    Deleverd
-                  </Text>
-                </View>
-              </View>
-            </View>
+            
 
           </View>
         </ScrollView>

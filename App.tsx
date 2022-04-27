@@ -23,6 +23,7 @@ import BrandWiseProductScreen from './screens/BrandWiseProductScreen'
 import MyOrdersScreen from './screens/MyOrdersScreen'
 import Requisition from './screens/RequisitionScreen'
 import RequisitionDetails from './screens/requisitionDetails'
+import OrderDetails from './screens/OrderDetailsScreen'
 
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
@@ -73,6 +74,11 @@ export default function App() {
         <Stack.Screen
           name="MyOrdersScreen"
           component={MyOrdersScreen}
+          options={{ header: () => null }}
+        />
+        <Stack.Screen
+          name="OrderDetails"
+          component={OrderDetails}
           options={{ header: () => null }}
         />
         <Stack.Screen
