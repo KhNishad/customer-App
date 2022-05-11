@@ -106,7 +106,7 @@ export default function TabTwoScreen(props: any) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Qunatity :{item?.cQuantity}</Text>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Total Amount :{item?.cSubTotalAmount}</Text>
+                  <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Total Amount : TK {item?.cSubTotalAmount}</Text>
                 </View>
                 {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={{ fontSize: 14, fontWeight: 'bold', padding: 15 }}>Payment Status:{item?.paymentStatus}</Text>

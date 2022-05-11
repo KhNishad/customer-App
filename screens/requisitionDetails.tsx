@@ -150,7 +150,7 @@ const customStyles = {
                             </View>
                             )}
                              <View style={[styles.card,{marginTop:10,paddingHorizontal:10}]}>
-                                <Text>Total : {allRequisition?.cSubTotalAmount}</Text>
+                                <Text>Total : TK {allRequisition?.cSubTotalAmount}</Text>
                                 <Text>Quantity : {allRequisition?.cQuantity}</Text>
                             </View>
                         </View>

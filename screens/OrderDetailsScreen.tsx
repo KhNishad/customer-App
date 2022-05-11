@@ -34,16 +34,16 @@ export default function RequisitionDetails() {
     // const [currentPosition, setcurrentPosition] = useState(0)
 
 
-let labels = ["Requisition Created","Processing","Order Placed"];
+let labels = ["Pending","Ready to Ship","On The Way","Delivered",'Cancelled'];
 
 
 const customStyles = {
   stepIndicatorSize: 25,
   currentStepIndicatorSize:30,
   separatorStrokeWidth: 2,
-  currentStepStrokeWidth: 3,
+  currentStepStrokeWidth: 2,
   stepStrokeCurrentColor: '#ec1d25',
-  stepStrokeWidth: 3,
+  stepStrokeWidth: 2,
   stepStrokeFinishedColor: '#ec1d25',
   stepStrokeUnFinishedColor: '#aaaaaa',
   separatorFinishedColor: '#ec1d25',
@@ -73,12 +73,13 @@ const customStyles = {
     const navigation = useNavigation();
     const route = useRoute();
     const { id } = route.params;
-// console.log('.......',id);
+    // console.log('.......',id);
 
 
     const [allRequisition, setallRequisition] = useState([]);
 
     const [refreshing, setrefreshing] = useState(false);
+
 
     useEffect(() => {
         OrderServices.getOrderDetails(id)
@@ -134,27 +135,35 @@ const customStyles = {
                                     <Text style={{ fontSize: 14, paddingHorizontal: 15 }}>Area : {allRequisition?.dlvrArea}</Text>
                                 </View>
                             </View>
-                            {allRequisition?.requisitionDetails?.map((item:any,index:number)=>
-                            <View style={styles.card} key={index}>
-                                <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'flex-start',paddingHorizontal:10}}>
-                                    <View style={{width:100}}>
-                                        <Image style={styles.img} source={{ uri: `${apiImagepath}/${item?.product?.images[0].url}` }} />
-                                    </View>
-                                    <View style={{width:deviceWidth-150}}>
-                                        <Text>{item?.product?.title} </Text>
-                                        <Text>TK: {item?.price}</Text>
-                                    </View>
-                                   
+                            {allRequisition?.orderSeller?.map((items:any,indexs:number)=>
+                            <View key={indexs}>
+                                <View>
+                                  <View style={[styles.card,{marginTop:10,paddingHorizontal:10,marginBottom:-2,borderBottomRightRadius:0,borderBottomLeftRadius:0}]}>
+                                   <Text>Seller No : {items?.orderSellerNo}</Text>
+                                   <Text>Total : TK {items?.totalAmont}</Text>
+                                  </View>
                                 </View>
-                                <View style={{marginTop:10}}>
-                                  <StepIndicator stepCount={3}  customStyles={customStyles}  currentPosition={item?.status =='createRequisition'? 0 : item?.status == 'processing'?1:2}  labels={labels} />
+                                {items?.orderSellerDetails.map((item:any,index:number)=>
+                                <View style={styles.card} key={index}>
+                                    <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'flex-start',paddingHorizontal:10}}>
+                                        <View style={{width:100}}>
+                                            <Image style={styles.img} source={{ uri: `${apiImagepath}/${item?.product?.images[0].url}` }} />
+                                        </View>
+                                        <View style={{width:deviceWidth-150}}>
+                                            <Text>{item?.product?.title} </Text>
+                                            <Text>TK: {item?.price}</Text>
+                                        </View>
+                                    
+                                    </View>
+                                    <View style={{marginTop:10}}>
+                                    <StepIndicator stepCount={5}  customStyles={customStyles}  currentPosition={items?.orderSellerStatus =='Pending'? 0 : items?.orderSellerStatus == 'ReadyToShip'?1:items?.orderSellerStatus == 'OnTheWay'?2:items?.orderSellerStatus == 'Deivered'?3:4}  labels={labels} />
+                                    </View>
                                 </View>
+                                )}
                             </View>
+                           
                             )}
-                             <View style={[styles.card,{marginTop:10,paddingHorizontal:10}]}>
-                                <Text>Total : {allRequisition?.cSubTotalAmount}</Text>
-                                <Text>Quantity : {allRequisition?.cQuantity}</Text>
-                            </View>
+                            
                         </View>
                     </View>
                 </ScrollView>
