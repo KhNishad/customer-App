@@ -73,7 +73,10 @@ export default function TopCategories() {
       .then((res) => {
         setfilterItems(res?.data?.filterOptions);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log('err....',err);
+        
+      });
   }, [slug]);
 
   // get child category or product under category
@@ -89,7 +92,10 @@ export default function TopCategories() {
             .then((res) => {
               setfilterItems(res?.data?.filterOptions);
             })
-            .catch((err) => {});
+            .catch((err) => {
+              console.log('..err',err);
+              
+            });
           setisLoading(false);
         }
       })
@@ -155,7 +161,7 @@ export default function TopCategories() {
       <Header2 filter={true} setopenFilter={setopenFilter} />
       {/* <SafeAreaView> */}
       <ScrollView
-        style={{ marginBottom: 20 }}
+        style={{ marginBottom: 10 }}
         removeClippedSubviews={true}
         onScroll={({ nativeEvent }) => {
           if (isCloseToBottom(nativeEvent)) {
@@ -255,6 +261,7 @@ export default function TopCategories() {
                 alignItems: "center",
                 justifyContent: "center",
                 flexWrap: "wrap",
+                
               }}
             >
               <ProductCard products={categoryWisePro} />

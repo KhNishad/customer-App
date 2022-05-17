@@ -54,7 +54,7 @@ export default function ProductDetails() {
   useEffect(() => {
     productService.getSingleProductDetails(title).then((res) => {
       setproductDetail(res?.data);
-      // console.log("...............res", res?.data);
+      // console.log("...............res", res?.data?.variations[0]?.isNagotiable);
     });
   }, [refreshing, title]);
 
@@ -191,7 +191,13 @@ export default function ProductDetails() {
                 </TouchableOpacity>
               </View> */}
             </View>
-
+              {productDetail?.variations[0]?.isNagotiable  ? 
+              <View style={[styles.shopTileContainer, { marginBottom: 5 }]}>
+              <Text style={styles.proTitle}><Text style={{color:'red'}}>**</Text>Price Negotiable</Text>
+            </View>
+              :
+                null
+              }
             <View style={[styles.shopTileContainer, { marginBottom: 10 }]}>
               <Text style={styles.proTitle}>{productDetail?.title}</Text>
 
@@ -331,7 +337,7 @@ export default function ProductDetails() {
 
             <View style={{ padding: 10 }}>
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                Specification & Description :
+                Specification:
               </Text>
               <View style={{ marginVertical: 10 }}>
                 <Text>{productDetail?.description}</Text>
@@ -342,6 +348,15 @@ export default function ProductDetails() {
                     </Text>
                   ))}
                 </View>
+              </View>
+            </View>
+            <View style={{ padding: 10 }}>
+              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+               Long Description :
+              </Text>
+              <View style={{ marginVertical: 10 }}>
+                <Text>{productDetail?.longDescription}</Text>
+                
               </View>
             </View>
           </View>
@@ -468,8 +483,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   detailsImg: {
-    width: deviceWidth,
-    height: deviceWidth,
+    width: deviceWidth-50,
+    height: deviceWidth-50,
     marginLeft: -1,
   },
   priceAndWishContainer: {

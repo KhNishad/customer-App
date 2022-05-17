@@ -75,7 +75,7 @@ export default function TabTwoScreen(props: any) {
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF9411" />
 
-      <SafeAreaView>
+      {/* <SafeAreaView> */}
         
         <View style={styles.container1}>
             <View
@@ -84,12 +84,14 @@ export default function TabTwoScreen(props: any) {
                 flexDirection: "row",
               }}
             >
+              <TouchableOpacity onPress={() => navigation.goBack()}>
               <AntDesign
-                onPress={() => navigation.navigate("HomeScreen")}
+                
                 name="left"
                 size={30}
                 color={"black"}
               ></AntDesign>
+              </TouchableOpacity>
               <Text
                 style={{ fontSize: 20, fontWeight: "bold", marginLeft: 10 }}
               >
@@ -186,7 +188,7 @@ export default function TabTwoScreen(props: any) {
             </View>
           </View>
         </ScrollView>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </View>
   );
 }

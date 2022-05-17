@@ -57,24 +57,35 @@ export default function ProductCard({ products }: any) {
                   </Text>
                   {/* <EvilIcons name='heart' size={20} /> */}
                 </View>
+                {item?.productVariation[0]?.isNagotiable == true ? 
+                <View>
+                  <Text style={{fontSize:11}}> <Text style={{color:'red'}}>**</Text>Price Negotiable</Text>
+                </View>
+                :
+                <>
+                
                 <Text style={{ fontSize: 12, fontWeight: "bold" }}>
                   Tk.{item?.productVariation[0]?.regularPrice}
                 </Text>
-                {/* {item?.productVariation[0]?.salePrice } */}
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text
-                    style={{ fontSize: 10, textDecorationLine: "line-through" }}
+                {item?.productVariation[0]?.salePrice == 0 ?
+                  null :
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
                   >
-                    Tk.{item?.productVariation[0]?.salePrice}
-                  </Text>
-                </View>
+                    <Text
+                      style={{ fontSize: 10, textDecorationLine: "line-through" }}
+                    >
+                      Tk.{item?.productVariation[0]?.salePrice}
+                    </Text>
+                  </View>
+                }
+                </>
+}
               </View>
             </TouchableOpacity>
           ))}
