@@ -36,7 +36,7 @@ export default function ProductDetails() {
   const [{ qnty, token }] = useStateValue();
   const [state, dispatch] = useStateValue();
 
-  const closeIt = () => {};
+  const closeIt = () => { };
   // pull refresh  function
   function wait(time: any) {
     return new Promise((resolve) => {
@@ -191,13 +191,13 @@ export default function ProductDetails() {
                 </TouchableOpacity>
               </View> */}
             </View>
-              {productDetail?.variations[0]?.isNagotiable  ? 
+            {productDetail?.variations?.length && productDetail?.variations[0]?.isNagotiable ?
               <View style={[styles.shopTileContainer, { marginBottom: 5 }]}>
-              <Text style={styles.proTitle}><Text style={{color:'red'}}>**</Text>Price Negotiable</Text>
-            </View>
+                <Text style={styles.proTitle}><Text style={{ color: 'red' }}>**</Text>Price Negotiable</Text>
+              </View>
               :
-                null
-              }
+              null
+            }
             <View style={[styles.shopTileContainer, { marginBottom: 10 }]}>
               <Text style={styles.proTitle}>{productDetail?.title}</Text>
 
@@ -352,11 +352,11 @@ export default function ProductDetails() {
             </View>
             <View style={{ padding: 10 }}>
               <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-               Long Description :
+                Long Description :
               </Text>
               <View style={{ marginVertical: 10 }}>
                 <Text>{productDetail?.longDescription}</Text>
-                
+
               </View>
             </View>
           </View>
@@ -483,8 +483,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   detailsImg: {
-    width: deviceWidth-50,
-    height: deviceWidth-50,
+    width: deviceWidth - 50,
+    height: deviceWidth - 50,
     marginLeft: -1,
   },
   priceAndWishContainer: {
