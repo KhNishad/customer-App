@@ -304,11 +304,11 @@ export default function TabTwoScreen() {
             alignItems: "center",
             justifyContent: "space-between",
             paddingHorizontal: 20,
-            paddingBottom: 10,
+            paddingBottom: 5,
           }}
         >
-          <Text style={{ fontSize: 20 }}>Total:</Text>
-          <Text style={{ fontSize: 20 }}>$ {totalPrice}</Text>
+          <Text style={{ fontSize: 18 }}>Total:</Text>
+          <Text style={{ fontSize: 18 }}>TK {totalPrice}</Text>
         </View>
 
         <TouchableOpacity

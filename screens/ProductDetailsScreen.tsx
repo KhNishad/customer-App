@@ -285,7 +285,7 @@ export default function ProductDetails() {
               >
                 <Text style={{ fontSize: 18 }}>Total</Text>
                 <Text style={{ fontSize: 18 }}>
-                  ${" "}
+                  TK{" "}
                   {productDetail?.variations[0]?.salePrice
                     ? productDetail?.variations[0]?.salePrice
                     : productDetail?.variations[0]?.regularPrice}{" "}
