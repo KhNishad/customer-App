@@ -113,9 +113,7 @@ export default function TabTwoScreen(props: any) {
                       navigation.navigate("BrandWiseProductScreen", {
                         title: item?.title,
                         slug:item?.slug,
-                        titlee:item?.name,
-                        // originn:"Brand"
-                        
+                        titlee:item?.name,                        
                       })
                     }
                     style={styles.card3}

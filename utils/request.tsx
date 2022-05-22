@@ -50,6 +50,7 @@ const request = async (link, params={}, noPrefix = null, header = null) => {
     net: Boolean 
     let headers = {
         "Content-Type": "application/json",
+        
     };
     
     const token = await SecureStore.getItemAsync('accessToken')

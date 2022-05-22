@@ -26,7 +26,7 @@ const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
 
 
-export default function TabTwoScreen(props:any) {
+export default function TabTwoScreen(props: any) {
 
   const navigation = useNavigation();
   const [ModalOpen, setModalOpen] = useState(false);
@@ -34,24 +34,24 @@ export default function TabTwoScreen(props:any) {
   const [homeSection, setHomeSection] = useState<any>({})
   const [refreshing, setrefreshing] = useState(false)
 
-useEffect(() => {
+  useEffect(() => {
 
-  const data ={
-    "homePage:banners": [
-      {}
-    ],
-  
-  "homePage:innerSections":[{
+    const data = {
+      "homePage:banners": [
+        {}
+      ],
 
-  }],
-  }
-     HomeServices.homeSettings(data).then((res)=>{
-        setHomeSection(res?.data)
-        // console.log('====================================',res?.data);
-       
-     })
-     
-},[refreshing])
+      "homePage:innerSections": [{
+
+      }],
+    }
+    HomeServices.homeSettings(data).then((res) => {
+      setHomeSection(res?.data)
+      console.log('====================================', res?.data);
+
+    })
+
+  }, [refreshing])
 
 
 
@@ -65,18 +65,18 @@ useEffect(() => {
         <ScrollView>
           <Header />
           <View>
-            <Slider banner={homeSection?.['homePage:banners']}/>
+            <Slider banner={homeSection?.['homePage:banners']} />
           </View>
           <View style={styles.iconSection}>
-            <TouchableOpacity onPress={()=> navigation.navigate('CategoryScreen')} style={styles.icons}>
+            <TouchableOpacity onPress={() => navigation.navigate('CategoryScreen')} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/categories.png')}></Image>
-              <Text  style={{ fontSize: 10,textAlign:'center' }}>Categories</Text>
+              <Text style={{ fontSize: 10, textAlign: 'center' }}>Categories</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> navigation.navigate('AllBrandScreen',{origin:'Brand'})} style={styles.icons}>
+            <TouchableOpacity onPress={() => navigation.navigate('AllBrandScreen', { origin: 'Brand' })} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/layers.png')}></Image>
               <Text style={{ fontSize: 10 }}>All Brand</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> navigation.navigate('AllBrandScreen',{origin:'Shop'})} style={styles.icons}>
+            <TouchableOpacity onPress={() => navigation.navigate('AllBrandScreen', { origin: 'Shop' })} style={styles.icons}>
               <Image style={styles.mainBanner} source={require('../assets/images/gift-card.png')}></Image>
               <Text style={{ fontSize: 10 }}>All Shop</Text>
             </TouchableOpacity>
@@ -93,29 +93,36 @@ useEffect(() => {
               <Text style={{ fontSize: 10 }}>Electronics</Text>
             </TouchableOpacity>
           </View>
-          {homeSection?.['homePage:innerSections']?.length>0?
-          <View>
-          {homeSection?.['homePage:innerSections'].map((item:any,index:number)=>
-          
-          <View style={{marginBottom:10}} key={index}>
-              <View style={styles.ProductSection}>
-                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item?.title}</Text>
-                <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
-              </View>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View style={styles.CardContainer}>
-                    <ProductCard products={item?.source}/>
+          {homeSection?.['homePage:innerSections']?.length > 0 ?
+            <View>
+              {homeSection?.['homePage:innerSections'].map((item: any, index: number) =>
+
+                <View style={{ marginBottom: 10 }} key={index}>
+                  <View style={styles.ProductSection}>
+                    <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item?.title}</Text>
+                    <TouchableOpacity onPress={()=> navigation.navigate("AllProductScreen", {
+                        title: item?.title,
+                        products:item?.source,
+                        
+                      })}>
+                      <Text style={{ fontSize: 15, fontWeight: 'bold' }}>See All </Text>
+
+                    </TouchableOpacity>
+                  </View>
+                  <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                    <View style={styles.CardContainer}>
+                      <ProductCard products={item?.source.slice(10)} />
+                    </View>
+                  </ScrollView>
                 </View>
-              </ScrollView>
-          </View>
-          )}
-          </View>
-          :null}
+              )}
+            </View>
+            : null}
         </ScrollView>
       </SafeAreaView>
-      {ModalOpen?
-           <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
-      :null}
+      {ModalOpen ?
+        <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen} />
+        : null}
 
 
     </View>
@@ -160,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // flexWrap: 'wrap',
     justifyContent: 'space-between',
-    
+
   },
   card: {
     width: deviceWidth / 3 - 15,
@@ -169,25 +176,25 @@ const styles = StyleSheet.create({
     borderRadius: 10
 
   },
-  icons:{
+  icons: {
     alignItems: 'center',
     width: deviceWidth / 6 - 2,
-    textAlign:'center' 
+    textAlign: 'center'
 
   },
-  ProductSection:{
+  ProductSection: {
     display: 'flex',
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    paddingHorizontal: 10, 
-    alignItems: 'center' ,
-  },
-  iconSection:{
-    display: 'flex', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
     alignItems: 'center',
-    paddingVertical:10,
-    paddingHorizontal:5 
+  },
+  iconSection: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 5
   }
 });
