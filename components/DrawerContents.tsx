@@ -149,8 +149,7 @@ export function DrawerContent(props:any) {
                                 <MaterialIcons name="assignment-return" size={25} color={color} />
                             )}
                             label="Profile"
-                            onPress={() => {
-                            }}
+                            onPress={() => {props.navigation.navigate('AddressScreen')}}
                         />
                               
                         <DrawerItem 
@@ -198,13 +197,13 @@ export function DrawerContent(props:any) {
                         {/* </>
                           } */}
                     
-                          <DrawerItem 
+                          {/* <DrawerItem 
                             icon={({color, size}) => (
                                 <Ionicons name="ios-settings-outline" size={25} color={color} />
                             )}
                             label="Privacy Policies"
                             onPress={() => Linking.openURL('')}
-                        />
+                        /> */}
                 </View>
               
             </DrawerContentScrollView>

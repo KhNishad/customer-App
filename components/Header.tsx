@@ -32,7 +32,7 @@ export default function TabTwoScreen() {
                 />
          </View>
          <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-           <FontAwesome style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
+           <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
            {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
            {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
          </View>
