@@ -14,7 +14,7 @@ import LoginService from '../services/LoginService';
 
 export default function ModalScreen({setopenFilter,openFilter,data}:any) {
 
-console.log(".............daata",data);
+// console.log(".............daata",data);
 
     
 const navigation = useNavigation();

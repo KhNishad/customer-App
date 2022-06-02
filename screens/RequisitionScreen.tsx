@@ -38,7 +38,7 @@ export default function TabTwoScreen(props: any) {
   useEffect(() => {
     Requisition.getRewuisition()
       .then((res) => {
-        console.log('..................',res);
+        // console.log('..................',res);
 
         setallRequisition(res?.data);
       })

@@ -33,11 +33,11 @@ export default function TopCategories() {
   const [bannerrs, setbanner] = useState("");
   const [selectedCat, setselectedCat] = useState("");
   const [isLoading, setisLoading] = useState(false);
-  const [slugg, setslugg] = useState("");
   const [count, setcount] = useState(0);
   const [filterItems, setfilterItems] = useState([]);
   const [openFilter, setopenFilter] = useState(false);
   const [subSub, setsubSub] = useState("");
+  const [selectedIds, setselectedIds] = useState([])
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -74,8 +74,8 @@ export default function TopCategories() {
         setfilterItems(res?.data?.filterOptions);
       })
       .catch((err) => {
-        console.log('err....',err);
-        
+        console.log('err....', err);
+
       });
   }, [slug]);
 
@@ -93,8 +93,8 @@ export default function TopCategories() {
               setfilterItems(res?.data?.filterOptions);
             })
             .catch((err) => {
-              console.log('..err',err);
-              
+              console.log('..err', err);
+
             });
           setisLoading(false);
         }
@@ -105,50 +105,81 @@ export default function TopCategories() {
   };
   // filter
   const makeFilter = async (id: number) => {
+
+    let idArr = selectedIds
+    let indexMe = idArr.findIndex(e=>e == id)
+    if(indexMe > -1){
+      idArr.splice(indexMe,1)
+    }else{
+      idArr.push(id)
+    }
+    setselectedIds(idArr)
+    // try {
+    //   let res = await categoryService.categoryFilterSPec(
+    //     subSub ? subSub : slug,
+    //     idArr
+    //   );
+    //   filterProduct(idArr)
+    //   setfilterItems(res?.data?.filterOptions);
+    // } catch (error) { }
+    filterProduct(idArr)
+
+   
+  };
+
+  const filterProduct = async (id: number) => {
+
     try {
-      let res = await categoryService.categoryFilterSPec(
+
+      let res = await categoryService.getCatWiseProductss(
         subSub ? subSub : slug,
         id
       );
-      console.log("...............ress of filter", res);
-      setfilterItems(res?.data?.filterOptions);
-    } catch (error) {}
+      console.log(".................products",res?.data);
+      
+      setcategoryWisePro(res?.data);
+    } catch (error) { }
   };
+
+
+    
 
   // lazay loading in react native
-  const lazayLoading = async () => {
-    setisLoading(true);
-    current = current + 1;
+  // const lazayLoading = async () => {
+  //   setisLoading(true);
+  //   current = current + 1;
 
-    categoryService
-      .categoryWiseProduct(slugg, limit, current)
-      .then((res) => {
-        if (res?.data?.products?.length > 0) {
-          let dataAr = categoryWisePro;
-          res?.data?.products?.map((item, i) => {
-            dataAr?.push(item);
-          });
-          setcategoryWisePro(dataAr);
+  //   categoryService
+  //     .categoryWiseProduct(slugg, limit, current)
+  //     .then((res) => {
+  //       if (res?.data?.products?.length > 0) {
+  //         let dataAr = categoryWisePro;
+  //         res?.data?.products?.map((item, i) => {
+  //           dataAr?.push(item);
+  //         });
+  //         setcategoryWisePro(dataAr);
 
-          // setcategoryWisePro(res?.data?.products)
-          setisLoading(false);
-        } else {
-          setisLoading(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err), setisLoading(false);
-      });
-  };
+  //         // setcategoryWisePro(res?.data?.products)
+  //         setisLoading(false);
+  //       } else {
+  //         setisLoading(false);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err), setisLoading(false);
+  //     });
+  // };
   // fire event when scroll ends
 
-  const isCloseToBottom = ({
-    layoutMeasurement,
-    contentOffset,
-    contentSize,
-  }) => {
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
-  };
+
+
+  // const isCloseToBottom = ({
+  //   layoutMeasurement,
+  //   contentOffset,
+  //   contentSize,
+  // }) => {
+  //   return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+  // };
 
   return (
     <View
@@ -163,11 +194,11 @@ export default function TopCategories() {
       <ScrollView
         style={{ marginBottom: 10 }}
         removeClippedSubviews={true}
-        onScroll={({ nativeEvent }) => {
-          if (isCloseToBottom(nativeEvent)) {
-            lazayLoading();
-          }
-        }}
+        // onScroll={({ nativeEvent }) => {
+        //   if (isCloseToBottom(nativeEvent)) {
+        //     lazayLoading();
+        //   }
+        // }}
       >
         <View removeClippedSubviews={true}>
           <View
@@ -261,7 +292,7 @@ export default function TopCategories() {
                 alignItems: "center",
                 justifyContent: "center",
                 flexWrap: "wrap",
-                
+
               }}
             >
               <ProductCard products={categoryWisePro} />
@@ -287,7 +318,7 @@ export default function TopCategories() {
         <View
           style={[styles.filterDrawer, { marginLeft: openFilter ? 0 : 300 }]}
         >
-          <ScrollView removeClippedSubviews={true}>
+          <ScrollView removeClippedSubviews={true} style={{ marginBottom: 60 }}>
             <TouchableOpacity
               onPress={() => setopenFilter(false)}
               style={{ alignItems: "flex-end", padding: 5, marginRight: 5 }}
@@ -362,7 +393,7 @@ export default function TopCategories() {
                           key={indexs}
                           style={{
                             backgroundColor: items?.isSelected
-                              ? "res"
+                              ? "red"
                               : "#F2F3F3",
                             margin: 5,
                             width: "42%",
@@ -372,7 +403,10 @@ export default function TopCategories() {
                           <TouchableOpacity
                             onPress={() => makeFilter(items?.id)}
                           >
-                            <Text style={{ padding: 5 }}>{items?.title}</Text>
+                            <Text style={{
+                              padding: 5, color: items?.isSelected ? "#fff"
+                                : "black",
+                            }}>{items?.title}</Text>
                           </TouchableOpacity>
                         </View>
                       ))}
@@ -397,7 +431,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   filterDrawer: {
-    backgroundColor: "#1234",
+    backgroundColor: "#fff",
     width: deviceWidth / 1.5,
     height: deviceHeaight,
     position: "absolute",
@@ -406,6 +440,8 @@ const styles = StyleSheet.create({
     borderRightWidth: 0.5,
     left: 130,
     top: 55,
+    borderLeftWidth: 1,
+    borderLeftColor: '#1234'
   },
   termValues: {
     flexDirection: "row",

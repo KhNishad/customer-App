@@ -70,6 +70,7 @@ const request = async (link, params={}, noPrefix = null, header = null) => {
     
     };
 
+
         let options={
             url: link,
             method: confiq.method, 
@@ -79,7 +80,6 @@ const request = async (link, params={}, noPrefix = null, header = null) => {
             params : confiq.params,
             file : confiq.file
         }
-        
 
         return axios(options).then(res=>{
             // console.log('res ====', options);

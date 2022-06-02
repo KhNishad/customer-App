@@ -84,7 +84,7 @@ const customStyles = {
     useEffect(() => {
         OrderServices.getOrderDetails(id)
             .then((res) => {
-                console.log('..................deails', res);
+                // console.log('..................deails', res);
 
                 setallRequisition(res?.data);
             })
