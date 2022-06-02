@@ -37,45 +37,23 @@ export default function TopCategories() {
   const [filterItems, setfilterItems] = useState([]);
   const [openFilter, setopenFilter] = useState(false);
   const [subSub, setsubSub] = useState("");
-  const [selectedIds, setselectedIds] = useState([])
+  const [selectedIds, setselectedIds] = useState([]);
 
   const route = useRoute();
   const isFocused = useIsFocused();
 
   const { slug, pro, childs } = route.params;
 
-  // useEffect(() => {
-
-  //   topCats = []
-  //   setslugg(slug)
-
-  //   categoryService.getSingleCategory(slug).then(res => {
-
-  //     setcount(res?.count)
-  //     topCats = res?.data
-  //     settopCategories(topCats)
-  //     setcategoryWisePro(pro)
-  //     setselectedCat(res?.data?.category?.title)
-  //     setbanner(res?.data?.category?.images?.banner?.url)
-
-  //     if (res?.data?.products?.length > 0) {
-  //       setcategoryWisePro(res?.data?.products?.splice(0, 20))
-  //     }
-
-  //   }).catch(err => { console.log(err), setisLoading(false) });
-
-  // }, [slug])
-
   useEffect(() => {
     setcategoryWisePro(pro);
+    setselectedIds([]);
     categoryService
       .categoryFilter(slug)
       .then((res) => {
         setfilterItems(res?.data?.filterOptions);
       })
       .catch((err) => {
-        console.log('err....', err);
-
+        console.log("err....", err);
       });
   }, [slug]);
 
@@ -93,8 +71,7 @@ export default function TopCategories() {
               setfilterItems(res?.data?.filterOptions);
             })
             .catch((err) => {
-              console.log('..err', err);
-
+              console.log("..err", err);
             });
           setisLoading(false);
         }
@@ -105,44 +82,35 @@ export default function TopCategories() {
   };
   // filter
   const makeFilter = async (id: number) => {
-
-    let idArr = selectedIds
-    let indexMe = idArr.findIndex(e=>e == id)
-    if(indexMe > -1){
-      idArr.splice(indexMe,1)
-    }else{
-      idArr.push(id)
+    let idArr = selectedIds;
+    let indexMe = idArr.findIndex((e) => e == id);
+    if (indexMe > -1) {
+      idArr.splice(indexMe, 1);
+    } else {
+      idArr.push(id);
     }
-    setselectedIds(idArr)
-    // try {
-    //   let res = await categoryService.categoryFilterSPec(
-    //     subSub ? subSub : slug,
-    //     idArr
-    //   );
-    //   filterProduct(idArr)
-    //   setfilterItems(res?.data?.filterOptions);
-    // } catch (error) { }
-    filterProduct(idArr)
-
-   
+    setselectedIds(idArr);
+    try {
+      let res = await categoryService.categoryFilterSPec(
+        subSub ? subSub : slug,
+        idArr
+      );
+      filterProduct(idArr);
+      setfilterItems(res?.data?.filterOptions);
+    } catch (error) {}
   };
 
   const filterProduct = async (id: number) => {
-
     try {
-
       let res = await categoryService.getCatWiseProductss(
         subSub ? subSub : slug,
         id
       );
-      console.log(".................products",res?.data);
-      
+      // console.log(".................products", res?.data);
+
       setcategoryWisePro(res?.data);
-    } catch (error) { }
+    } catch (error) {}
   };
-
-
-    
 
   // lazay loading in react native
   // const lazayLoading = async () => {
@@ -170,8 +138,6 @@ export default function TopCategories() {
   //     });
   // };
   // fire event when scroll ends
-
-
 
   // const isCloseToBottom = ({
   //   layoutMeasurement,
@@ -292,7 +258,6 @@ export default function TopCategories() {
                 alignItems: "center",
                 justifyContent: "center",
                 flexWrap: "wrap",
-
               }}
             >
               <ProductCard products={categoryWisePro} />
@@ -403,10 +368,14 @@ export default function TopCategories() {
                           <TouchableOpacity
                             onPress={() => makeFilter(items?.id)}
                           >
-                            <Text style={{
-                              padding: 5, color: items?.isSelected ? "#fff"
-                                : "black",
-                            }}>{items?.title}</Text>
+                            <Text
+                              style={{
+                                padding: 5,
+                                color: items?.isSelected ? "#fff" : "black",
+                              }}
+                            >
+                              {items?.title}
+                            </Text>
                           </TouchableOpacity>
                         </View>
                       ))}
@@ -441,7 +410,7 @@ const styles = StyleSheet.create({
     left: 130,
     top: 55,
     borderLeftWidth: 1,
-    borderLeftColor: '#1234'
+    borderLeftColor: "#1234",
   },
   termValues: {
     flexDirection: "row",

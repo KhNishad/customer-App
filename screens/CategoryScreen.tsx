@@ -59,10 +59,9 @@ export default function CategoryScreen() {
     categoryService
       .getAllCategories()
       .then((res) => {
-        // console.log('====================================res',res);
 
         setallCategories(res?.data);
-        setchildCat(res[0]?.childTermValues);
+        setchildCat(res?.data[0]?.children);
         setbanner(res[0]?.images?.banner?.url);
         setselected(res[0]?.slug);
         if (!childCat) {
@@ -72,7 +71,7 @@ export default function CategoryScreen() {
       .catch((err) => {
         console.log(err);
       });
-  }, [refreshing]);
+  }, []);
 
   // const getProducts = async (slug:any,childs:any) =>{
 
