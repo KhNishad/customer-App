@@ -1,10 +1,11 @@
 
-import { View, Text,StyleSheet,StatusBar,ScrollView ,Image,ActivityIndicator,SafeAreaView,TextInput,Button } from 'react-native';
+import { View, Text,StyleSheet,StatusBar,ScrollView ,Image,ActivityIndicator,SafeAreaView,TextInput,Button, Alert } from 'react-native';
 import { Dimensions } from 'react-native'
 import { Ionicons,Feather, AntDesign, FontAwesome} from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
+import SearchService from '../services/SearchService';
 
 
 const deviceWidth = Dimensions.get('window').width
@@ -13,23 +14,92 @@ const deviceHeight = Dimensions.get('window').height
 
 export default function TabTwoScreen() {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
+    const [searchKeyWord, setsearchKeyWord] = useState('')
+  const [suggestPro, setsuggestPro] = useState([])
+
+
+     // global search for product
+
+     useEffect(() => {
+      setsuggestPro([]);
+      setsearchKeyWord('')
+     })
+     
+
+  const globalSearch = () =>{
+    
+     
+    SearchService.globalSearch(searchKeyWord).then(res=>{
+    
+      setsearchKeyWord('')
+    
+      if(res?.count > 0){  
+
+        navigation.navigate('SearchProductScreen',{result:res?.data,keyWord:searchKeyWord})
+
+      }else if(res?.count == 0){
+        setsearchKeyWord('')
+        Alert.alert(
+          "O Items found!",
+          "Nothing Matched Your Search Key Word",
+          [],
+          { cancelable: true }
+        ); 
+      }
+    }).catch(err=>console.log("err",err))
+   
+  }
+
+  // suggest search options 
+  const globalSearch2 = (keyWord:any) =>{
+
+     setsearchKeyWord(keyWord)
+     if(keyWord){
+      SearchService.globalSearch(keyWord).then(res=>{
+        
+        
+        setsuggestPro(res?.data.slice(0,10))
+        }).catch(err=>console.log("err",err))
+
+     }
+   
+   
+  }
 
 
   return (
-
+    <>
     <View style={styles.container}>
       <View style={styles.headerBar}>
         <TouchableOpacity onPress={()=>navigation.openDrawer()}>
            <Image  style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image>
         </TouchableOpacity>
          <View  style={styles.input}>
-              <Feather name='search' style={{paddingRight:5}} color={'red'} size={20}></Feather>
+              
                <TextInput
                     // onChangeText={setemail}
                     // value={email}
+                    style={{width:deviceWidth/2.5}}
                     placeholder="Search"
+                    onChangeText={searchKeyWord => {
+                      globalSearch2(searchKeyWord)
+                      setsearchKeyWord(searchKeyWord)}
+                    
+                    }
+                    onBlur={()=>
+                      {
+                        setsearchKeyWord('')
+                        globalSearch2('')
+                        setsuggestPro([])
+                      }
+                     
+                    }
+                    onSubmitEditing={()=>  globalSearch()}
                 />
+                <TouchableOpacity onPress={()=> globalSearch()}>
+                <Feather name='search' style={{paddingRight:5}} color={'red'} size={20}></Feather>
+                </TouchableOpacity>
          </View>
          <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
            <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
@@ -42,6 +112,32 @@ export default function TabTwoScreen() {
       </View>
                 
     </View>
+    {suggestPro && suggestPro?.length > 0 ? (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 9999,
+            top: 55,
+            backgroundColor: "#fff",
+            width: deviceWidth,
+          }}
+        >
+          {suggestPro &&
+            suggestPro?.map((item: any, index: any) => (
+              <TouchableOpacity key={index} onPress={()=>navigation.navigate('SearchProductScreen',{keyWord: searchKeyWord})}>
+                <View style={{ padding: 8 }}>
+                  <Text
+                    numberOfLines={1}
+                    style={{ fontSize: 16, marginLeft: 5, width: 200 }}
+                  >
+                    {item?.title}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+        </View>
+      ) : null}
+    </>
   );
 }
 

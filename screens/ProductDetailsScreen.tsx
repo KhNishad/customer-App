@@ -10,6 +10,13 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native-gesture-handler";
+// import HTML from "react-native-render-html";
+// import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-html-table-bridge';
+
+
+
+
+
 // components
 import Header2 from "../components/header2";
 import LoginModal from "../components/LoginModal";
@@ -25,6 +32,20 @@ const deviceWidth = Dimensions.get("window").width;
 const apiImagepath = "http://103.119.71.9:4400/media";
 
 export default function ProductDetails() {
+
+    // for table render in description
+    // const config = {
+    //   WebViewComponent: WebView
+    // };
+   
+    // const renderers = {
+    // table: makeTableRenderer(config)
+    // };
+    // const htmlConfig = {
+    // alterNode,
+    // renderers,
+    // ignoredTags: IGNORED_TAGS
+    // };
   const navigation = useNavigation();
   const [refreshing, setrefreshing] = useState(false);
   const [productDetail, setproductDetail] = useState<any>({});

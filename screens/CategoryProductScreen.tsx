@@ -63,6 +63,8 @@ export default function TopCategories() {
     productService
       .getCatWiseProduct(slug)
       .then((res) => {
+        console.log('..............res',res);
+        
         if (res?.data) {
           setcategoryWisePro(res?.data);
           categoryService
@@ -208,7 +210,8 @@ export default function TopCategories() {
                         </TouchableOpacity>
                       </View>
                       <View style={{ width: "100%", height: "50%" }}>
-                        <View
+                        <TouchableOpacity
+                         onPress={() => getChildCategory(item?.slug)}
                           style={{
                             flexDirection: "row",
                             height: 30,
@@ -228,7 +231,7 @@ export default function TopCategories() {
                           >
                             {item?.title}
                           </Text>
-                        </View>
+                        </TouchableOpacity>
                       </View>
                     </View>
                   ))}

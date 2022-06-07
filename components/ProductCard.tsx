@@ -7,7 +7,7 @@ const deviceHeight = Dimensions.get("window").height;
 const apiImagepath = "http://103.119.71.9:4400/media";
 
 export default function ProductCard({ products }: any) {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   // console.log("..........", products);
 
@@ -44,6 +44,7 @@ export default function ProductCard({ products }: any) {
                 >
                   {item.title}
                 </Text>
+                {item?.brand?.title != 'N/A'?
                 <View
                   style={{
                     display: "flex",
@@ -56,7 +57,7 @@ export default function ProductCard({ products }: any) {
                     {item?.brand?.title}
                   </Text>
                   {/* <EvilIcons name='heart' size={20} /> */}
-                </View>
+                </View>:null}
                 {item?.productVariation[0]?.isNagotiable == true ? 
                 <View>
                   <Text style={{fontSize:11}}> <Text style={{color:'red'}}>**</Text>Price Negotiable</Text>

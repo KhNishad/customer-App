@@ -25,6 +25,7 @@ import Requisition from './screens/RequisitionScreen'
 import RequisitionDetails from './screens/requisitionDetails'
 import OrderDetails from './screens/OrderDetailsScreen'
 import AllProductScreen from './screens/AllProductScreen'
+import SearchProductScreen from './screens/SearchProductScreen'
 
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
@@ -65,6 +66,11 @@ export default function App() {
           <Stack.Screen
             name="FavoriteScreen"
             component={FavoriteScreen}
+            options={{ header: () => null }}
+          />
+          <Stack.Screen
+            name="SearchProductScreen"
+            component={SearchProductScreen}
             options={{ header: () => null }}
           />
           <Stack.Screen
