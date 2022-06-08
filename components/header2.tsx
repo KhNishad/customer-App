@@ -24,10 +24,10 @@ export default function TabTwoScreen({filter,setopenFilter}:any) {
   
        // global search for product
 
-       useEffect(() => {
-        setsuggestPro([]);
-        setsearchKeyWord('')
-       })
+      //  useEffect(() => {
+      //   setsuggestPro([]);
+      //   setsearchKeyWord('')
+      //  })
   
     const globalSearch = () =>{
       
@@ -113,9 +113,7 @@ export default function TabTwoScreen({filter,setopenFilter}:any) {
            <Text style={{fontSize:16,fontWeight:'bold',color:"black"}}>Grocery</Text>
          </View> */}
       </View>
-                
-    </View>
-    {suggestPro && suggestPro?.length > 0 ? (
+      {suggestPro && suggestPro?.length > 0 ? (
         <View
           style={{
             position: "absolute",
@@ -139,7 +137,9 @@ export default function TabTwoScreen({filter,setopenFilter}:any) {
               </TouchableOpacity>
             ))}
         </View>
-      ) : null}
+      ) : null}    
+    </View>
+    
     </>
   );
 }
@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
     borderTopColor:'#fff',
     borderTopWidth:.2,
     paddingVertical:5,
-    paddingHorizontal:10
+    paddingHorizontal:10,
+    position:'relative'
   },
   headerBar:{
     display:'flex',

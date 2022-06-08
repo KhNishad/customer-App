@@ -19,21 +19,11 @@ export default function CarouselExample({banner}:any) {
 // bannerson = banner['homePage:banners']
 
 
+console.log('....................res',banner);
 
 
   const navigation = useNavigation();
 
-  const  banners = [
-    {
-      img:'',
-      id:'1'
-    }, {
-      img:'',
-      id:'2'
-    }
-
-  ]
- 
 
     return (
       <View  style={{paddingTop:10,backgroundColor:'#fff'}}>

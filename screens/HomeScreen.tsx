@@ -46,9 +46,9 @@ export default function TabTwoScreen(props: any) {
     HomeServices.homeSettings(data).then((res) => {
       setHomeSection(res?.data);
     });
-  }, [refreshing]);
+  }, []);
 
-  console.log("====================================", homeSection);
+  // console.log("====================================", homeSection);
 
   return (
     <View style={styles.container}>
@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor:'#FF9411',
     // paddingTop:deviceHeight/6
+    position:'relative'
   },
   title: {
     fontSize: 30,

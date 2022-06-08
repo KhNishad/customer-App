@@ -21,10 +21,10 @@ export default function TabTwoScreen() {
 
      // global search for product
 
-     useEffect(() => {
-      setsuggestPro([]);
-      setsearchKeyWord('')
-     })
+    //  useEffect(() => {
+    //   setsuggestPro([]);
+    //   setsearchKeyWord('')
+    //  })
      
 
   const globalSearch = () =>{
@@ -35,7 +35,7 @@ export default function TabTwoScreen() {
       setsearchKeyWord('')
     
       if(res?.count > 0){  
-
+          
         navigation.navigate('SearchProductScreen',{result:res?.data,keyWord:searchKeyWord})
 
       }else if(res?.count == 0){
@@ -87,14 +87,14 @@ export default function TabTwoScreen() {
                       setsearchKeyWord(searchKeyWord)}
                     
                     }
-                    onBlur={()=>
-                      {
-                        setsearchKeyWord('')
-                        globalSearch2('')
-                        setsuggestPro([])
-                      }
+                    // onBlur={()=>
+                    //   {
+                    //     setsearchKeyWord('')
+                    //     globalSearch2('')
+                    //     setsuggestPro([])
+                    //   }
                      
-                    }
+                    // }
                     onSubmitEditing={()=>  globalSearch()}
                 />
                 <TouchableOpacity onPress={()=> globalSearch()}>
