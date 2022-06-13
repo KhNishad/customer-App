@@ -19,7 +19,7 @@ export default function CarouselExample({banner}:any) {
 // bannerson = banner['homePage:banners']
 
 
-console.log('....................res',banner);
+// console.log('....................res',banner);
 
 
   const navigation = useNavigation();

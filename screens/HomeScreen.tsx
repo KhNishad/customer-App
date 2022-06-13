@@ -48,7 +48,7 @@ export default function TabTwoScreen(props: any) {
     });
   }, []);
 
-  // console.log("====================================", homeSection);
+  console.log("====================================ddd", homeSection);
 
   return (
     <View style={styles.container}>
@@ -132,7 +132,7 @@ export default function TabTwoScreen(props: any) {
                         onPress={() =>
                           navigation.navigate("AllProductScreen", {
                             title: item?.title,
-                            products: item?.source,
+                            products: item?.productArray,
                           })
                         }
                       >
@@ -146,8 +146,8 @@ export default function TabTwoScreen(props: any) {
                       showsHorizontalScrollIndicator={false}
                     >
                       <View style={styles.CardContainer}>
-                        {item?.source?.length > 0 ? (
-                          <ProductCard products={item?.source.slice(0, 10)} />
+                        {item?.productArray?.length > 0 ? (
+                          <ProductCard products={item?.productArray.slice(0, 10)} />
                         ) : null}
                       </View>
                     </ScrollView>
