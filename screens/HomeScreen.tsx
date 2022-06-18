@@ -48,7 +48,7 @@ export default function TabTwoScreen(props: any) {
     });
   }, []);
 
-  console.log("====================================ddd", homeSection);
+  // console.log("====================================ddd", homeSection);
 
   return (
     <View style={styles.container}>

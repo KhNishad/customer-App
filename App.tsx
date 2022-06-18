@@ -26,6 +26,8 @@ import RequisitionDetails from './screens/requisitionDetails'
 import OrderDetails from './screens/OrderDetailsScreen'
 import AllProductScreen from './screens/AllProductScreen'
 import SearchProductScreen from './screens/SearchProductScreen'
+import Profile from './screens/Profile'
+import HurryOrder from './screens/HurryOrder'
 
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
@@ -138,6 +140,16 @@ export default function App() {
           <Stack.Screen
             name="AllProductScreen"
             component={AllProductScreen}
+            options={{ header: () => null }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{ header: () => null }}
+          />
+          <Stack.Screen
+            name="HurryOrder"
+            component={HurryOrder}
             options={{ header: () => null }}
           />
 

@@ -15,9 +15,16 @@ async function  getSingleProductDetails (data:any) {
     return res;
 }
 
+async function ImageUpload(file:any) {
+    // console.log('..................file',file);
+
+  const res = await request('/media/upload/base64',{method:'POST',data:file})
+  return res;
+}
 
 
-export default {getCatWiseProduct,getSingleProductDetails}
+
+export default {getCatWiseProduct,getSingleProductDetails,ImageUpload}
 
 
 

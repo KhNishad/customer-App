@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SearchService from '../services/SearchService';
+import * as SecureStore from 'expo-secure-store';
+
 
 
 const deviceWidth = Dimensions.get('window').width
@@ -17,6 +19,7 @@ export default function TabTwoScreen() {
     const navigation = useNavigation<any>();
     const [searchKeyWord, setsearchKeyWord] = useState('')
   const [suggestPro, setsuggestPro] = useState([])
+  const [token, settoken] = useState('')
 
 
      // global search for product
@@ -25,7 +28,18 @@ export default function TabTwoScreen() {
     //   setsuggestPro([]);
     //   setsearchKeyWord('')
     //  })
-     
+
+    useEffect(() => {
+      const token = async()=>{
+        let tokenn = await SecureStore.getItemAsync('accessToken')
+        if(tokenn){
+          settoken(tokenn)
+        }else{
+          settoken('')
+        }
+      }
+      token()
+    },[] )
 
   const globalSearch = () =>{
     
@@ -67,6 +81,14 @@ export default function TabTwoScreen() {
    
   }
 
+  const hurryOrder =()=>{
+    if(token){
+      navigation.navigate('HurryOrder')
+    }else{
+      alert('Login First')
+    }
+  }
+
 
   return (
     <>
@@ -80,7 +102,7 @@ export default function TabTwoScreen() {
                <TextInput
                     // onChangeText={setemail}
                     // value={email}
-                    style={{width:deviceWidth/2.5}}
+                    style={{width:deviceWidth/2.7}}
                     placeholder="Search"
                     onChangeText={searchKeyWord => {
                       globalSearch2(searchKeyWord)
@@ -102,9 +124,11 @@ export default function TabTwoScreen() {
                 </TouchableOpacity>
          </View>
          <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
-           <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
            {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
            {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
+           <TouchableOpacity onPress={()=>hurryOrder()}>
+           <Text style={{color:'#fff',fontWeight:'bold'}}>Hurry Order</Text>
+           </TouchableOpacity>
          </View>
          {/* <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
            <Text style={{fontSize:16,fontWeight:'bold',color:"black"}}>Grocery</Text>
@@ -160,7 +184,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 35,
-    width:deviceWidth/2,
+    width:deviceWidth/2.2,
     // margin: 12,
     borderWidth: .5,
     padding: 5,

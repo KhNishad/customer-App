@@ -320,6 +320,7 @@ export default function TabTwoScreen() {
                     {userInfo?.shippingAddress?.map(
                       (item: any, index: number) => (
                         <View
+                        key={index}
                           style={{
                             justifyContent: "space-between",
                             paddingHorizontal: 5,

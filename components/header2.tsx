@@ -104,7 +104,7 @@ export default function TabTwoScreen({filter,setopenFilter}:any) {
            {filter?
            <Feather onPress={()=>setopenFilter(true)} name='filter' style={{paddingRight:5}} color={'#fff'} size={25}></Feather>
             :null}
-           <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome>
+           {/* <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome> */}
 
            {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
            {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}

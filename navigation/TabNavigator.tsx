@@ -1,4 +1,4 @@
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useEffect } from "react";
 // services
@@ -9,6 +9,7 @@ import CatNav from "../navigation/CatNavigation";
 import Root from "../navigation/DrawerNavigation";
 // navigations
 import CartScreen from "../screens/MyCart";
+import Profile from '../screens/Profile'
 import AddToCartServices from "../services/AddToCartServices";
 import NetworkUtils from "../utils/Connection";
 
@@ -114,6 +115,23 @@ export function TabNav() {
           tabBarIcon: ({ focused, color }) => (
             <MaterialIcons
               name="category"
+              size={30}
+              color={focused ? "#BB2227" : color}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarLabel: "Profile",
+          // unmountOnBlur: true,
+          header: () => null,
+
+          tabBarIcon: ({ focused, color }) => (
+            <FontAwesome
+              name="user"
               size={30}
               color={focused ? "#BB2227" : color}
             />
