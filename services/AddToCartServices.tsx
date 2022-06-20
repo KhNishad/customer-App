@@ -12,14 +12,19 @@ async function getAllCartItem() {
     return data;
   }
 
-  async function placeOrder(data:any) {
+async function placeOrder(data:any) {
     const res = await request('/requisition',{method:'POST',data:data})
+    return res;
+  }
+
+async function placeHurryOrder(data:any) {
+    const res = await request('/order/hurry',{method:'POST',data:data})
     return res;
   }
 
   
 
-export default {addToCart,getAllCartItem,placeOrder}
+export default {addToCart,getAllCartItem,placeOrder,placeHurryOrder}
 
 
 

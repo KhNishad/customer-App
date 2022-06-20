@@ -115,7 +115,7 @@ const pickImage = async () => {
                 </TouchableOpacity>
             </View>
             <TouchableOpacity style={{alignItems:'center'}}>
-                <Text style={[styles.title,{fontSize:14,color:'#FF9411',marginBottom:15}]}>Change Password</Text>
+                <Text style={[styles.title,{fontSize:14,color:'#FF9411',marginBottom:15}]}>Hurry Order List</Text>
             </TouchableOpacity>
           </View>
         </View>
