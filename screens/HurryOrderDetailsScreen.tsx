@@ -17,6 +17,7 @@ import StepIndicator from 'react-native-step-indicator';
 
 // img
 import Requisition from "../services/RequisitionServices";
+import HurryOrderService from "../services/HurryOrderService";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -34,33 +35,33 @@ export default function RequisitionDetails() {
     // const [currentPosition, setcurrentPosition] = useState(0)
 
 
-let labels = ["Requisition Created","Processing","Order Placed"];
+    let labels = ["Created", "Requisition Created"];
 
 
-const customStyles = {
-  stepIndicatorSize: 25,
-  currentStepIndicatorSize:30,
-  separatorStrokeWidth: 2,
-  currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#ec1d25',
-  stepStrokeWidth: 3,
-  stepStrokeFinishedColor: '#ec1d25',
-  stepStrokeUnFinishedColor: '#aaaaaa',
-  separatorFinishedColor: '#ec1d25',
-  separatorUnFinishedColor: '#aaaaaa',
-  stepIndicatorFinishedColor: '#ec1d25',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
-  stepIndicatorLabelFontSize: 13,
-  currentStepIndicatorLabelFontSize: 13,
-  stepIndicatorLabelCurrentColor: '#ec1d25',
-  stepIndicatorLabelFinishedColor: '#ffffff',
-  stepIndicatorLabelUnFinishedColor: '#aaaaaa',
-  labelColor: '#999999',
-  labelSize: 10,
-  currentStepLabelColor: '#ec1d25',
-  
-}
+    const customStyles = {
+        stepIndicatorSize: 25,
+        currentStepIndicatorSize: 30,
+        separatorStrokeWidth: 2,
+        currentStepStrokeWidth: 3,
+        stepStrokeCurrentColor: '#ec1d25',
+        stepStrokeWidth: 3,
+        stepStrokeFinishedColor: '#ec1d25',
+        stepStrokeUnFinishedColor: '#aaaaaa',
+        separatorFinishedColor: '#ec1d25',
+        separatorUnFinishedColor: '#aaaaaa',
+        stepIndicatorFinishedColor: '#ec1d25',
+        stepIndicatorUnFinishedColor: '#ffffff',
+        stepIndicatorCurrentColor: '#ffffff',
+        stepIndicatorLabelFontSize: 13,
+        currentStepIndicatorLabelFontSize: 13,
+        stepIndicatorLabelCurrentColor: '#ec1d25',
+        stepIndicatorLabelFinishedColor: '#ffffff',
+        stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+        labelColor: '#999999',
+        labelSize: 10,
+        currentStepLabelColor: '#ec1d25',
+
+    }
 
 
     const refresh = React.useCallback(() => {
@@ -75,14 +76,15 @@ const customStyles = {
     const { id } = route.params;
 
 
-    const [allRequisition, setallRequisition] = useState([]);
+    const [allRequisition, setallRequisition] = useState({});
 
     const [refreshing, setrefreshing] = useState(false);
 
     useEffect(() => {
-        Requisition.getRequisitionDetails(id)
-            .then((res) => {
+        HurryOrderService.getHurryOrderDetails(id)
 
+            .then((res) => {
+                console.log('===============', res);
                 setallRequisition(res?.data);
             })
             .catch((err) => {
@@ -114,7 +116,7 @@ const customStyles = {
                         <Text
                             style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}
                         >
-                            Requisition Details
+                            Hurry Order Details
                         </Text>
                         <View></View>
                     </View>
@@ -132,26 +134,27 @@ const customStyles = {
                                     <Text style={{ fontSize: 14, paddingHorizontal: 15 }}>Area : {allRequisition?.dlvrArea}</Text>
                                 </View>
                             </View>
-                            {allRequisition?.requisitionDetails?.map((item:any,index:number)=>
-                            <View style={styles.card} key={index}>
-                                <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'flex-start',paddingHorizontal:10}}>
-                                    <View style={{width:100}}>
-                                        <Image style={styles.img} source={{ uri: `${apiImagepath}/${item?.product?.images[0].url}` }} />
+                            <View style={[styles.card, { marginTop: 10, paddingHorizontal: 10 }]}>
+                                {Object.keys(allRequisition)?.length > 0 ?
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginVertical: 5, flexWrap: 'wrap' }}>
+                                        {allRequisition?.images.map((item, index) =>
+                                            <View key={index} >
+                                                <Image
+                                                    style={styles.img}
+                                                    source={{ uri: `${apiImagepath}/${item?.url}` }}
+                                                />
+                                                <Text style={{ width: deviceWidth / 3.5 }} numberOfLines={2}>{item?.alt}</Text>
+                                            </View>
+                                        )}
+
                                     </View>
-                                    <View style={{width:deviceWidth-150}}>
-                                        <Text>{item?.product?.title} </Text>
-                                        <Text>TK: {item?.price}</Text>
-                                    </View>
-                                   
+                                    : null}
+                                <View style={{ paddingHorizontal: 20 }}>
+                                    <Text>Note: {allRequisition?.note}</Text>
                                 </View>
-                                <View style={{marginTop:10}}>
-                                  <StepIndicator stepCount={3}  customStyles={customStyles}  currentPosition={item?.status =='createRequisition'? 0 : item?.status == 'processing'?1:2}  labels={labels} />
+                                <View style={{ marginTop: 10 }}>
+                                    <StepIndicator stepCount={2} customStyles={customStyles} currentPosition={allRequisition?.hurryOrderStatus == 'created' ? 0 : allRequisition?.hurryOrderStatus == 'requisitionCreated' ? 1 : 2} labels={labels} />
                                 </View>
-                            </View>
-                            )}
-                             <View style={[styles.card,{marginTop:10,paddingHorizontal:10}]}>
-                                <Text>Total : TK {allRequisition?.cSubTotalAmount}</Text>
-                                <Text>Quantity : {allRequisition?.cQuantity}</Text>
                             </View>
                         </View>
                     </View>

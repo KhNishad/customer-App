@@ -195,7 +195,7 @@ import {
               </View>
               <Entypo name="chevron-right" size={25} color="#000" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.profileSection1}>
+            <TouchableOpacity onPress={()=>navigation.navigate('HurryOrderList')} style={styles.profileSection1}>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View
                   style={{
@@ -205,7 +205,7 @@ import {
                 >
                   <MaterialIcons name="support-agent" size={25} color="#1239" />
                 </View>
-                <Text style={styles.title}>Change Paasword</Text>
+                <Text style={styles.title}>Hurry Order</Text>
               </View>
               <Entypo name="chevron-right" size={25} color="#000" />
             </TouchableOpacity>

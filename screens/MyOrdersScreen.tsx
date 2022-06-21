@@ -84,17 +84,7 @@ export default function TabTwoScreen(props: any) {
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
 
-            {/* <View style={styles.deleverd}>
-              <TouchableOpacity style={{ borderBottomWidth: 2, }}>
-                <Text style={styles.name}>Deleverd</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.name}>Processing</Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={styles.name}>Cancel</Text>
-              </TouchableOpacity>
-            </View> */}
+           
 
 
             <View style={{ paddingHorizontal: 10,paddingVertical:10 }}>

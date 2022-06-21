@@ -20,6 +20,7 @@ const deviceHeight = Dimensions.get('window').height
 // service
 import AddToCartServices from '../services/AddToCartServices';
 import profileService from '../services/profileService';
+import HurryOrderService from '../services/HurryOrderService';
 
 
 import SuccessModal from '../components/filterModal';
@@ -36,6 +37,7 @@ export default function TabTwoScreen() {
   const [Imagee, setImagee] = useState([])
   const [renderMe, setrenderMe] = useState(false);
   const [texts, settexts] = useState([])
+  const [note, setnote] = useState('')
 
 
   useEffect(() => {
@@ -118,11 +120,14 @@ export default function TabTwoScreen() {
     })
     arr.pop()
      const data   = {
-      images : arr
+      images : arr,
+      note:note
      }
 
+
      try {
-      let res  = await AddToCartServices.placeHurryOrder(data)
+      let res  = await HurryOrderService.placeHurryOrder(data)
+
       if(res){
         showMessage({
           message: `${res.message}`,
@@ -203,6 +208,13 @@ export default function TabTwoScreen() {
 
               </View>
             </View>
+
+                        <TextInput
+                        style={styles.input}
+                        onChangeText={setnote}
+                        value={note}
+                        placeholder="Note...."
+                    />
 
 
             <View style={{ alignItems: 'center', marginVertical: 30 }}>

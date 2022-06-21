@@ -28,7 +28,8 @@ import AllProductScreen from './screens/AllProductScreen'
 import SearchProductScreen from './screens/SearchProductScreen'
 import Profile from './screens/Profile'
 import HurryOrder from './screens/HurryOrder'
-
+import HurryOrderList from './screens/HurryListScreen'
+import HurryOrderDetails from './screens/HurryOrderDetailsScreen'
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
 import { useEffect } from "react";
@@ -150,6 +151,17 @@ export default function App() {
           <Stack.Screen
             name="HurryOrder"
             component={HurryOrder}
+            options={{ header: () => null }}
+          />
+
+          <Stack.Screen
+            name="HurryOrderList"
+            component={HurryOrderList}
+            options={{ header: () => null }}
+          />
+          <Stack.Screen
+            name="HurryOrderDetails"
+            component={HurryOrderDetails}
             options={{ header: () => null }}
           />
 

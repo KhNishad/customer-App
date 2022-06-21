@@ -17,14 +17,11 @@ async function placeOrder(data:any) {
     return res;
   }
 
-async function placeHurryOrder(data:any) {
-    const res = await request('/order/hurry',{method:'POST',data:data})
-    return res;
-  }
+
 
   
 
-export default {addToCart,getAllCartItem,placeOrder,placeHurryOrder}
+export default {addToCart,getAllCartItem,placeOrder}
 
 
 
