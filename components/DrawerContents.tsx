@@ -11,6 +11,8 @@ import { useIsDrawerOpen } from '@react-navigation/drawer';
 // import { useStateValue } from '../context/StateProvider'
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { useNavigation } from '@react-navigation/native';
+import { useStateValue } from "../context/StateProvider";
+import { actionTypes } from "../context/reducer";
 
 
 
@@ -25,6 +27,8 @@ export function DrawerContent(props:any) {
 
 
   const isDrawerOpen = useIsDrawerOpen();
+  const [{ qnty,  }] = useStateValue();
+  const [state, dispatch] = useStateValue();
   
 
   const [notLogin, setnotLogin] = useState(false)
@@ -65,7 +69,11 @@ export function DrawerContent(props:any) {
             showMessage({
               message: `Logged Out Successfully`,
               type: "success",
-            });            
+            });  
+            dispatch({
+              type: actionTypes.GET_TOTAL,
+              qnty: '',
+            });          
           }
        
         }

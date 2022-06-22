@@ -41,12 +41,13 @@ export default function TabTwoScreen() {
     let qty = 0;
     AddToCartServices.getAllCartItem()
       .then((res) => {
+        console.log('====================================',res);
         setcartItem(res?.data?.packageList);
-        // res?.data?.packageList.map((item:any, index:number) => {
-        //     qty = qty + item?.qty;
-        //     total = total +  ((item?.productVariation?.salePrice?item?.productVariation?.salePrice:item?.productVariation?.regularPrice) * item?.qty)
+        res?.data?.packageList.map((item:any, index:number) => {
+            // qty = qty + item?.qty;
+            total = total +  ((item?.productVariation?.salePrice?item?.productVariation?.salePrice:item?.productVariation?.regularPrice) * item?.qty)
 
-        // })
+        })
         setTotalPrice(total);
         dispatch({
           type: actionTypes.GET_TOTAL,

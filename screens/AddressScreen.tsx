@@ -294,7 +294,7 @@ export default function TabTwoScreen() {
               />
             </View>
 
-            <View style={[styles.text_input, { marginTop: 10 }]}>
+            {/* <View style={[styles.text_input, { marginTop: 10 }]}>
               <Text style={styles.labelText}>Address</Text>
               <TextInput
                 style={styles.input}
@@ -302,7 +302,7 @@ export default function TabTwoScreen() {
                 placeholder="Address"
                 value={address}
               />
-            </View>
+            </View> */}
 
             <View style={{ marginBottom: 10 }}>
               <Text style={{ paddingVertical: 10 }}>Your Saved Address: </Text>

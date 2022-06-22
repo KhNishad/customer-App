@@ -332,7 +332,7 @@ export default function ProductDetails() {
                 style={styles.secondBtns}
               >
                 <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity
+                  <View
                     style={{ flexDirection: "row", alignItems: "center" }}
                   >
                     <AntDesign
@@ -341,7 +341,7 @@ export default function ProductDetails() {
                       color={"#fff"}
                     ></AntDesign>
                     <Text style={{ color: "#fff" }}> Add to Cart</Text>
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </TouchableOpacity>
               {/* <View style={styles.secondBtns}>

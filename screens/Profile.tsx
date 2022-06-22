@@ -4,7 +4,7 @@ import {
     FontAwesome,
     MaterialIcons,
   } from "@expo/vector-icons";
-  import { useFocusEffect, useNavigation } from "@react-navigation/native";
+  import { useFocusEffect, useNavigation,useIsFocused } from "@react-navigation/native";
   import React, { useEffect, useState } from "react";
   import {
     Dimensions,
@@ -27,6 +27,7 @@ import {
   export default function HomeScreen(props: any) {
     const navigation = useNavigation<any>();
     const scheme = useColorScheme();
+    const isFocused = useIsFocused();
   
   const [token, settoken] = useState('')
   const [phone, setphone] = useState('')
@@ -36,11 +37,21 @@ import {
     const token = async()=>{
      
       let tokenn = await SecureStore.getItemAsync('accessToken')
-      console.log(".......token",tokenn);
+
       
       if(tokenn){
         settoken(tokenn)
+        profileService.getUser().then((res)=>{
+          
+           setname(res?.data?.name)
+           setphone(res?.data?.phone)
+         }).catch(err=>{
+            console.log(err);
+            
+         })
       }else{
+        setname('')
+        setphone('')
         settoken('')
       }
       
@@ -48,25 +59,25 @@ import {
     }
    
     token()
-  },[] )
+  },[isFocused] )
 
  
 
-  useFocusEffect(() => {
-    if(token){
+  // useFocusEffect(() => {
+  //   if(token){
       
-     profileService.getUser().then((res)=>{
-      console.log('.........../,',res?.data?.name);
+  //    profileService.getUser().then((res)=>{
+  //     console.log('.........resdd',res);
       
-       setname(res?.data?.name)
-       setphone(res?.data?.phone)
-     }).catch(err=>{
-        console.log(err);
+  //      setname(res?.data?.name)
+  //      setphone(res?.data?.phone)
+  //    }).catch(err=>{
+  //       console.log(err);
         
-     })
-    }
+  //    })
+  //   }
                  
-   }) 
+  //  }) 
 
    
   
