@@ -11,9 +11,10 @@ import {
 import { Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
+import * as SecureStore from 'expo-secure-store';
 
 // components
 import Header from "../components/Header";
@@ -32,10 +33,12 @@ const deviceHeight = Dimensions.get("window").height;
 
 export default function TabTwoScreen(props: any) {
   const navigation = useNavigation<any>();
+  const isFocused = useIsFocused();
   const [ModalOpen, setModalOpen] = useState(false);
   const [banner, setbanner] = useState([]);
   const [homeSection, setHomeSection] = useState<any>({});
   const [refreshing, setrefreshing] = useState(false);
+  const [token, settoken] = useState('')
 
   useEffect(() => {
     const data = {
@@ -47,6 +50,19 @@ export default function TabTwoScreen(props: any) {
       setHomeSection(res?.data);
     });
   }, []);
+
+  useFocusEffect(() => {
+    const token = async () => {
+      let tokenn = await SecureStore.getItemAsync('accessToken')
+      if (tokenn) {
+        settoken(tokenn)
+      } else {
+        settoken('')
+      }
+    }
+    token()
+
+  })
 
   // console.log("====================================ddd", homeSection);
 

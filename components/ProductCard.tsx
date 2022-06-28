@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
-    // resizeMode:'center',
+    resizeMode:'center',
     // borderWidth:.1
   },
 });

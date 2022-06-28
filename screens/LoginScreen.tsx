@@ -10,6 +10,7 @@ import moment from 'moment'
 import {Picker} from '@react-native-picker/picker';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import * as SecureStore from 'expo-secure-store';
+import LoginModal from '../components/LoginModal';
 
 const deviceWidth = Dimensions.get('window').width
 const deviceHeight = Dimensions.get('window').height
@@ -20,9 +21,9 @@ let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
 import LoginService from '../services/LoginService';
 
-export default function TabTwoScreen() {
+export default function TabTwoScreen(props:any) {
 
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
 
 
     const [phone, setphone] = useState('')
@@ -32,6 +33,7 @@ export default function TabTwoScreen() {
     const [gender, setgender] = useState('male')
 
     const [showDate, setshowDate] = useState(false)
+    const [ModalOpen, setModalOpen] = useState(false)
 
 
   const LoginSubmit = async ()=>{
@@ -72,6 +74,11 @@ export default function TabTwoScreen() {
 
     };
 
+    // close the drawer
+    const closeIt = ()=>{
+      props.navigation.closeDrawer()
+
+    }
 
   return (
     <View style={styles.container}>
@@ -137,7 +144,7 @@ export default function TabTwoScreen() {
                 </TouchableOpacity>
             </View>
             <View style={{alignItems:'center',paddingBottom:10}}>
-                <Text style={[styles.title,{fontSize:14}]}>Already Have An Account?<Text style={{color:'#000000'}} >  Login</Text>
+                <Text style={[styles.title,{fontSize:14}]}>Already Have An Account?<Text onPress={()=>setModalOpen(true)} style={{color:'#000000'}} >  Login</Text>
                 </Text>
             </View>
                  {showDate ?
@@ -148,7 +155,10 @@ export default function TabTwoScreen() {
                      display="default"
                      onChange={onChange}
                    />
-                  : null}       
+                  : null}   
+                  {ModalOpen?
+              <LoginModal closeIt={closeIt}  setModalOpen={setModalOpen} ModalOpen={ModalOpen}/>
+             :null}    
         
     </View>
   );

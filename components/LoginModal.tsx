@@ -9,17 +9,20 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import * as SecureStore from 'expo-secure-store';
 
 
+
 const deviceWidth = Dimensions.get('window').width
 
 import LoginService from '../services/LoginService';
+import navigation from '../navigation';
 
 export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
-
+  const navigation = useNavigation<any>();
     const [number, setnumber] = useState('')
     const [otpCode, setotpCode] = useState('')
     const [isOtp, setisOtp] = useState(false)
     const [passWord, setpassWord] = useState('')
     const [isConfirmOtp, setisConfirmOtp] = useState(false)
+    
     
 
     const sendOtp = async ()=>{
@@ -42,6 +45,7 @@ export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
                   setotpCode('')
                   setpassWord('')
                   setnumber('')
+                  navigation.navigate('Home')
                   
               } catch (error) {
                   console.log('err in send otp',error);
@@ -88,6 +92,7 @@ export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
             });
             SecureStore.setItemAsync('accessToken',res?.data?.token?.accessToken);
             setModalOpen(false)
+            navigation.navigate('Home')
             // console.log('====================================',res?.data?.token?.accessToken);
             
         } catch (error) {
@@ -107,7 +112,7 @@ export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
   return (
     <View style={styles.container}>
            <Modal isVisible={ModalOpen} style={{alignItems:'center'}}>
-              <View style={{ width:deviceWidth-50,justifyContent:'center',height:270,backgroundColor:'#fff',alignItems:'center',borderRadius:10 }}>
+              <View style={{ width:deviceWidth-50,justifyContent:'center',height:280,backgroundColor:'#fff',alignItems:'center',borderRadius:10 }}>
                 <Ionicons  onPress={()=>setModalOpen(false)} name='close' color={'red'} size={25}/>
                 <View style={{marginTop:10}}>
                     {!isOtp?
@@ -167,6 +172,12 @@ export default function ModalScreen({setModalOpen,ModalOpen,closeIt}:any) {
                     <Text style={{color:'#fff',paddingHorizontal:20,paddingVertical:10,fontWeight:'bold'}}>Submit</Text>
                   </TouchableOpacity>
                 </View>}
+                <View style={{paddingVertical:5}}>
+                  <Text>If You Don't Register?<Text onPress={()=>{
+                     navigation.navigate('LoginScreen');
+                     setModalOpen(false)
+                }} style={{color:'#FF9411'}}>Register</Text></Text>
+                </View>
               
               </View>
            </Modal>

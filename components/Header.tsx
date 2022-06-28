@@ -43,7 +43,7 @@ export default function TabTwoScreen() {
     }
     token()
 
-  }, [])
+  }, [isFocused])
 
   const globalSearch = () => {
 

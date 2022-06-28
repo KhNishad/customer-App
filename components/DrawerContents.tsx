@@ -13,6 +13,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 import { useNavigation } from '@react-navigation/native';
 import { useStateValue } from "../context/StateProvider";
 import { actionTypes } from "../context/reducer";
+import LoginModal from '../components/LoginModal';
 
 
 
@@ -21,7 +22,7 @@ import profileService from '../services/profileService'
 
 
 
-import LoginModal from '../components/LoginModal';
+
 
 export function DrawerContent(props:any) {
 

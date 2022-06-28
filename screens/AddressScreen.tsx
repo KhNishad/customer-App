@@ -199,7 +199,7 @@ export default function TabTwoScreen() {
       address: address,
       shippingAddress: addressCon,
     };
-    // console.log('...........payload', data);
+    console.log('...........payload', data);
 
     try {
       let res = await AddressServices.setAddress(userInfo?.id, data);
