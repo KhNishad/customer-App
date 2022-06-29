@@ -29,16 +29,15 @@ export default function TabTwoScreen() {
   const isFocused = useIsFocused();
   const [fullName, setfullName] = useState("");
   const [address, setaddress] = useState("");
-  const [zipCode, setzipCode] = useState("");
-  const [city, setcity] = useState([]);
-  const [district, setdistrict] = useState([]);
-  const [division, setdivision] = useState([]);
-  const [area, setarea] = useState([]);
-  const [policeStation, setpoliceStation] = useState([]);
+  const [city, setcity] = useState<any>([]);
+  const [district, setdistrict] = useState<any>([]);
+  const [division, setdivision] = useState<any>([]);
+  const [area, setarea] = useState<any>([]);
+  const [policeStation, setpoliceStation] = useState<any>([]);
   const [refreshing, setrefreshing] = useState(false);
   const [isActive, setisActive] = useState(false);
   const [type, settype] = useState("home");
-  const [userInfo, setuserInfo] = useState({});
+  const [userInfo, setuserInfo] = useState<any>({});
   // dropdown values
   const [selectedDivision, setSelectedDivision] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
@@ -184,41 +183,10 @@ export default function TabTwoScreen() {
   };
 
   const submit = async () => {
-    if (!selectedDivision) {
-      setdivisionValidError("Division is Required");
-      setdistrictValidError("District is Required");
-      setcityValidError("City is Required");
-      setpoliceValidError("Police St is Required");
-      setareaValidError("Area is Required");
-      setstreetValidError("Street Address is Required");
-    } else if (!selectedDistrict) {
-      setdivisionValidError("");
-    } else if (!selectedCity) {
-      setdivisionValidError("");
-      setdistrictValidError("");
-    } else if (!selectedPolice) {
-      setdivisionValidError("");
-      setdistrictValidError("");
-      setcityValidError("");
-    } else if (!selectedArea) {
-      setdivisionValidError("");
-      setdistrictValidError("");
-      setcityValidError("");
-      setpoliceValidError("");
-    } else if (!address) {
-      setdivisionValidError("");
-      setdistrictValidError("");
-      setcityValidError("");
-      setpoliceValidError("");
-      setareaValidError("");
-    } else {
-      setdivisionValidError("");
-      setdistrictValidError("");
-      setcityValidError("");
-      setpoliceValidError("");
-      setareaValidError("");
-      setstreetValidError("");
-
+    if (!selectedDivision || !selectedDistrict || !selectedCity || !selectedPolice || !selectedArea || !address) {
+      alert('All fields are Required')
+     } else {
+     
       let division1 = division.findIndex(
         (el: any) => el.id == selectedDivision
       );
@@ -232,11 +200,11 @@ export default function TabTwoScreen() {
       let area1 = area.findIndex((el: any) => el.id == selectedArea);
 
       let addressCon: any = userInfo?.shippingAddress || [];
-      if (isActive) {
+
         addressCon.map((item) => {
           item.isActive = false;
         });
-      }
+      
 
       addressCon.push({
         division: {
@@ -261,16 +229,13 @@ export default function TabTwoScreen() {
         },
         more: address,
         type: type,
-        isActive: isActive,
+        isActive: true,
       });
 
       const data = {
         name: fullName,
-        // address: address,
         shippingAddress: addressCon,
       };
-      // console.log("...........payload", data);
-
       try {
         let res = await AddressServices.setAddress(userInfo?.id, data);
         showMessage({
@@ -281,6 +246,11 @@ export default function TabTwoScreen() {
         setaddNew(false);
         setaddress("");
         setSelectedDivision("");
+        setselectedArea('')
+        setselectedCity('')
+        setselectedPolice("")
+        setSelectedDistrict('')
+        
       } catch (error) {
         showMessage({
           message: `${error.message}`,
@@ -304,7 +274,6 @@ export default function TabTwoScreen() {
       address: address,
       shippingAddress: addressCon,
     };
-    console.log("...........payload", data);
 
     try {
       let res = await AddressServices.setAddress(userInfo?.id, data);
@@ -716,7 +685,7 @@ export default function TabTwoScreen() {
                     paddingVertical: 15,
                   }}
                 >
-                  <Text style={{ marginRight: 10, fontSize: 16 }}>Active</Text>
+                  {/* <Text style={{ marginRight: 10, fontSize: 16 }}>Active</Text>
                   {!isActive ? (
                     <MaterialCommunityIcons
                       onPress={() => setisActive(true)}
@@ -730,7 +699,7 @@ export default function TabTwoScreen() {
                       size={30}
                       name="checkbox-multiple-marked"
                     ></MaterialCommunityIcons>
-                  )}
+                  )} */}
                 </View>
 
                 <View

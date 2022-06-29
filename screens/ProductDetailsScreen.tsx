@@ -10,12 +10,8 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native-gesture-handler";
-// import HTML from "react-native-render-html";
+import RenderHtml from "react-native-render-html";
 // import { IGNORED_TAGS, alterNode, makeTableRenderer } from 'react-native-render-html-table-bridge';
-
-
-
-
 
 // components
 import Header2 from "../components/header2";
@@ -52,6 +48,7 @@ export default function ProductDetails() {
   const route = useRoute();
   const [Counter, setCounter] = useState(1);
   const [ModalOpen, setModalOpen] = useState(false);
+  const [description, setdescription] = useState<any>()
 
   const { title } = route.params;
   const [{ qnty, token }] = useStateValue();
@@ -75,7 +72,12 @@ export default function ProductDetails() {
   useEffect(() => {
     productService.getSingleProductDetails(title).then((res) => {
       setproductDetail(res?.data);
-      // console.log("...............res", res?.data?.variations[0]?.isNagotiable);
+      if(res?.data?.longDescription){
+        const source = {
+          html: `${res?.data?.longDescription}`
+        };
+        setdescription(source)
+      }
     });
   }, [refreshing, title]);
 
@@ -202,15 +204,6 @@ export default function ProductDetails() {
                 </View>
               ) : null}
 
-              {/* <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 0 }}>
-
-                <TouchableOpacity style={{ paddingRight: 10 }}>
-                  <Entypo name='heart-outlined' size={20} color={'#1239'}></Entypo>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ paddingRight: 15 }}>
-                  <Entypo name='share' size={20} color='#1239'></Entypo>
-                </TouchableOpacity>
-              </View> */}
             </View>
             {productDetail?.variations?.length && productDetail?.variations[0]?.isNagotiable ?
               <View style={[styles.shopTileContainer, { marginBottom: 5 }]}>
@@ -227,28 +220,7 @@ export default function ProductDetails() {
               </Text>
             </View>
 
-            {/* review section */}
-
-            {/* <View style={styles.allReviews}>
-              <Rating
-                type='custom'
-                readonly={true}
-                startingValue={5}
-                imageSize={18}
-              // onFinishRating={''}
-              // ratingColor='#3498db'
-
-              />
-
-              <TouchableOpacity
-                style={styles.allReview}
-              >
-                <Text style={{ color: "#1239", fontSize: 14 }}>
-                  All Reviews
-                </Text>
-              </TouchableOpacity>
-            </View> */}
-            {/* qty box  */}
+           
 
             <View style={styles.qtyContainer}>
               <View
@@ -344,14 +316,7 @@ export default function ProductDetails() {
                   </View>
                 </View>
               </TouchableOpacity>
-              {/* <View style={styles.secondBtns}>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <AntDesign name="tago" size={25} color={"#fff"}></AntDesign>
-                    <Text style={{ color: '#fff', marginLeft: 5 }}>Buy Now</Text>
-                  </TouchableOpacity>
-                </View>
-              </View> */}
+            
             </View>
 
             {/* description */}
@@ -376,7 +341,12 @@ export default function ProductDetails() {
                 Long Description :
               </Text>
               <View style={{ marginVertical: 10 }}>
-                <Text>{productDetail?.longDescription}</Text>
+                {description?
+                  <RenderHtml
+                    contentWidth={deviceWidth-20}
+                    source={description}
+                  />
+                  :null}
 
               </View>
             </View>
