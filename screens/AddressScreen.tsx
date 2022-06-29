@@ -51,7 +51,12 @@ export default function TabTwoScreen() {
   const [token, settoken] = useState("");
 
   // validator
-  const [emailValidError, setEmailValidError] = useState("");
+  const [divisionValidError, setdivisionValidError] = useState("");
+  const [districtValidError, setdistrictValidError] = useState("");
+  const [cityValidError, setcityValidError] = useState("");
+  const [policeValidError, setpoliceValidError] = useState("");
+  const [areaValidError, setareaValidError] = useState("");
+  const [streetValidError, setstreetValidError] = useState("");
 
   useEffect(() => {
     const token = async () => {
@@ -86,7 +91,7 @@ export default function TabTwoScreen() {
         let res = await profileService.getUser();
         setfullName(res?.data?.name);
         setuserInfo(res?.data);
-        // console.log("..........user info",res?.data);
+        console.log("..........user info", res?.data);
       } catch (error) {}
     };
     getUser();
@@ -179,59 +184,109 @@ export default function TabTwoScreen() {
   };
 
   const submit = async () => {
-    let division1 = division.findIndex((el: any) => el.id == selectedDivision);
-    let district1 = district.findIndex((el: any) => el.id == selectedDistrict);
-    let city1 = city.findIndex((el: any) => el.id == selectedCity);
-    let police1 = policeStation.findIndex((el: any) => el.id == selectedPolice);
-    let area1 = area.findIndex((el: any) => el.id == selectedArea);
-    let addressCon = userInfo?.shippingAddress || [];
+    if (!selectedDivision) {
+      setdivisionValidError("Division is Required");
+      setdistrictValidError("District is Required");
+      setcityValidError("City is Required");
+      setpoliceValidError("Police St is Required");
+      setareaValidError("Area is Required");
+      setstreetValidError("Street Address is Required");
+    } else if (!selectedDistrict) {
+      setdivisionValidError("");
+    } else if (!selectedCity) {
+      setdivisionValidError("");
+      setdistrictValidError("");
+    } else if (!selectedPolice) {
+      setdivisionValidError("");
+      setdistrictValidError("");
+      setcityValidError("");
+    } else if (!selectedArea) {
+      setdivisionValidError("");
+      setdistrictValidError("");
+      setcityValidError("");
+      setpoliceValidError("");
+    } else if (!address) {
+      setdivisionValidError("");
+      setdistrictValidError("");
+      setcityValidError("");
+      setpoliceValidError("");
+      setareaValidError("");
+    } else {
+      setdivisionValidError("");
+      setdistrictValidError("");
+      setcityValidError("");
+      setpoliceValidError("");
+      setareaValidError("");
+      setstreetValidError("");
 
-    addressCon.push({
-      division: {
-        id: division[division1]?.id,
-        title: division[division1]?.title,
-      },
-      district: {
-        id: district[district1]?.id,
-        title: district[district1]?.title,
-      },
-      city: {
-        id: city[city1]?.id,
-        title: city[city1]?.title,
-      },
-      policeStation: {
-        id: policeStation[police1]?.id,
-        title: policeStation[police1]?.title,
-      },
-      area: {
-        id: area[area1]?.id,
-        title: area[area1]?.title,
-      },
-      more: "string",
-      type: type,
-      isActive: isActive,
-    });
+      let division1 = division.findIndex(
+        (el: any) => el.id == selectedDivision
+      );
+      let district1 = district.findIndex(
+        (el: any) => el.id == selectedDistrict
+      );
+      let city1 = city.findIndex((el: any) => el.id == selectedCity);
+      let police1 = policeStation.findIndex(
+        (el: any) => el.id == selectedPolice
+      );
+      let area1 = area.findIndex((el: any) => el.id == selectedArea);
 
-    const data = {
-      name: fullName,
-      address: address,
-      shippingAddress: addressCon,
-    };
-    console.log("...........payload", data);
+      let addressCon: any = userInfo?.shippingAddress || [];
+      if (isActive) {
+        addressCon.map((item) => {
+          item.isActive = false;
+        });
+      }
 
-    try {
-      let res = await AddressServices.setAddress(userInfo?.id, data);
-      showMessage({
-        message: `${res.message}`,
-        type: "success",
+      addressCon.push({
+        division: {
+          id: division[division1]?.id,
+          title: division[division1]?.title,
+        },
+        district: {
+          id: district[district1]?.id,
+          title: district[district1]?.title,
+        },
+        city: {
+          id: city[city1]?.id,
+          title: city[city1]?.title,
+        },
+        policeStation: {
+          id: policeStation[police1]?.id,
+          title: policeStation[police1]?.title,
+        },
+        area: {
+          id: area[area1]?.id,
+          title: area[area1]?.title,
+        },
+        more: address,
+        type: type,
+        isActive: isActive,
       });
-      setrenderMe(!renderMe);
-      setaddNew(false);
-    } catch (error) {
-      showMessage({
-        message: `${error.message}`,
-        type: "danger",
-      });
+
+      const data = {
+        name: fullName,
+        // address: address,
+        shippingAddress: addressCon,
+      };
+      // console.log("...........payload", data);
+
+      try {
+        let res = await AddressServices.setAddress(userInfo?.id, data);
+        showMessage({
+          message: `${res.message}`,
+          type: "success",
+        });
+        setrenderMe(!renderMe);
+        setaddNew(false);
+        setaddress("");
+        setSelectedDivision("");
+      } catch (error) {
+        showMessage({
+          message: `${error.message}`,
+          type: "danger",
+        });
+      }
     }
   };
 
@@ -259,6 +314,34 @@ export default function TabTwoScreen() {
       });
       setrenderMe(!renderMe);
       setaddNew(false);
+    } catch (error) {
+      showMessage({
+        message: `${error.message}`,
+        type: "danger",
+      });
+    }
+  };
+
+  const makeActive = async (index: number) => {
+    userInfo?.shippingAddress.map((item) => {
+      item.isActive = false;
+    });
+
+    let addressCon = userInfo?.shippingAddress;
+    addressCon[index]["isActive"] = true;
+
+    const data = {
+      name: fullName,
+      shippingAddress: addressCon,
+    };
+
+    try {
+      let res = await AddressServices.setAddress(userInfo?.id, data);
+      showMessage({
+        message: `${res.message}`,
+        type: "success",
+      });
+      setrenderMe(!renderMe);
     } catch (error) {
       showMessage({
         message: `${error.message}`,
@@ -359,6 +442,7 @@ export default function TabTwoScreen() {
                               ) : (
                                 <View style={styles.addressType}>
                                   <Ionicons
+                                    onPress={() => makeActive(index)}
                                     name="ios-checkmark-circle-outline"
                                     size={25}
                                     color="#ec1d25"
@@ -376,6 +460,9 @@ export default function TabTwoScreen() {
                               ></AntDesign>
                             </View>
 
+                            <Text style={[styles.deliveryAddressText]}>
+                              Street Address : {item?.more}
+                            </Text>
                             <Text style={[styles.deliveryAddressText]}>
                               Division : {item?.division?.title}
                             </Text>
@@ -459,6 +546,11 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                {divisionValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{divisionValidError}</Text>
+                  </View>
+                ) : null}
 
                 <View>
                   <Text>District</Text>
@@ -491,6 +583,11 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                {districtValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{districtValidError}</Text>
+                  </View>
+                ) : null}
                 <View>
                   <Text>City</Text>
                   <View
@@ -522,6 +619,11 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                {cityValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{cityValidError}</Text>
+                  </View>
+                ) : null}
                 <View>
                   <Text>Police Station</Text>
                   <View
@@ -553,6 +655,11 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                {policeValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{policeValidError}</Text>
+                  </View>
+                ) : null}
                 <View>
                   <Text>Area</Text>
                   <View
@@ -583,6 +690,11 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                {areaValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{areaValidError}</Text>
+                  </View>
+                ) : null}
                 <View style={[styles.text_input, { marginTop: 10 }]}>
                   <Text style={{}}>Street Address</Text>
                   <TextInput
@@ -592,6 +704,11 @@ export default function TabTwoScreen() {
                     value={address}
                   />
                 </View>
+                {streetValidError ? (
+                  <View style={{ alignItems: "flex-end" }}>
+                    <Text style={{ color: "red" }}>{streetValidError}</Text>
+                  </View>
+                ) : null}
                 <View
                   style={{
                     flexDirection: "row",
