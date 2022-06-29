@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,useIsFocused } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
@@ -31,6 +31,7 @@ import SuccessModal from "../components/filterModal";
 
 export default function TabTwoScreen() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const [total, setTotal] = useState("");
   const [searchItem, setsearchItem] = useState("");
@@ -43,27 +44,7 @@ export default function TabTwoScreen() {
   const [note, setnote] = useState("");
 
   useEffect(() => {
-    let total = 0;
-    let qty = 0;
-    AddToCartServices.getAllCartItem()
-      .then((res) => {
-        // setcartItem(res?.data?.packageList)
-        setsearchItem(res?.data?.extraParams?.searchCode);
-
-        res?.data?.packageList.map((item: any, index: number) => {
-          qty = qty + item?.qty;
-          total =
-            total +
-            (item?.productVariation?.salePrice
-              ? item?.productVariation?.salePrice
-              : item?.productVariation?.regularPrice) *
-              item?.qty;
-        });
-        setTotal(total);
-      })
-      .catch((err) => {
-        console.log("err in cart List", err);
-      });
+    
 
     profileService
       .getUser()
@@ -75,7 +56,7 @@ export default function TabTwoScreen() {
       .catch((err) => {
         console.log("err in cart List", err);
       });
-  }, []);
+  }, [isFocused]);
 
   //   image upload
   const pickImage = async () => {
@@ -197,17 +178,28 @@ export default function TabTwoScreen() {
               </View>
               {userInfo?.shippingAddress?.length ? (
                 <View>
-                  <Text style={{ fontSize: 16, padding: 15 }}>
-                    {userInfo?.shippingAddress[0]?.type} :
-                    {userInfo?.shippingAddress[0]?.more},{" "}
-                    {userInfo?.shippingAddress[0]?.area?.title} ,
-                    {userInfo?.shippingAddress[0]?.policeStation?.title} ,{" "}
-                    {userInfo?.shippingAddress[0]?.city?.title} ,{" "}
-                    {userInfo?.shippingAddress[0]?.district?.title},{" "}
-                    {userInfo?.shippingAddress[0]?.division?.title} , Bangladesh{" "}
+                  {userInfo?.shippingAddress?.map((item, index) => (
+                    <View key={index}>
+                      {item.isActive ? (
+                        <Text
+                          style={{ fontSize: 16, padding: 15, color: "#000" }}
+                        >
+                          {item?.more} ,{item?.area?.title} ,
+                          {item?.policeStation?.title} , {item?.city?.title} ,{" "}
+                          {item?.district?.title}, {item?.division?.title} ,
+                        </Text>
+                      ) : null}
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
+                  <Text style={{ color: "red", fontSize: 15 }}>
+                    You Don't Have Any Active Address! Please create Address
+                    from Profile Before Placing Order
                   </Text>
                 </View>
-              ) : null}
+              )}
             </View>
 
             <View style={{ padding: 5 }}>
@@ -262,8 +254,30 @@ export default function TabTwoScreen() {
             />
 
             <View style={{ alignItems: "center", marginVertical: 30 }}>
-              <TouchableOpacity
-                onPress={() => hurryOrder()}
+            {userInfo?.shippingAddress?.length ? (
+                <View>
+                  {userInfo?.shippingAddress?.map((item, index) => (
+                    <View key={index}>
+                      {item.isActive ? (
+                        <TouchableOpacity
+                        onPress={() => hurryOrder()}
+                        style={{
+                          backgroundColor: "#1C6E7A",
+                          padding: 10,
+                          width: deviceWidth / 1.1,
+                          alignItems: "center",
+                          borderRadius: 10,
+                        }}
+                      >
+                        <Text style={[styles.title]}>Submit Order</Text>
+                      </TouchableOpacity>
+                      ) : null}
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <TouchableOpacity
+                onPress={() => navigation.navigate('AddressScreen')}
                 style={{
                   backgroundColor: "#1C6E7A",
                   padding: 10,
@@ -272,8 +286,10 @@ export default function TabTwoScreen() {
                   borderRadius: 10,
                 }}
               >
-                <Text style={[styles.title]}>Submit Order</Text>
+                <Text style={[styles.title]}>Create Address To Order</Text>
               </TouchableOpacity>
+              )}
+              
             </View>
           </View>
         </ScrollView>
