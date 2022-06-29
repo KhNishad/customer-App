@@ -4,7 +4,8 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -25,6 +26,7 @@ const deviceHeight = Dimensions.get("window").height;
 
 export default function TabTwoScreen() {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [fullName, setfullName] = useState("");
   const [address, setaddress] = useState("");
   const [zipCode, setzipCode] = useState("");
@@ -46,6 +48,22 @@ export default function TabTwoScreen() {
   const [idEdit, setidEdit] = useState(false);
   const [addNew, setaddNew] = useState(false);
   const [renderMe, setrenderMe] = useState(false);
+  const [token, settoken] = useState("");
+
+  // validator
+  const [emailValidError, setEmailValidError] = useState("");
+
+  useEffect(() => {
+    const token = async () => {
+      let tokenn = await SecureStore.getItemAsync("accessToken");
+      if (tokenn) {
+        settoken(tokenn);
+      } else {
+        settoken("");
+      }
+    };
+    token();
+  }, [isFocused]);
 
   useEffect(() => {
     setSelectedDistrict("");
@@ -166,7 +184,7 @@ export default function TabTwoScreen() {
     let city1 = city.findIndex((el: any) => el.id == selectedCity);
     let police1 = policeStation.findIndex((el: any) => el.id == selectedPolice);
     let area1 = area.findIndex((el: any) => el.id == selectedArea);
-    let addressCon = userInfo?.shippingAddress;
+    let addressCon = userInfo?.shippingAddress || [];
 
     addressCon.push({
       division: {
@@ -199,7 +217,7 @@ export default function TabTwoScreen() {
       address: address,
       shippingAddress: addressCon,
     };
-    console.log('...........payload', data);
+    console.log("...........payload", data);
 
     try {
       let res = await AddressServices.setAddress(userInfo?.id, data);
@@ -249,6 +267,10 @@ export default function TabTwoScreen() {
     }
   };
 
+  const login = () => {
+    alert("Login First");
+  };
+
   return (
     <View>
       <StatusBar backgroundColor="#FF9411" />
@@ -294,16 +316,6 @@ export default function TabTwoScreen() {
               />
             </View>
 
-            {/* <View style={[styles.text_input, { marginTop: 10 }]}>
-              <Text style={styles.labelText}>Address</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={setaddress}
-                placeholder="Address"
-                value={address}
-              />
-            </View> */}
-
             <View style={{ marginBottom: 10 }}>
               <Text style={{ paddingVertical: 10 }}>Your Saved Address: </Text>
               <View>
@@ -320,7 +332,7 @@ export default function TabTwoScreen() {
                     {userInfo?.shippingAddress?.map(
                       (item: any, index: number) => (
                         <View
-                        key={index}
+                          key={index}
                           style={{
                             justifyContent: "space-between",
                             paddingHorizontal: 5,
@@ -388,154 +400,30 @@ export default function TabTwoScreen() {
                 </View>
               </View>
             </View>
-            <TouchableOpacity
-              onPress={() => setaddNew(true)}
-              style={{
-                paddingVertical: 10,
-                backgroundColor: "#1239",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ color: "#fff" }}>Add New Address</Text>
-            </TouchableOpacity>
-            {/* {idEdit ?
-                            <View>
-                                <View>
-                                    <Text>Division</Text>
-                                    <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
-                                        <Picker
-                                            selectedValue={selectedDivision}
-                                            mode='dropdown'
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setSelectedDivision(itemValue)
-                                                getDistrict(itemValue)
-                                                setcity([])
-                                                setarea([])
-                                                setpoliceStation([])
+            {token ? (
+              <TouchableOpacity
+                onPress={() => setaddNew(true)}
+                style={{
+                  paddingVertical: 10,
+                  backgroundColor: "#1239",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#fff" }}>Add New Address</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => login()}
+                style={{
+                  paddingVertical: 10,
+                  backgroundColor: "#1239",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ color: "#fff" }}>Add New Address</Text>
+              </TouchableOpacity>
+            )}
 
-                                            }
-                                            }>
-                                            <Picker.Item label='Select Any' value={''} />
-                                            {division?.map((item: any, index) =>
-                                                <Picker.Item key={index} label={item?.title} value={item?.id} />
-
-                                            )}
-                                        </Picker>
-                                    </View>
-                                </View>
-
-                                <View>
-                                    <Text>District</Text>
-                                    <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
-                                        <Picker
-                                            selectedValue={selectedDistrict}
-                                            mode='dropdown'
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setSelectedDistrict(itemValue)
-                                                getCities(itemValue)
-
-                                            }
-                                            }>
-                                            <Picker.Item label='Select Any' value={''} />
-
-                                            {district?.map((item: any, index) =>
-                                                <Picker.Item key={index} label={item?.title} value={item?.id} />
-                                            )}
-                                        </Picker>
-                                    </View>
-                                </View>
-                                <View>
-                                    <Text>City</Text>
-                                    <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
-                                        <Picker
-                                            selectedValue={selectedCity}
-                                            mode='dropdown'
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setselectedCity(itemValue)
-                                                getPolice(itemValue)
-                                            }
-                                            }>
-                                            <Picker.Item label='Select Any' value={''} />
-
-                                            {city?.map((item: any, index) =>
-                                                <Picker.Item key={index} label={item?.title} value={item?.id} />
-                                            )}
-                                        </Picker>
-                                    </View>
-                                </View>
-                                <View>
-                                    <Text>Police Station</Text>
-                                    <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
-                                        <Picker
-                                            selectedValue={selectedPolice}
-                                            mode='dropdown'
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setselectedPolice(itemValue)
-                                                getArea(itemValue)
-                                            }
-                                            }>
-                                            <Picker.Item label='Select Any' value={''} />
-
-                                            {policeStation?.map((item: any, index) =>
-                                                <Picker.Item key={index} label={item?.title} value={item?.id} />
-                                            )}
-                                        </Picker>
-                                    </View>
-                                </View>
-                                <View>
-                                    <Text>Area</Text>
-                                    <View style={{ borderWidth: .8, borderColor: '#1234', borderRadius: 2, marginTop: 10, paddingLeft: 10 }}>
-                                        <Picker
-                                            selectedValue={selectedArea}
-                                            mode='dropdown'
-                                            onValueChange={(itemValue, itemIndex) =>
-                                                setselectedArea(itemValue)
-                                            }>
-                                            <Picker.Item label='Select Any' value={''} />
-
-                                            {area?.map((item: any, index) =>
-                                                <Picker.Item key={index} label={item?.title} value={item?.id} />
-                                            )}
-                                        </Picker>
-                                    </View>
-                                </View>
-                                <View style={{ flexDirection: "row", alignItems: 'center', paddingVertical: 15 }}>
-                                    <Text style={{ marginRight: 10, fontSize: 16 }}>Active</Text>
-                                    {!isActive ?
-                                        <MaterialCommunityIcons onPress={() => setisActive(true)} style={{ marginRight: 10 }} size={30} name='checkbox-multiple-blank-outline'></MaterialCommunityIcons>
-                                        :
-                                        <MaterialCommunityIcons onPress={() => setisActive(false)} size={30} name='checkbox-multiple-marked'></MaterialCommunityIcons>
-                                    }
-                                </View>
-
-                                <View style={{ flexDirection: "row", alignItems: 'center', paddingVertical: 10 }}>
-                                    <Text style={{ marginRight: 10, fontSize: 16 }}>Type</Text>
-                                    <View style={{ flexDirection: "row", alignItems: 'center', paddingVertical: 15, marginRight: 10 }}>
-                                        <Text>Home</Text>
-                                        {type == 'office' ?
-                                            <MaterialCommunityIcons onPress={() => settype('home')} style={{ marginRight: 10 }} size={30} name='checkbox-multiple-blank-outline'></MaterialCommunityIcons>
-                                            :
-                                            <MaterialCommunityIcons size={30} name='checkbox-multiple-marked'></MaterialCommunityIcons>
-                                        }
-                                    </View>
-                                    <View style={{ flexDirection: "row", alignItems: 'center', paddingVertical: 15 }}>
-                                        <Text>Office</Text>
-                                        {type == 'home' ?
-                                            <MaterialCommunityIcons onPress={() => settype('office')} style={{ marginRight: 10 }} size={30} name='checkbox-multiple-blank-outline'></MaterialCommunityIcons>
-                                            :
-                                            <MaterialCommunityIcons size={30} name='checkbox-multiple-marked'></MaterialCommunityIcons>
-                                        }
-                                    </View>
-
-                                </View>
-
-                                <View style={{ alignItems: 'center', margin: 12, marginBottom: 20 }}>
-                                    <TouchableOpacity onPress={() => submit()} style={{ backgroundColor: '#1C6E7A', padding: 10, width: deviceWidth / 1.1, alignItems: 'center', borderRadius: 10 }}>
-                                        <Text style={[styles.title,]}>Update Address</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                            : null} */}
             {addNew ? (
               <View>
                 <View>
@@ -695,6 +583,15 @@ export default function TabTwoScreen() {
                     </Picker>
                   </View>
                 </View>
+                <View style={[styles.text_input, { marginTop: 10 }]}>
+                  <Text style={{}}>Street Address</Text>
+                  <TextInput
+                    style={styles.input1}
+                    onChangeText={setaddress}
+                    placeholder="Enter Street Address"
+                    value={address}
+                  />
+                </View>
                 <View
                   style={{
                     flexDirection: "row",
@@ -823,6 +720,13 @@ const styles = StyleSheet.create({
     // width: deviceWidth / 1.1,
     height: 40,
 
+    paddingHorizontal: 12,
+  },
+  input1: {
+    // width: deviceWidth / 1.1,
+    height: 60,
+    borderWidth: 0.5,
+    borderColor: "#1234",
     paddingHorizontal: 12,
   },
   text_input: {
