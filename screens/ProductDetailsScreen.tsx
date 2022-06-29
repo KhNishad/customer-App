@@ -397,8 +397,9 @@ export default function ProductDetails() {
         }}
       >
         <TouchableOpacity
+        
           onPress={() => navigation.navigate("MyCart")}
-          style={{ flexDirection: "row" }}
+          style={{ flexDirection: "row",width:deviceWidth - 20 ,alignItems:'center',justifyContent:'center'}}
         >
           <AntDesign name="shoppingcart" size={25} color={"#fff"}></AntDesign>
           <Text style={{ color: "#fff", fontSize: 18, marginLeft: 5 }}>
