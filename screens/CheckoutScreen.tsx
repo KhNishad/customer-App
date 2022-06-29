@@ -85,7 +85,6 @@ export default function TabTwoScreen() {
       });
     }
   };
-  console.log(".............res order", userInfo);
 
   return (
     <View>
