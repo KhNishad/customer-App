@@ -26,10 +26,11 @@ const apiImagepath = "http://103.119.71.9:4400/media";
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeaight = Dimensions.get("window").height;
 
+let current=1;
 export default function TopCategories() {
   const navigation = useNavigation();
   const [topCategories, settopCategories] = useState<any>({});
-  const [categoryWisePro, setcategoryWisePro] = useState([]);
+  const [categoryWisePro, setcategoryWisePro] = useState<any>([]);
   const [bannerrs, setbanner] = useState("");
   const [selectedCat, setselectedCat] = useState("");
   const [isLoading, setisLoading] = useState(false);
@@ -58,17 +59,16 @@ export default function TopCategories() {
   }, [slug]);
 
   // get child category or product under category
-  const getChildCategory = (slug: any) => {
-    setsubSub(slug);
+  const getChildCategory = (slugg: any) => {
+    current = 1
+    setsubSub(slugg);
     productService
-      .getCatWiseProduct(slug)
+      .getCatWiseProduct(slugg,1,18)
       .then((res) => {
-        console.log('..............res',res);
-        
         if (res?.data) {
           setcategoryWisePro(res?.data);
           categoryService
-            .categoryFilter(slug)
+            .categoryFilter(slugg)
             .then((res) => {
               setfilterItems(res?.data?.filterOptions);
             })
@@ -114,40 +114,32 @@ export default function TopCategories() {
     } catch (error) {}
   };
 
+
+
   // lazay loading in react native
-  // const lazayLoading = async () => {
-  //   setisLoading(true);
-  //   current = current + 1;
+  const lazayLoading = async () => {
+    setisLoading(true);
+    current = current + 1;
 
-  //   categoryService
-  //     .categoryWiseProduct(slugg, limit, current)
-  //     .then((res) => {
-  //       if (res?.data?.products?.length > 0) {
-  //         let dataAr = categoryWisePro;
-  //         res?.data?.products?.map((item, i) => {
-  //           dataAr?.push(item);
-  //         });
-  //         setcategoryWisePro(dataAr);
-
-  //         // setcategoryWisePro(res?.data?.products)
-  //         setisLoading(false);
-  //       } else {
-  //         setisLoading(false);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err), setisLoading(false);
-  //     });
-  // };
+    productService
+      .getCatWiseProduct(subSub || slug, current, 18)
+      .then((res) => {
+          setcategoryWisePro([...categoryWisePro, ...res?.data]);
+          setisLoading(false);
+      })
+      .catch((err) => {
+        console.log(err), setisLoading(false);
+      });
+  };
   // fire event when scroll ends
 
-  // const isCloseToBottom = ({
-  //   layoutMeasurement,
-  //   contentOffset,
-  //   contentSize,
-  // }) => {
-  //   return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
-  // };
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+  };
 
   return (
     <View
@@ -162,11 +154,11 @@ export default function TopCategories() {
       <ScrollView
         style={{ marginBottom: 10 }}
         removeClippedSubviews={true}
-        // onScroll={({ nativeEvent }) => {
-        //   if (isCloseToBottom(nativeEvent)) {
-        //     lazayLoading();
-        //   }
-        // }}
+        onScroll={({ nativeEvent }) => {
+          if (isCloseToBottom(nativeEvent)) {
+            lazayLoading();
+          }
+        }}
       >
         <View removeClippedSubviews={true}>
           <View

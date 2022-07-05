@@ -32,22 +32,20 @@ function wait(time: any) {
 export default function TabTwoScreen(props: any) {
   const navigation = useNavigation<any>();
 
-  const [allBrands, setallBrands] = useState([]);
+  const [allBrands, setallBrands] = useState<any>([]);
 
   const [refreshing, setrefreshing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setcurrentPage] = useState(1);
 
   const route = useRoute();
-  const { origin } = route.params;
+  const { origin }:any = route.params;
 
   useEffect(() => {
     setIsLoading(true);
     if (origin == "Brand") {
       BrandAndShopServices.getAllBrand(currentPage)
         .then((res) => {
-          // console.log("........", res?.data);
-
           setallBrands(res?.data);
         })
         .catch((err) => {
@@ -154,20 +152,13 @@ export default function TabTwoScreen(props: any) {
   const loadMoreItem = () => {
     setcurrentPage(currentPage + 1);
     setIsLoading(true);
+    console.log('..........start');
+
     if (origin == "Brand") {
       BrandAndShopServices.getAllBrand(currentPage)
         .then((res) => {
-          console.log(".................called");
-
-          if (res?.data?.length > 0) {
-            let dataArr = allBrands;
-            res?.data?.map((item: any) => {
-              dataArr?.push(item);
-            });
-            setallBrands(dataArr);
-          } else {
-            setIsLoading(false);
-          }
+          setallBrands([...allBrands, ...res?.data]);
+          setIsLoading(false);
         })
         .catch((err) => {
           console.log(err);
@@ -182,6 +173,8 @@ export default function TabTwoScreen(props: any) {
         });
     }
   };
+  console.log(".................called",allBrands?.length);
+
 
   const renderLoader = () => {
     return isLoading ? (
@@ -220,7 +213,7 @@ export default function TabTwoScreen(props: any) {
         keyExtractor={(item, index) => String(index)}
         ListFooterComponent={renderLoader}
         onEndReached={() => loadMoreItem()}
-        onEndReachedThreshold={0}
+        onEndReachedThreshold={0.5}
         legacyImplementation={true}
         numColumns={3}
       />

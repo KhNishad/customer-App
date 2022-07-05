@@ -92,7 +92,7 @@ export default function CategoryScreen() {
         <View style={styles.container}>
           <ScrollView
             ref={ref}
-            style={{ marginBottom: 20 }}
+            style={{ width:'100%',marginBottom:120 }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={refresh} />
             }

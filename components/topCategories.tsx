@@ -22,7 +22,7 @@ export default function TopCategories({ childCat, banner }: any) {
 
   const getChildCategory = async (slug: any, childs: any) => {
     try {
-      let res = await productService.getCatWiseProduct(slug);
+      let res = await productService.getCatWiseProduct(slug,1,15);
       if (res?.data?.length > 0 || childs) {
         navigation.navigate("categoryWiseProductScreen", {
           slug: slug,

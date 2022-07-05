@@ -73,7 +73,7 @@ const request = async (link, params = {}, noPrefix = null, header = null) => {
 
   return axios(options)
     .then((res) => {
-      //   console.log("res ====", options);
+        console.log("res ====", options);
       return res.data;
     })
     .catch((err) => {

@@ -2,9 +2,9 @@
 import request from '../utils/request';
 
 
-async function  getCatWiseProduct (data:any) {
+async function  getCatWiseProduct (data:any,pageNo:number,itemNo:number) {
      
-    const res = await request(`/product/getList?catSlug=${data}`)
+    const res = await request(`/product/getList?page=${pageNo}&take=${itemNo}&catSlug=${data}`)
     
     return res;
 }
