@@ -1,26 +1,27 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  StatusBar,
-  SafeAreaView,
-  TextInput,
-  Button,
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Dimensions,
   Image,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { Dimensions } from "react-native";
-import { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { useFocusEffect, useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import Modal from "react-native-modal";
-import { Ionicons } from "@expo/vector-icons";
-import * as SecureStore from 'expo-secure-store';
 
 // components
-import Header from "../components/Header";
 import Slider from "../components/bannerCarosel";
-import ProductCard from "../components/ProductCard";
+import Header from "../components/Header";
 import LoginModal from "../components/LoginModal";
+import ProductCard from "../components/ProductCard";
 
 //services
 
@@ -38,7 +39,8 @@ export default function TabTwoScreen(props: any) {
   const [banner, setbanner] = useState([]);
   const [homeSection, setHomeSection] = useState<any>({});
   const [refreshing, setrefreshing] = useState(false);
-  const [token, settoken] = useState('')
+  const [token, settoken] = useState("");
+  const [loader, setloader] = useState(true);
 
   useEffect(() => {
     const data = {
@@ -48,131 +50,138 @@ export default function TabTwoScreen(props: any) {
     };
     HomeServices.homeSettings(data).then((res) => {
       setHomeSection(res?.data);
+      setloader(false);
     });
   }, []);
 
   useFocusEffect(() => {
     const token = async () => {
-      let tokenn = await SecureStore.getItemAsync('accessToken')
+      let tokenn = await SecureStore.getItemAsync("accessToken");
       if (tokenn) {
-        settoken(tokenn)
+        settoken(tokenn);
       } else {
-        settoken('')
+        settoken("");
       }
-    }
-    token()
-
-  })
+    };
+    token();
+  });
 
   // console.log("====================================ddd", homeSection);
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF9411" />
-
+      <Header />
       <SafeAreaView>
-        <ScrollView>
-          <Header />
-          <View>
-            <Slider banner={homeSection?.["homePage:banners"]} />
-          </View>
-          <View style={styles.iconSection}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("CategoryScreen")}
-              style={styles.icons}
-            >
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/categories.png")}
-              ></Image>
-              <Text style={{ fontSize: 10, textAlign: "center" }}>
-                Categories
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("AllBrandScreen", { origin: "Brand" })
-              }
-              style={styles.icons}
-            >
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/layers.png")}
-              ></Image>
-              <Text style={{ fontSize: 10 }}>All Brand</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("AllBrandScreen", { origin: "Shop" })
-              }
-              style={styles.icons}
-            >
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/gift-card.png")}
-              ></Image>
-              <Text style={{ fontSize: 10 }}>All Shop</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.icons}>
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/mobile-app.png")}
-              ></Image>
-              <Text style={{ fontSize: 10 }}>Mobile</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.icons}>
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/clothes-rack.png")}
-              ></Image>
-              <Text style={{ fontSize: 10 }}>Fashion</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.icons}>
-              <Image
-                style={styles.mainBanner}
-                source={require("../assets/images/electronics.png")}
-              ></Image>
-              <Text style={{ fontSize: 10 }}>Electronics</Text>
-            </TouchableOpacity>
-          </View>
-          {homeSection?.["homePage:innerSections"]?.length > 0 ? (
+        {!loader ? (
+          <ScrollView>
             <View>
-              {homeSection?.["homePage:innerSections"].map(
-                (item: any, index: number) => (
-                  <View style={{ marginBottom: 10 }} key={index}>
-                    <View style={styles.ProductSection}>
-                      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                        {item?.title}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate("AllProductScreen", {
-                            title: item?.title,
-                            products: item?.productArray,
-                          })
-                        }
-                      >
-                        <Text style={{ fontSize: 15, fontWeight: "bold" }}>
-                          See All{" "}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                    <ScrollView
-                      horizontal={true}
-                      showsHorizontalScrollIndicator={false}
-                    >
-                      <View style={styles.CardContainer}>
-                        {item?.productArray?.length > 0 ? (
-                          <ProductCard products={item?.productArray.slice(0, 10)} />
-                        ) : null}
-                      </View>
-                    </ScrollView>
-                  </View>
-                )
-              )}
+              <Slider banner={homeSection?.["homePage:banners"]} />
             </View>
-          ) : null}
-        </ScrollView>
+            <View style={styles.iconSection}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("CategoryScreen")}
+                style={styles.icons}
+              >
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/categories.png")}
+                ></Image>
+                <Text style={{ fontSize: 10, textAlign: "center" }}>
+                  Categories
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("AllBrandScreen", { origin: "Brand" })
+                }
+                style={styles.icons}
+              >
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/layers.png")}
+                ></Image>
+                <Text style={{ fontSize: 10 }}>All Brand</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("AllBrandScreen", { origin: "Shop" })
+                }
+                style={styles.icons}
+              >
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/gift-card.png")}
+                ></Image>
+                <Text style={{ fontSize: 10 }}>All Shop</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.icons}>
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/mobile-app.png")}
+                ></Image>
+                <Text style={{ fontSize: 10 }}>Mobile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.icons}>
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/clothes-rack.png")}
+                ></Image>
+                <Text style={{ fontSize: 10 }}>Fashion</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.icons}>
+                <Image
+                  style={styles.mainBanner}
+                  source={require("../assets/images/electronics.png")}
+                ></Image>
+                <Text style={{ fontSize: 10 }}>Electronics</Text>
+              </TouchableOpacity>
+            </View>
+            {homeSection?.["homePage:innerSections"]?.length > 0 ? (
+              <View>
+                {homeSection?.["homePage:innerSections"].map(
+                  (item: any, index: number) => (
+                    <View style={{ marginBottom: 10 }} key={index}>
+                      <View style={styles.ProductSection}>
+                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                          {item?.title}
+                        </Text>
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("AllProductScreen", {
+                              title: item?.title,
+                              products: item?.productArray,
+                            })
+                          }
+                        >
+                          <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                            See All{" "}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                      >
+                        <View style={styles.CardContainer}>
+                          {item?.productArray?.length > 0 ? (
+                            <ProductCard
+                              products={item?.productArray.slice(0, 10)}
+                            />
+                          ) : null}
+                        </View>
+                      </ScrollView>
+                    </View>
+                  )
+                )}
+              </View>
+            ) : null}
+          </ScrollView>
+        ) : (
+          <View style={{ alignItems: "center", marginTop: deviceHeight / 2.5 }}>
+            <ActivityIndicator size="large" color="#FF9411" />
+          </View>
+        )}
       </SafeAreaView>
       {ModalOpen ? (
         <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen} />
@@ -187,7 +196,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor:'#FF9411',
     // paddingTop:deviceHeight/6
-    position:'relative'
+    position: "relative",
   },
   title: {
     fontSize: 30,

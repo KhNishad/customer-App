@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     position: "relative",
+    zIndex: 1,
   },
   headerBar: {
     display: "flex",

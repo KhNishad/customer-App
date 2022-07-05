@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import SearchService from "../services/SearchService";
+import LoginModal from "./LoginModal";
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -24,13 +25,14 @@ export default function TabTwoScreen() {
   const [searchKeyWord, setsearchKeyWord] = useState("");
   const [suggestPro, setsuggestPro] = useState([]);
   const [token, settoken] = useState("");
+  const [ModalOpen, setModalOpen] = useState(false);
 
   // global search for product
 
   useEffect(() => {
     setsuggestPro([]);
     setsearchKeyWord("");
-  }, [isFocused]);
+  }, []);
 
   useEffect(() => {
     const token = async () => {
@@ -76,13 +78,14 @@ export default function TabTwoScreen() {
         .catch((err) => console.log("err", err));
     }
   };
+  console.log("............0000", suggestPro);
 
   const hurryOrder = async () => {
     let tokenn = await SecureStore.getItemAsync("accessToken");
     if (tokenn) {
       navigation.navigate("HurryOrder");
     } else {
-      alert("Login First");
+      setModalOpen(true);
     }
   };
 
@@ -105,14 +108,11 @@ export default function TabTwoScreen() {
                 globalSearch2(searchKeyWord);
                 setsearchKeyWord(searchKeyWord);
               }}
-              // onBlur={()=>
-              //   {
-              //     setsearchKeyWord('')
-              //     globalSearch2('')
-              //     setsuggestPro([])
-              //   }
-
-              // }
+              onBlur={() => {
+                setsearchKeyWord("");
+                globalSearch2("");
+                setsuggestPro([]);
+              }}
               onSubmitEditing={() => globalSearch()}
             />
             <TouchableOpacity onPress={() => globalSearch()}>
@@ -143,39 +143,47 @@ export default function TabTwoScreen() {
            <Text style={{fontSize:16,fontWeight:'bold',color:"black"}}>Grocery</Text>
          </View> */}
         </View>
+        {suggestPro && suggestPro?.length > 0 ? (
+          <View
+            style={{
+              position: "absolute",
+              zIndex: 9999,
+              top: 55,
+              backgroundColor: "#fff",
+              width: deviceWidth,
+            }}
+          >
+            {suggestPro &&
+              suggestPro?.map((item: any, index: any) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    navigation.navigate("SearchProductScreen", {
+                      keyWord: searchKeyWord,
+                    })
+                  }
+                >
+                  <View style={{ padding: 8 }}>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        fontSize: 16,
+                        marginLeft: 5,
+                        width: 200,
+                        color: "#000",
+                      }}
+                    >
+                      {item?.title}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+          </View>
+        ) : null}
+        {ModalOpen ? (
+          <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen} />
+        ) : null}
       </View>
-      {suggestPro && suggestPro?.length > 0 ? (
-        <View
-          style={{
-            position: "absolute",
-            zIndex: 9999,
-            top: 55,
-            backgroundColor: "#fff",
-            width: deviceWidth,
-          }}
-        >
-          {suggestPro &&
-            suggestPro?.map((item: any, index: any) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() =>
-                  navigation.navigate("SearchProductScreen", {
-                    keyWord: searchKeyWord,
-                  })
-                }
-              >
-                <View style={{ padding: 8 }}>
-                  <Text
-                    numberOfLines={1}
-                    style={{ fontSize: 16, marginLeft: 5, width: 200 }}
-                  >
-                    {item?.title}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-        </View>
-      ) : null}
     </>
   );
 }
@@ -189,6 +197,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.2,
     paddingVertical: 5,
     paddingHorizontal: 10,
+    position: "relative",
+    zIndex: 1,
   },
   headerBar: {
     display: "flex",

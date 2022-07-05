@@ -1,21 +1,27 @@
 import { AntDesign, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // services
+import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { actionTypes } from "../context/reducer";
 import { useStateValue } from "../context/StateProvider";
 import CatNav from "../navigation/CatNavigation";
 import Root from "../navigation/DrawerNavigation";
 // navigations
+import { useIsFocused } from "@react-navigation/native";
+import LoginModal from "../components/LoginModal";
 import CartScreen from "../screens/MyCart";
-import Profile from '../screens/Profile'
+import Profile from "../screens/Profile";
 import AddToCartServices from "../services/AddToCartServices";
 import NetworkUtils from "../utils/Connection";
 
 export function TabNav() {
-  const [{ qnty, token }] = useStateValue();
+  const isFocused = useIsFocused();
+  const [{ qnty }] = useStateValue();
   const [state, dispatch] = useStateValue();
+  const [ModalOpen, setModalOpen] = useState(false);
+  const [token, settoken] = useState<any>("");
 
   useEffect(() => {
     let qty = 0;
@@ -33,6 +39,18 @@ export function TabNav() {
         console.log("err in cart List", err);
       });
   }, []);
+
+  useEffect(() => {
+    const token = async () => {
+      let tokenn = await SecureStore.getItemAsync("accessToken");
+      if (tokenn) {
+        settoken(tokenn);
+      } else {
+        settoken("");
+      }
+    };
+    token();
+  }, [isFocused]);
 
   const netFunction = () => {
     NetworkUtils.isNetworkAvailable().then((res) => {
@@ -57,111 +75,91 @@ export function TabNav() {
   const Tab = createBottomTabNavigator();
 
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="HomeScreen"
-        component={Root}
-        options={{
-          tabBarLabel: "Home",
-          // unmountOnBlur: true,
-          header: () => null,
+    <>
+      <Tab.Navigator>
+        <Tab.Screen
+          name="HomeScreen"
+          component={Root}
+          options={{
+            tabBarLabel: "Home",
+            // unmountOnBlur: true,
+            header: () => null,
 
-          tabBarIcon: ({ focused, color }) => (
-            <AntDesign
-              name="home"
-              size={30}
-              color={focused ? "#BB2227" : color}
-            />
-          ),
-        }}
-      />
-      {/* <Tab.Screen name="FavoriteScreen" component={FavoriteScreen}
-            options={{
-               tabBarLabel: "Favorite",
-               // unmountOnBlur: true,
-               header: () => null,
+            tabBarIcon: ({ focused, color }) => (
+              <AntDesign
+                name="home"
+                size={30}
+                color={focused ? "#BB2227" : color}
+              />
+            ),
+          }}
+        />
 
-               tabBarIcon: ({ focused, color }) =>
-                  <AntDesign name="hearto" size={30} color={focused ? '#BB2227' : color} />,
-            }}
+        <Tab.Screen
+          name="CartScreen"
+          component={CartScreen}
+          options={{
+            tabBarLabel: "Cart",
+            tabBarBadge: qnty ? qnty : null,
+            // unmountOnBlur: true,
+            header: () => null,
 
-         /> */}
-      <Tab.Screen
-        name="CartScreen"
-        component={CartScreen}
-        options={{
-          tabBarLabel: "Cart",
-          tabBarBadge: qnty ? qnty : null,
-          // unmountOnBlur: true,
-          header: () => null,
+            tabBarIcon: ({ focused, color }) => (
+              <AntDesign
+                name="shoppingcart"
+                size={30}
+                color={focused ? "#BB2227" : color}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="CategoryScreen"
+          component={CatNav}
+          options={{
+            tabBarLabel: "Categories",
+            // unmountOnBlur: true,
+            header: () => null,
 
-          tabBarIcon: ({ focused, color }) => (
-            <AntDesign
-              name="shoppingcart"
-              size={30}
-              color={focused ? "#BB2227" : color}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="CategoryScreen"
-        component={CatNav}
-        options={{
-          tabBarLabel: "Categories",
-          // unmountOnBlur: true,
-          header: () => null,
+            tabBarIcon: ({ focused, color }) => (
+              <MaterialIcons
+                name="category"
+                size={30}
+                color={focused ? "#BB2227" : color}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          // listeners={({ navigation, route }) => ({
+          //   tabPress: (e) => {
+          //     console.log("...........");
 
-          tabBarIcon: ({ focused, color }) => (
-            <MaterialIcons
-              name="category"
-              size={30}
-              color={focused ? "#BB2227" : color}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarLabel: "Profile",
-          // unmountOnBlur: true,
-          header: () => null,
+          //     if (!token) {
 
-          tabBarIcon: ({ focused, color }) => (
-            <FontAwesome
-              name="user"
-              size={30}
-              color={focused ? "#BB2227" : color}
-            />
-          ),
-        }}
-      />
+          //     }
+          //   },
+          // })}
+          options={{
+            tabBarLabel: "Profile",
+            // unmountOnBlur: true,
+            header: () => null,
 
-      {/* <Tab.Screen name="Profile"  component={Root}
-            
-             options={{
-                tabBarLabel: "Profile",
-                // unmountOnBlur: true,
-                header: () => null,
-               
-             tabBarIcon: ({focused, color }) =>  
-             <FontAwesome name="user-o" size={25} color={focused? '#BB2227': color} />,
-             }} 
-             
-            //  listeners={({ navigation, route }) => ({
-            //   tabPress: e => {
-            //     setrenderMe(!renderMe)
-            //     navigation.reset({
-            //       index: 0,
-            //       routes: [{name: 'Categories'}],
-            //     });
-              
-            //     },
-             
-            //   })}
-           /> */}
-    </Tab.Navigator>
+            tabBarIcon: ({ focused, color }) => (
+              <FontAwesome
+                name="user"
+                size={30}
+                color={focused ? "#BB2227" : color}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+      {ModalOpen ? (
+        <LoginModal setModalOpen={setModalOpen} ModalOpen={ModalOpen} />
+      ) : null}
+    </>
   );
 }
