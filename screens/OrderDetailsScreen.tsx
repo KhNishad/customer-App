@@ -84,6 +84,8 @@ export default function RequisitionDetails() {
   useEffect(() => {
     OrderServices.getOrderDetails(id)
       .then((res) => {
+        // console.log("...............", res);
+
         setallRequisition(res?.data);
         setloader(false);
       })
@@ -91,6 +93,10 @@ export default function RequisitionDetails() {
         console.log(err);
       });
   }, [refreshing]);
+
+  // const totalAmount = ()=>{
+  //   let total = allRequisition?.
+  // }
 
   return (
     <View style={styles.container}>
@@ -127,7 +133,7 @@ export default function RequisitionDetails() {
                     </Text>
 
                     <Text style={{ fontSize: 14, paddingHorizontal: 15 }}>
-                      Strret : {allRequisition?.dlvrAddress}
+                      Street : {allRequisition?.dlvrAddress}
                     </Text>
                     <Text style={{ fontSize: 14, paddingHorizontal: 15 }}>
                       Division : {allRequisition?.dlvrDivision}
@@ -159,7 +165,8 @@ export default function RequisitionDetails() {
                             },
                           ]}
                         >
-                          <Text>Seller No : {items?.orderSellerNo}</Text>
+                          <Text>Seller Name : {items?.seller?.name}</Text>
+                          <Text>Phone No : {items?.seller?.phone}</Text>
                           <Text>Total : TK {items?.totalAmont}</Text>
                         </View>
                       </View>
@@ -185,6 +192,7 @@ export default function RequisitionDetails() {
                               <View style={{ width: deviceWidth - 150 }}>
                                 <Text>{item?.product?.title} </Text>
                                 <Text>TK: {item?.price}</Text>
+                                <Text>Quantity : {item?.quantity}</Text>
                               </View>
                             </View>
                             <View style={{ marginTop: 10 }}>
@@ -211,6 +219,47 @@ export default function RequisitionDetails() {
                     </View>
                   )
                 )}
+                <View style={styles.card}>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingHorizontal: 20,
+                    }}
+                  >
+                    <Text>Sub Total: </Text>
+                    <Text>Tk: {allRequisition?.cSubTotalAmount}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingHorizontal: 20,
+                    }}
+                  >
+                    <Text>Shipping: </Text>
+                    <Text>Tk: {allRequisition?.cDeliveryCharge}</Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingHorizontal: 20,
+                    }}
+                  >
+                    <Text style={{ color: "#FF9411", fontWeight: "bold" }}>
+                      Total:{" "}
+                    </Text>
+                    <Text style={{ color: "#FF9411", fontWeight: "bold" }}>
+                      Tk:{" "}
+                      {allRequisition?.cSubTotalAmount +
+                        allRequisition?.cDeliveryCharge}
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
           </ScrollView>

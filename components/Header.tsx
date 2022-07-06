@@ -78,7 +78,7 @@ export default function TabTwoScreen() {
         .catch((err) => console.log("err", err));
     }
   };
-  console.log("............0000", suggestPro);
+  // console.log("............0000", suggestPro);
 
   const hurryOrder = async () => {
     let tokenn = await SecureStore.getItemAsync("accessToken");

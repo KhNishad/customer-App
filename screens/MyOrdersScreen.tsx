@@ -117,14 +117,14 @@ export default function TabTwoScreen(props: any) {
                           >
                             Qunatity :{item?.cQuantity}
                           </Text>
-                          <Text
+                          {/* <Text
                             style={{
                               fontSize: 14,
                               fontWeight: "bold",
                             }}
                           >
                             Delevery Charge: :TK {item?.cDeliveryCharge}
-                          </Text>
+                          </Text> */}
                         </View>
                         <Text
                           style={{
