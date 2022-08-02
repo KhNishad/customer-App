@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
   Image,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -188,7 +189,7 @@ export default function TabTwoScreen(props: any) {
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF9411" />
 
-      {/* <SafeAreaView> */}
+      <SafeAreaView>
 
       <View style={styles.container1}>
         <View
@@ -217,7 +218,7 @@ export default function TabTwoScreen(props: any) {
         legacyImplementation={true}
         numColumns={3}
       />
-      {/* </SafeAreaView> */}
+      </SafeAreaView>
     </View>
   );
 }

@@ -66,14 +66,14 @@ const request = async (link, params = {}, noPrefix = null, header = null) => {
     method: confiq.method,
     baseURL: url,
     headers: headers,
-    data: confiq.data,
+    data: confiq.data || undefined,
     params: confiq.params,
     file: confiq.file,
   };
 
   return axios(options)
     .then((res) => {
-        console.log("res ====", options);
+        // console.log("res ====", options);
       return res.data;
     })
     .catch((err) => {
