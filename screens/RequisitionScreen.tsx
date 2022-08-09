@@ -68,12 +68,12 @@ export default function TabTwoScreen(props: any) {
               flexDirection: "row",
             }}
           >
-            <AntDesign
+            <TouchableOpacity
+              style={{ width: 20 }}
               onPress={() => navigation.goBack()}
-              name="left"
-              size={25}
-              color={"black"}
-            ></AntDesign>
+            >
+              <AntDesign name="left" size={25} color={"black"}></AntDesign>
+            </TouchableOpacity>
             <Text style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}>
               My Requisition
             </Text>

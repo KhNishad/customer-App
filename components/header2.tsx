@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import SearchService from "../services/SearchService";
 
@@ -67,106 +68,108 @@ export default function TabTwoScreen({ filter, setopenFilter }: any) {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.headerBar}>
-          <TouchableOpacity>
-            <AntDesign
-              onPress={() => navigation.goBack()}
-              name="left"
-              size={30}
-              color={"#fff"}
-            ></AntDesign>
-            {/* <Image  style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image> */}
-          </TouchableOpacity>
-          <View style={styles.input}>
-            <Feather
-              name="search"
-              style={{ paddingRight: 5 }}
-              color={"red"}
-              size={20}
-            ></Feather>
-            <TextInput
-              style={{ width: deviceWidth / 2.5 }}
-              placeholder="Search..."
-              onChangeText={(searchKeyWord) => {
-                globalSearch2(searchKeyWord);
-                setsearchKeyWord(searchKeyWord);
-              }}
-              // onBlur={()=>
-              //   {
-              //     setsearchKeyWord('')
-              //     globalSearch2('')
-              //     setsuggestPro([])
-              //   }
-
-              // }
-              onSubmitEditing={() => globalSearch()}
-            />
-            <TouchableOpacity onPress={() => globalSearch()}>
+        <SafeAreaView>
+          <View style={styles.headerBar}>
+            <TouchableOpacity>
+              <AntDesign
+                onPress={() => navigation.goBack()}
+                name="left"
+                size={30}
+                color={"#fff"}
+              ></AntDesign>
+              {/* <Image  style={{width:80,height:30,resizeMode:'center'}} source={require('../assets/images/ESSA_Logo_PNG.png')}></Image> */}
+            </TouchableOpacity>
+            <View style={styles.input}>
               <Feather
                 name="search"
                 style={{ paddingRight: 5 }}
                 color={"red"}
                 size={20}
               ></Feather>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            {filter ? (
-              <Feather
-                onPress={() => setopenFilter(true)}
-                name="filter"
-                style={{ paddingRight: 5 }}
-                color={"#fff"}
-                size={25}
-              ></Feather>
-            ) : null}
-            {/* <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome> */}
+              <TextInput
+                style={{ width: deviceWidth / 2.5 }}
+                placeholder="Search..."
+                onChangeText={(searchKeyWord) => {
+                  globalSearch2(searchKeyWord);
+                  setsearchKeyWord(searchKeyWord);
+                }}
+                // onBlur={()=>
+                //   {
+                //     setsearchKeyWord('')
+                //     globalSearch2('')
+                //     setsuggestPro([])
+                //   }
 
-            {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
-            {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
-          </View>
-          {/* <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
+                // }
+                onSubmitEditing={() => globalSearch()}
+              />
+              <TouchableOpacity onPress={() => globalSearch()}>
+                <Feather
+                  name="search"
+                  style={{ paddingRight: 5 }}
+                  color={"red"}
+                  size={20}
+                ></Feather>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              {filter ? (
+                <Feather
+                  onPress={() => setopenFilter(true)}
+                  name="filter"
+                  style={{ paddingRight: 5 }}
+                  color={"#fff"}
+                  size={25}
+                ></Feather>
+              ) : null}
+              {/* <FontAwesome onPress={()=>navigation.navigate('AddressScreen')} style={{marginRight:5}} name='user' color={'#fff'} size={25}></FontAwesome> */}
+
+              {/* <Feather style={{marginRight:5}} name='mail' color={'#fff'} size={25}></Feather> */}
+              {/* <Feather onPress={() => navigation.openDrawer()} name='bell' color={'#fff'} size={25}></Feather> */}
+            </View>
+            {/* <View style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
            <Text style={{fontSize:16,fontWeight:'bold',color:"black"}}>Grocery</Text>
          </View> */}
-        </View>
-        {suggestPro && suggestPro?.length > 0 ? (
-          <View
-            style={{
-              position: "absolute",
-              zIndex: 9999,
-              top: 55,
-              backgroundColor: "#fff",
-              width: deviceWidth,
-            }}
-          >
-            {suggestPro &&
-              suggestPro?.map((item: any, index: any) => (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    navigation.navigate("SearchProductScreen", {
-                      keyWord: searchKeyWord,
-                    })
-                  }
-                >
-                  <View style={{ padding: 8 }}>
-                    <Text
-                      numberOfLines={1}
-                      style={{ fontSize: 16, marginLeft: 5, width: 200 }}
-                    >
-                      {item?.title}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
           </View>
-        ) : null}
+          {suggestPro && suggestPro?.length > 0 ? (
+            <View
+              style={{
+                position: "absolute",
+                zIndex: 9999,
+                top: 55,
+                backgroundColor: "#fff",
+                width: deviceWidth,
+              }}
+            >
+              {suggestPro &&
+                suggestPro?.map((item: any, index: any) => (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() =>
+                      navigation.navigate("SearchProductScreen", {
+                        keyWord: searchKeyWord,
+                      })
+                    }
+                  >
+                    <View style={{ padding: 8 }}>
+                      <Text
+                        numberOfLines={1}
+                        style={{ fontSize: 16, marginLeft: 5, width: 200 }}
+                      >
+                        {item?.title}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+            </View>
+          ) : null}
+        </SafeAreaView>
       </View>
     </>
   );

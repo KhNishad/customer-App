@@ -74,7 +74,7 @@ export default function TabTwoScreen(props: any) {
       <Header />
       <SafeAreaView>
         {!loader ? (
-          <ScrollView style={{width:'100%'}}>
+          <ScrollView style={{ width: "100%" }}>
             <View>
               <Slider banner={homeSection?.["homePage:banners"]} />
             </View>
@@ -196,8 +196,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // backgroundColor:'#FF9411',
     // paddingTop:deviceHeight/6
-    marginBottom:50
-    
+    marginBottom: 50,
   },
   title: {
     fontSize: 30,

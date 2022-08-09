@@ -90,7 +90,7 @@ export default function TabTwoScreen() {
         let res = await profileService.getUser();
         setfullName(res?.data?.name);
         setuserInfo(res?.data);
-        console.log("..........user info", res?.data);
+        // console.log("..........user info", res?.data);
       } catch (error) {}
     };
     getUser();
@@ -183,10 +183,16 @@ export default function TabTwoScreen() {
   };
 
   const submit = async () => {
-    if (!selectedDivision || !selectedDistrict || !selectedCity || !selectedPolice || !selectedArea || !address) {
-      alert('All fields are Required')
-     } else {
-     
+    if (
+      !selectedDivision ||
+      !selectedDistrict ||
+      !selectedCity ||
+      !selectedPolice ||
+      !selectedArea ||
+      !address
+    ) {
+      alert("All fields are Required");
+    } else {
       let division1 = division.findIndex(
         (el: any) => el.id == selectedDivision
       );
@@ -201,10 +207,9 @@ export default function TabTwoScreen() {
 
       let addressCon: any = userInfo?.shippingAddress || [];
 
-        addressCon.map((item) => {
-          item.isActive = false;
-        });
-      
+      addressCon.map((item) => {
+        item.isActive = false;
+      });
 
       addressCon.push({
         division: {
@@ -246,11 +251,10 @@ export default function TabTwoScreen() {
         setaddNew(false);
         setaddress("");
         setSelectedDivision("");
-        setselectedArea('')
-        setselectedCity('')
-        setselectedPolice("")
-        setSelectedDistrict('')
-        
+        setselectedArea("");
+        setselectedCity("");
+        setselectedPolice("");
+        setSelectedDistrict("");
       } catch (error) {
         showMessage({
           message: `${error.message}`,
@@ -337,16 +341,17 @@ export default function TabTwoScreen() {
                 justifyContent: "space-between",
               }}
             >
-              <AntDesign
+              <TouchableOpacity
+                style={{ width: 20 }}
                 onPress={() => navigation.goBack()}
-                name="left"
-                size={30}
-                color={"black"}
-              ></AntDesign>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              >
+                <AntDesign name="left" size={25} color={"black"}></AntDesign>
+              </TouchableOpacity>
+              <Text
+                style={{ fontSize: 16, fontWeight: "bold", marginLeft: 10 }}
+              >
                 Add Shipping Address
               </Text>
-              <View></View>
             </View>
           </View>
           <View style={{ paddingHorizontal: 15, paddingVertical: 10 }}>
@@ -482,18 +487,19 @@ export default function TabTwoScreen() {
 
             {addNew ? (
               <View>
-                <View>
+                <View style={{ marginTop: 15 }}>
                   <Text>Division</Text>
                   <View
                     style={{
                       borderWidth: 0.8,
                       borderColor: "#1234",
                       borderRadius: 2,
-                      marginTop: 10,
+                      marginTop: 15,
                       paddingLeft: 10,
                     }}
                   >
                     <Picker
+                      itemStyle={{ height: 80 }}
                       selectedValue={selectedDivision}
                       mode="dropdown"
                       onValueChange={(itemValue, itemIndex) => {
@@ -521,18 +527,19 @@ export default function TabTwoScreen() {
                   </View>
                 ) : null}
 
-                <View>
+                <View style={{ marginTop: 15 }}>
                   <Text>District</Text>
                   <View
                     style={{
                       borderWidth: 0.8,
                       borderColor: "#1234",
                       borderRadius: 2,
-                      marginTop: 10,
+                      marginTop: 15,
                       paddingLeft: 10,
                     }}
                   >
                     <Picker
+                      itemStyle={{ height: 80 }}
                       selectedValue={selectedDistrict}
                       mode="dropdown"
                       onValueChange={(itemValue, itemIndex) => {
@@ -557,18 +564,19 @@ export default function TabTwoScreen() {
                     <Text style={{ color: "red" }}>{districtValidError}</Text>
                   </View>
                 ) : null}
-                <View>
+                <View style={{ marginTop: 15 }}>
                   <Text>City</Text>
                   <View
                     style={{
                       borderWidth: 0.8,
                       borderColor: "#1234",
                       borderRadius: 2,
-                      marginTop: 10,
+                      marginTop: 15,
                       paddingLeft: 10,
                     }}
                   >
                     <Picker
+                      itemStyle={{ height: 80 }}
                       selectedValue={selectedCity}
                       mode="dropdown"
                       onValueChange={(itemValue, itemIndex) => {
@@ -593,18 +601,19 @@ export default function TabTwoScreen() {
                     <Text style={{ color: "red" }}>{cityValidError}</Text>
                   </View>
                 ) : null}
-                <View>
+                <View style={{ marginTop: 15 }}>
                   <Text>Police Station</Text>
                   <View
                     style={{
                       borderWidth: 0.8,
                       borderColor: "#1234",
                       borderRadius: 2,
-                      marginTop: 10,
+                      marginTop: 15,
                       paddingLeft: 10,
                     }}
                   >
                     <Picker
+                      itemStyle={{ height: 80 }}
                       selectedValue={selectedPolice}
                       mode="dropdown"
                       onValueChange={(itemValue, itemIndex) => {
@@ -629,18 +638,19 @@ export default function TabTwoScreen() {
                     <Text style={{ color: "red" }}>{policeValidError}</Text>
                   </View>
                 ) : null}
-                <View>
+                <View style={{ marginTop: 15 }}>
                   <Text>Area</Text>
                   <View
                     style={{
                       borderWidth: 0.8,
                       borderColor: "#1234",
                       borderRadius: 2,
-                      marginTop: 10,
+                      marginTop: 15,
                       paddingLeft: 10,
                     }}
                   >
                     <Picker
+                      itemStyle={{ height: 80 }}
                       selectedValue={selectedArea}
                       mode="dropdown"
                       onValueChange={(itemValue, itemIndex) =>

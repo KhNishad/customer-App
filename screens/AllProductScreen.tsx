@@ -1,10 +1,9 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -15,8 +14,6 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 // components
 import ProductCard from "../components/ProductCard";
 // img
-import BrandAndShopServices  from "../services/BrandAndShopServices";
-
 
 const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
@@ -32,61 +29,53 @@ export default function TabTwoScreen(props: any) {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const { title,products } = route.params;
+  const { title, products } = route.params;
 
   const [isLoading, setisLoading] = useState(false);
-
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor="#FF9411" />
 
-      {/* <SafeAreaView> */}
-        
+      <SafeAreaView>
         <View style={styles.container1}>
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-              <AntDesign
-                
-                name="left"
-                size={25}
-                color={"black"}
-              ></AntDesign>
-              </TouchableOpacity>
-              <Text
-                style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}
-              >
-               {title ? title : ''}
-              </Text>
-              <View></View>
-            </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <AntDesign name="left" size={25} color={"black"}></AntDesign>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 18, fontWeight: "bold", marginLeft: 10 }}>
+              {title ? title : ""}
+            </Text>
+            <View></View>
           </View>
-          <ScrollView>
-          <View style={{ marginBottom: 20,alignItems:'center' }}>
-            
-          {products?.length > 0 ?
-                <View style={styles.CardContainer}>
-                    <ProductCard products={products}/>
-                </View>
-                :
-                
+        </View>
+        <ScrollView>
+          <View style={{ marginBottom: 20, alignItems: "center" }}>
+            {products?.length > 0 ? (
+              <View style={styles.CardContainer}>
+                <ProductCard products={products} />
+              </View>
+            ) : (
               <>
-                {isLoading?
-                <ActivityIndicator size="small" color="#e01221" />
-                :
-                <View style={{justifyContent:'center',alignItems:'center',}}>
-                  <Text style={{color:'red'}}>No Items Found</Text>
-                  </View>}
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="#e01221" />
+                ) : (
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
+                    <Text style={{ color: "red" }}>No Items Found</Text>
+                  </View>
+                )}
               </>
-            }
+            )}
           </View>
         </ScrollView>
-      {/* </SafeAreaView> */}
+      </SafeAreaView>
     </View>
   );
 }
@@ -114,5 +103,4 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
-  
 });
