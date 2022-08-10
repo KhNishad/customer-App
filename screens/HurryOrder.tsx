@@ -1,5 +1,5 @@
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import { useNavigation,useIsFocused } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import {
@@ -23,7 +23,6 @@ const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 
 // service
-import AddToCartServices from "../services/AddToCartServices";
 import HurryOrderService from "../services/HurryOrderService";
 import profileService from "../services/profileService";
 
@@ -44,8 +43,6 @@ export default function TabTwoScreen() {
   const [note, setnote] = useState("");
 
   useEffect(() => {
-    
-
     profileService
       .getUser()
       .then((res) => {
@@ -67,6 +64,7 @@ export default function TabTwoScreen() {
       base64: true,
       aspect: [4, 3],
       quality: 1,
+      presentationStyle: 0,
     });
 
     let img = Imagee;
@@ -214,7 +212,7 @@ export default function TabTwoScreen() {
                 }}
               >
                 {Imagee?.map((item, index) => (
-                  <View>
+                  <View key={index}>
                     <Image
                       style={styles.img}
                       source={{ uri: `${apiImagepath}/${item}` }}
@@ -254,42 +252,41 @@ export default function TabTwoScreen() {
             />
 
             <View style={{ alignItems: "center", marginVertical: 30 }}>
-            {userInfo?.shippingAddress?.length ? (
+              {userInfo?.shippingAddress?.length ? (
                 <View>
                   {userInfo?.shippingAddress?.map((item, index) => (
                     <View key={index}>
                       {item.isActive ? (
                         <TouchableOpacity
-                        onPress={() => hurryOrder()}
-                        style={{
-                          backgroundColor: "#1C6E7A",
-                          padding: 10,
-                          width: deviceWidth / 1.1,
-                          alignItems: "center",
-                          borderRadius: 10,
-                        }}
-                      >
-                        <Text style={[styles.title]}>Submit Order</Text>
-                      </TouchableOpacity>
+                          onPress={() => hurryOrder()}
+                          style={{
+                            backgroundColor: "#1C6E7A",
+                            padding: 10,
+                            width: deviceWidth / 1.1,
+                            alignItems: "center",
+                            borderRadius: 10,
+                          }}
+                        >
+                          <Text style={[styles.title]}>Submit Order</Text>
+                        </TouchableOpacity>
                       ) : null}
                     </View>
                   ))}
                 </View>
               ) : (
                 <TouchableOpacity
-                onPress={() => navigation.navigate('AddressScreen')}
-                style={{
-                  backgroundColor: "#1C6E7A",
-                  padding: 10,
-                  width: deviceWidth / 1.1,
-                  alignItems: "center",
-                  borderRadius: 10,
-                }}
-              >
-                <Text style={[styles.title]}>Create Address To Order</Text>
-              </TouchableOpacity>
+                  onPress={() => navigation.navigate("AddressScreen")}
+                  style={{
+                    backgroundColor: "#1C6E7A",
+                    padding: 10,
+                    width: deviceWidth / 1.1,
+                    alignItems: "center",
+                    borderRadius: 10,
+                  }}
+                >
+                  <Text style={[styles.title]}>Create Address To Order</Text>
+                </TouchableOpacity>
               )}
-              
             </View>
           </View>
         </ScrollView>

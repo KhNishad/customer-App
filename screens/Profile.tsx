@@ -1,95 +1,88 @@
 import {
-    AntDesign,
-    Entypo,
-    FontAwesome,
-    MaterialIcons,
-  } from "@expo/vector-icons";
-  import { useFocusEffect, useNavigation,useIsFocused } from "@react-navigation/native";
-  import React, { useEffect, useState } from "react";
-  import {
-    Dimensions,
-    Image,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View,
-  } from "react-native";
-  import { TouchableOpacity } from "react-native-gesture-handler";
-  import * as SecureStore from 'expo-secure-store';
-  import profileService from '../services/profileService'
-  
-  //components
-  
-  const deviceWidth = Dimensions.get("window").width;
-  const deviceHeight = Dimensions.get("window").height;
-  
-  export default function HomeScreen(props: any) {
-    const navigation = useNavigation<any>();
-    const scheme = useColorScheme();
-    const isFocused = useIsFocused();
-  
-  const [token, settoken] = useState('')
-  const [phone, setphone] = useState('')
-  const [name, setname] = useState('')
+  AntDesign,
+  Entypo,
+  FontAwesome,
+  MaterialIcons,
+} from "@expo/vector-icons";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import React, { useEffect, useState } from "react";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import profileService from "../services/profileService";
+
+//components
+
+const deviceWidth = Dimensions.get("window").width;
+const deviceHeight = Dimensions.get("window").height;
+
+export default function HomeScreen(props: any) {
+  const navigation = useNavigation<any>();
+  const scheme = useColorScheme();
+  const isFocused = useIsFocused();
+
+  const [token, settoken] = useState("");
+  const [phone, setphone] = useState("");
+  const [name, setname] = useState("");
 
   useEffect(() => {
-    const token = async()=>{
-     
-      let tokenn = await SecureStore.getItemAsync('accessToken')
+    const token = async () => {
+      let tokenn = await SecureStore.getItemAsync("accessToken");
 
-      
-      if(tokenn){
-        settoken(tokenn)
-        profileService.getUser().then((res)=>{
-          
-           setname(res?.data?.name)
-           setphone(res?.data?.phone)
-         }).catch(err=>{
+      if (tokenn) {
+        settoken(tokenn);
+        profileService
+          .getUser()
+          .then((res) => {
+            setname(res?.data?.name);
+            setphone(res?.data?.phone);
+          })
+          .catch((err) => {
             console.log(err);
-            
-         })
-      }else{
-        setname('')
-        setphone('')
-        settoken('')
+          });
+      } else {
+        setname("");
+        setphone("");
+        settoken("");
       }
-      
-      
-    }
-   
-    token()
-  },[isFocused] )
+    };
 
- 
+    token();
+  }, [isFocused]);
 
   // useFocusEffect(() => {
   //   if(token){
-      
+
   //    profileService.getUser().then((res)=>{
   //     console.log('.........resdd',res);
-      
+
   //      setname(res?.data?.name)
   //      setphone(res?.data?.phone)
   //    }).catch(err=>{
   //       console.log(err);
-        
+
   //    })
   //   }
-                 
-  //  }) 
 
-   
-  
-    return (
-      <View style={styles.container}>
-        <StatusBar backgroundColor={`black`} />
-  
+  //  })
+
+  return (
+    <View style={styles.container}>
+      {/* <StatusBar backgroundColor={`black`} /> */}
+      <SafeAreaView>
         <View style={styles.headerContainer}>
           <View
             style={{
               alignItems: "center",
-              flexDirection:'row'
+              flexDirection: "row",
             }}
           >
             <AntDesign
@@ -123,14 +116,12 @@ import {
                   style={styles.img}
                   source={require("../assets/images/essa-logo.jpeg")}
                 ></Image>
-  
+
                 <View style={{ marginLeft: 10 }}>
                   <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                     {name}
                   </Text>
-                  <Text style={{ color: "#1239" }}>
-                    {phone}
-                  </Text>
+                  <Text style={{ color: "#1239" }}>{phone}</Text>
                 </View>
               </View>
               {/* <TouchableOpacity
@@ -165,7 +156,7 @@ import {
                 >
                   <FontAwesome name="user" size={25} color="#1239" />
                 </View>
-  
+
                 <Text style={styles.title}>Profile</Text>
               </View>
               <Entypo name="chevron-right" size={25} color="#000" />
@@ -206,7 +197,10 @@ import {
               </View>
               <Entypo name="chevron-right" size={25} color="#000" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>navigation.navigate('HurryOrderList')} style={styles.profileSection1}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("HurryOrderList")}
+              style={styles.profileSection1}
+            >
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <View
                   style={{
@@ -250,68 +244,67 @@ import {
             </TouchableOpacity> */}
           </View>
         </View>
-        
-      </View>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      // alignItems: "center",
-    },
-    headerContainer: {
-      paddingHorizontal: 10,
-      paddingVertical: 10,
-      borderBottomColor: "#004C3F",
-      borderBottomWidth: 0.5,
-      backgroundColor: "#fff",
-    },
-    card: {
-      width: deviceWidth / 1.1,
-      // height: 190,
-      elevation: 5,
-      backgroundColor: "#fff",
-      padding: 10,
-      borderRadius: 5,
-    },
-    card1: {
-      width: deviceWidth / 1.1,
-      // height: 190,
-      elevation: 5,
-      backgroundColor: "#fff",
-      padding: 10,
-      borderRadius: 5,
-      paddingHorizontal: 20,
-      marginTop: 20,
-    },
-    img: {
-      width: 60,
-      height: 60,
-      resizeMode: "contain",
-      borderWidth: 0.01,
-      borderRadius: 100,
-    },
-    profileSection: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingHorizontal: 5,
-      paddingVertical: 15,
-      borderBottomWidth: 1,
-      borderBottomColor: "#1239",
-    },
-    profileSection1: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingHorizontal: 5,
-      paddingVertical: 15,
-    },
-    title: {
-      fontSize: 18,
-      marginLeft: 15,
-      color: "#000",
-    },
-  });
-  
+      </SafeAreaView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // alignItems: "center",
+  },
+  headerContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderBottomColor: "#004C3F",
+    borderBottomWidth: 0.5,
+    backgroundColor: "#fff",
+  },
+  card: {
+    width: deviceWidth / 1.1,
+    // height: 190,
+    elevation: 5,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+  },
+  card1: {
+    width: deviceWidth / 1.1,
+    // height: 190,
+    elevation: 5,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  img: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+    borderWidth: 0.01,
+    borderRadius: 100,
+  },
+  profileSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#1239",
+  },
+  profileSection1: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 5,
+    paddingVertical: 15,
+  },
+  title: {
+    fontSize: 18,
+    marginLeft: 15,
+    color: "#000",
+  },
+});
