@@ -115,7 +115,7 @@ export default function TabTwoScreen(props: any) {
                 ></Image>
                 <Text style={{ fontSize: 10 }}>All Shop</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.icons}>
+              {/* <TouchableOpacity style={styles.icons}>
                 <Image
                   style={styles.mainBanner}
                   source={require("../assets/images/mobile-app.png")}
@@ -135,7 +135,7 @@ export default function TabTwoScreen(props: any) {
                   source={require("../assets/images/electronics.png")}
                 ></Image>
                 <Text style={{ fontSize: 10 }}>Electronics</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {homeSection?.["homePage:innerSections"]?.length > 0 ? (
               <View>
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   iconSection: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 5,
