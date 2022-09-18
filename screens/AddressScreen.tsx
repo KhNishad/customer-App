@@ -143,7 +143,7 @@ export default function TabTwoScreen() {
 
   // edit address
 
-  const editAddress = async (index) => {
+  const editAddress = async (index:number) => {
     try {
       let res = await profileService.getUser();
       setidEdit(true);
