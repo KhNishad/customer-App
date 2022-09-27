@@ -122,6 +122,7 @@ export default function TabTwoScreen() {
           message: `${res.message}`,
           type: "success",
         });
+        navigation.navigate('HurryOrderList')
       }
     } catch (error) {
       showMessage({
