@@ -52,25 +52,25 @@ export function TabNav() {
     token();
   }, [isFocused]);
 
-  const netFunction = () => {
-    NetworkUtils.isNetworkAvailable().then((res) => {
-      if (!res) {
-        Alert.alert(
-          "Something Went Wrong!",
-          "Please Check Your Internet Connection",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "Try Again", onPress: () => netFunction() },
-          ]
-        );
-      }
-    });
-  };
-  netFunction();
+  // const netFunction = () => {
+  //   NetworkUtils.isNetworkAvailable().then((res) => {
+  //     if (!res) {
+  //       Alert.alert(
+  //         "Something Went Wrong!",
+  //         "Please Check Your Internet Connection",
+  //         [
+  //           {
+  //             text: "Cancel",
+  //             onPress: () => console.log("Cancel Pressed"),
+  //             style: "cancel",
+  //           },
+  //           { text: "Try Again", onPress: () => netFunction() },
+  //         ]
+  //       );
+  //     }
+  //   });
+  // };
+  // netFunction();
 
   const Tab = createBottomTabNavigator();
 

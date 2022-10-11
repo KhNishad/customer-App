@@ -102,6 +102,11 @@ export default function ModalScreen({ setModalOpen, ModalOpen, closeIt }: any) {
     }
   };
 
+  const forgotpass=()=>{
+    navigation.navigate('ForgotPassword')
+    setModalOpen(false)
+  }
+
   return (
     <View style={styles.container}>
       <Modal isVisible={ModalOpen} style={{ alignItems: "center" }}>
@@ -109,7 +114,7 @@ export default function ModalScreen({ setModalOpen, ModalOpen, closeIt }: any) {
           style={{
             width: deviceWidth - 50,
             justifyContent: "center",
-            height: 280,
+            // height: 280,
             backgroundColor: "#fff",
             alignItems: "center",
             borderRadius: 10,
@@ -143,6 +148,8 @@ export default function ModalScreen({ setModalOpen, ModalOpen, closeIt }: any) {
             )}
           </View>
 
+
+
           <View>
             <TextInput
               style={styles.input}
@@ -172,6 +179,12 @@ export default function ModalScreen({ setModalOpen, ModalOpen, closeIt }: any) {
                 )}
               </>
             )}
+
+            {isOtp ? null :
+              <View style={{ paddingHorizontal: 15 }}>
+                <Text onPress={()=>forgotpass()} style={{ color: 'red' }}>Forgot password?</Text>
+              </View>
+            }
           </View>
           {isOtp ? (
             <View

@@ -30,6 +30,7 @@ import Profile from './screens/Profile'
 import HurryOrder from './screens/HurryOrder'
 import HurryOrderList from './screens/HurryListScreen'
 import HurryOrderDetails from './screens/HurryOrderDetailsScreen'
+import ForgotPassword from './screens/ResetPassword'
 // import categoryWiseProductScreen from './screens/CategoryProductScreen'
 
 import { useEffect } from "react";
@@ -162,6 +163,11 @@ export default function App() {
           <Stack.Screen
             name="HurryOrderDetails"
             component={HurryOrderDetails}
+            options={{ header: () => null }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPassword}
             options={{ header: () => null }}
           />
 
