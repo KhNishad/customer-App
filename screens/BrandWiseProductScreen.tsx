@@ -39,10 +39,12 @@ export default function TabTwoScreen(props: any) {
   const [refreshing, setrefreshing] = useState(false);
   const [renderMe, setrenderMe] = useState(false);
   const [isLoading, setisLoading] = useState(false);
+  const [currnetPage, setcurrnetPage] = useState(1)
+  const [page, setpage] = useState(1)
 
   useEffect(() => {
     if(title){
-      BrandAndShopServices.getBrandWiseProduct(slug)
+      BrandAndShopServices.getBrandWiseProduct(page,slug)
       .then((res) => {
         
         setproducts(res?.data);
@@ -51,7 +53,7 @@ export default function TabTwoScreen(props: any) {
         console.log(err);
       });
     }else{
-      BrandAndShopServices.getShopWiseProduct(slug)
+      BrandAndShopServices.getShopWiseProduct(currnetPage,slug)
       .then((res) => {
         
         setproducts(res?.data);
@@ -69,6 +71,50 @@ export default function TabTwoScreen(props: any) {
       setrefreshing(false);
     });
   }, [refreshing]);
+
+  // lazay loading in react native
+  const lazayLoading = async () => {
+    setisLoading(true);
+    
+
+    if(title){
+      setpage(page+1)
+      BrandAndShopServices.getBrandWiseProduct(page,slug)
+      .then((res) => {
+        
+        setproducts([...products, ...res?.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }else{
+      setcurrnetPage(currnetPage+1)
+      BrandAndShopServices.getShopWiseProduct(currnetPage,slug)
+      .then((res) => {
+        
+        
+        setproducts([...products, ...res?.data]);
+        setisLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setisLoading(false);
+      });
+    }
+
+   
+    
+  };
+
+  
+
+  const isCloseToBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+  };
 
   return (
     <View style={styles.container}>
@@ -99,7 +145,14 @@ export default function TabTwoScreen(props: any) {
               <View></View>
             </View>
           </View>
-          <ScrollView>
+          <ScrollView 
+          removeClippedSubviews={true}
+          onScroll={({ nativeEvent }) => {
+            if (isCloseToBottom(nativeEvent)) {
+              lazayLoading();
+            }
+          }}
+          >
           <View style={{ marginBottom: 20,alignItems:'center' }}>
             
           {products?.length > 0 ?

@@ -10,14 +10,14 @@ async function getAllShop() {
   return data;
 }
 
-async function getBrandWiseProduct(slug: any) {
+async function getBrandWiseProduct(page:number,slug: any) {
   const data = await request(
-    `product/getList?page=1&take=10&brandSlug=${slug}`
+    `product/getList?page=${page}&take=10&brandSlug=${slug}`
   );
   return data;
 }
-async function getShopWiseProduct(slug: any) {
-  const data = await request(`product/getList?page=1&take=10&shopSlug=${slug}`);
+async function getShopWiseProduct(page:number,slug: any,) {
+  const data = await request(`product/getList?page=${page}&take=12&shopSlug=${slug}`);
   return data;
 }
 
