@@ -1,7 +1,7 @@
 import {
   useFocusEffect,
   useIsFocused,
-  useNavigation,
+  useNavigation
 } from "@react-navigation/native";
 import * as SecureStore from "expo-secure-store";
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
@@ -74,7 +74,7 @@ export default function TabTwoScreen(props: any) {
       <Header />
       <SafeAreaView>
         {!loader ? (
-          <ScrollView style={{width:'100%'}}>
+          <ScrollView removeClippedSubviews={true} style={{width:'100%'}}>
             <View>
               <Slider banner={homeSection?.["homePage:banners"]} />
             </View>
